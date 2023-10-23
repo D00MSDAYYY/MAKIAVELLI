@@ -18,13 +18,13 @@ Server::Server(QWidget *parent) : QWidget(parent),
     int wait_index{ui->stackedWidget->addWidget(waiting)};
 
     connect(constructor, &Server_Constructor::createButtonClicked,
-            ui->stackedWidget, [&,this]()
+            ui->stackedWidget, [=]()
             { ui->stackedWidget->setCurrentIndex(wait_index); });
     connect(constructor, &Server_Constructor::createButtonClicked,
             parent, [=]()
             { parent->parentWidget()->hide(); });
     connect(waiting, &Server_Waiting::shutDownButtonClicked,
-            ui->stackedWidget, [&,this]()
+            ui->stackedWidget, [=]()
             { ui->stackedWidget->setCurrentIndex(constr_index); });
     connect(waiting, &Server_Waiting::shutDownButtonClicked,
             this, [=]()

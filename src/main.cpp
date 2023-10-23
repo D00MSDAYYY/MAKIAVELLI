@@ -1,8 +1,11 @@
-#include <iostream>
-#include "game_server.hpp"
+#include "main_window.h"
+
+#include <QApplication>
 
 int main(int argc, char *argv[])
 {
-	Game_Server gs{2, 0, 100, 15, 0};
-	gs.run();
+	QApplication a(argc, argv);
+	MainWindow w;
+	w.show();
+	return a.exec();
 }

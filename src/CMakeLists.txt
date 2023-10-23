@@ -13,7 +13,6 @@ add_subdirectory(Networking)
 add_subdirectory(GUI)
 add_subdirectory(Concurrency)
 
-
 add_executable(${PROJECT_NAME} main.cpp)
 
 target_link_libraries(${PROJECT_NAME}
