@@ -15,10 +15,16 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
+target_sources(${PROJECT_NAME}
+PRIVATE
+  dummy.cpp
+PUBLIC
+  
+)
+
 
 target_link_libraries(${PROJECT_NAME}
 PUBLIC
-    Qt6::Widgets
     Main_Window
     Launch_Window
     Game_Window

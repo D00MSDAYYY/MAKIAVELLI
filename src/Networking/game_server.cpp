@@ -45,8 +45,21 @@ void Game_Server::run()
 		for (auto &[ID, country] : _players) //! this is very silly way to iterate over the players, because then we extract the node with country on disconnection of the client and after connect again and set the node  new (bigger) index we violate the order of players in queue
 		{
 			country.activityPoints()->currentPoints(country.activityPoints()->maxPoints());
+
+			Data_Country data_active_country{country.convertToData()};
+			olc::net::message<MSG_FROM> msg_data_active_country{};
+			msg_data_active_country.header.id = MSG_FROM::SERVER_NEXT_TURN;
+			msg_data_active_country << data_active_country;
+			MessageAllClients(msg_data_active_country);
+
 			std::this_thread::sleep_for(std::chrono::seconds(_thinking_time));
 			country.activityPoints()->currentPoints(-country.activityPoints()->maxPoints());
+
+			Data_Country data_inactive_country{country.convertToData()};
+			olc::net::message<MSG_FROM> msg_data_inactive_country{};
+			msg_data_inactive_country.header.id = MSG_FROM::SERVER_NEXT_TURN;
+			msg_data_inactive_country << data_inactive_country;
+			MessageAllClients(msg_data_inactive_country);
 		}
 	}
 	thread_updating.request_stop();
@@ -107,73 +120,6 @@ void Game_Server::OnMessage(std::shared_ptr<olc::net::connection<MSG_FROM>> clie
 
 	switch (msg.header.id)
 	{
-	case MSG_FROM::CLIENT_REQUEST_EXCHANGE_RES:
-	{
-		Data_Country data_sender_request_exchange;
-		Data_Country data_receiver_request_exchange;
-		msg >> data_sender_request_exchange >> data_receiver_request_exchange;
-
-		auto receiver_client{
-			std::find_if(
-				m_deqConnections.begin(),
-				m_deqConnections.end(),
-				[&data_sender_request_exchange, this](const auto &connection)
-				{
-					return _players.at(connection->GetID()).index() == data_sender_request_exchange._data_index;
-				})};
-
-		if (receiver_client != m_deqConnections.end())
-		{
-			olc::net::message<MSG_FROM> msg_request_exchange{};
-			msg_request_exchange.header.id = MSG_FROM::SERVER_REQUEST_EXCHANGE_RES;
-			data_sender_request_exchange._data_index = _players.at(client->GetID()).index();
-			msg_request_exchange << data_receiver_request_exchange << data_sender_request_exchange;
-			MessageClient(*receiver_client, msg_request_exchange);
-		}
-
-		break;
-	}
-
-	case MSG_FROM::CLIENT_ACCEPT_EXCHANGE_RES: //! maybe remove it to simplicity ERROR LOGIC
-	{
-		Data_Country data_sender_accept_exchange;
-		Data_Country data_receiver_accept_exchange;
-		msg >> data_sender_accept_exchange >> data_receiver_accept_exchange;
-		auto sender_client{
-			std::find_if(
-				m_deqConnections.begin(),
-				m_deqConnections.end(),
-				[&data_sender_accept_exchange, this](const auto &connection)
-				{
-					return _players.at(connection->GetID()).index() == data_sender_accept_exchange._data_index;
-				})};
-		if (sender_client != m_deqConnections.end())
-		{
-			if (_players.at(client->GetID()).activityPoints()->currentPoints() != 0 ||
-				_players.at((*sender_client)->GetID()).activityPoints()->currentPoints() != 0)
-			{
-				_players.at(client->GetID()).activityPoints()->currentPoints(-1);
-				_players.at((*sender_client)->GetID()).activityPoints()->currentPoints(-1);
-
-				*_players.at(client->GetID()).resources() +=
-					Resources(data_receiver_accept_exchange._data_resources);
-
-				*_players.at((*sender_client)->GetID()).resources() -=
-					Resources(data_sender_accept_exchange._data_resources);
-
-				olc::net::message<MSG_FROM> msg_sender_data_country{};
-				msg_sender_data_country.header.id = MSG_FROM::SERVER_DATA_COUNTRY;
-				msg_sender_data_country << _players.at(client->GetID()).convertToData();
-				MessageAllClients(msg_sender_data_country);
-
-				olc::net::message<MSG_FROM> msg_receiver_data_country{};
-				msg_receiver_data_country.header.id = MSG_FROM::SERVER_DATA_COUNTRY;
-				msg_receiver_data_country << _players.at((*sender_client)->GetID()).convertToData();
-				MessageAllClients(msg_receiver_data_country);
-			}
-		}
-		break;
-	}
 	case MSG_FROM::CLIENT_BUY_POINTS:
 	{
 		if (_players.at(client->GetID()).activityPoints()->currentPoints() == 0)
@@ -286,6 +232,73 @@ void Game_Server::OnMessage(std::shared_ptr<olc::net::connection<MSG_FROM>> clie
 		msg_data_country.header.id = MSG_FROM::SERVER_DATA_COUNTRY;
 		msg_data_country << _players.at(client->GetID()).convertToData();
 		MessageAllClients(msg_data_country);
+		break;
+	}
+	case MSG_FROM::CLIENT_REQUEST_EXCHANGE_RES:
+	{
+		Data_Country data_sender_request_exchange;
+		Data_Country data_receiver_request_exchange;
+		msg >> data_sender_request_exchange >> data_receiver_request_exchange;
+
+		auto receiver_client{
+			std::find_if(
+				m_deqConnections.begin(),
+				m_deqConnections.end(),
+				[&data_sender_request_exchange, this](const auto &connection)
+				{
+					return _players.at(connection->GetID()).index() == data_sender_request_exchange._data_index;
+				})};
+
+		if (receiver_client != m_deqConnections.end())
+		{
+			olc::net::message<MSG_FROM> msg_request_exchange{};
+			msg_request_exchange.header.id = MSG_FROM::SERVER_REQUEST_EXCHANGE_RES;
+			data_sender_request_exchange._data_index = _players.at(client->GetID()).index();
+			msg_request_exchange << data_receiver_request_exchange << data_sender_request_exchange;
+			MessageClient(*receiver_client, msg_request_exchange);
+		}
+
+		break;
+	}
+
+	case MSG_FROM::CLIENT_ACCEPT_EXCHANGE_RES: //! maybe remove it to simplicity ERROR LOGIC
+	{
+		Data_Country data_sender_accept_exchange;
+		Data_Country data_receiver_accept_exchange;
+		msg >> data_sender_accept_exchange >> data_receiver_accept_exchange;
+		auto sender_client{
+			std::find_if(
+				m_deqConnections.begin(),
+				m_deqConnections.end(),
+				[&data_sender_accept_exchange, this](const auto &connection)
+				{
+					return _players.at(connection->GetID()).index() == data_sender_accept_exchange._data_index;
+				})};
+		if (sender_client != m_deqConnections.end())
+		{
+			if (_players.at(client->GetID()).activityPoints()->currentPoints() != 0 ||
+				_players.at((*sender_client)->GetID()).activityPoints()->currentPoints() != 0)
+			{
+				_players.at(client->GetID()).activityPoints()->currentPoints(-1);
+				_players.at((*sender_client)->GetID()).activityPoints()->currentPoints(-1);
+
+				*_players.at(client->GetID()).resources() +=
+					Resources(data_receiver_accept_exchange._data_resources);
+
+				*_players.at((*sender_client)->GetID()).resources() -=
+					Resources(data_sender_accept_exchange._data_resources);
+
+				olc::net::message<MSG_FROM> msg_sender_data_country{};
+				msg_sender_data_country.header.id = MSG_FROM::SERVER_DATA_COUNTRY;
+				msg_sender_data_country << _players.at(client->GetID()).convertToData();
+				MessageAllClients(msg_sender_data_country);
+
+				olc::net::message<MSG_FROM> msg_receiver_data_country{};
+				msg_receiver_data_country.header.id = MSG_FROM::SERVER_DATA_COUNTRY;
+				msg_receiver_data_country << _players.at((*sender_client)->GetID()).convertToData();
+				MessageAllClients(msg_receiver_data_country);
+			}
+		}
 		break;
 	}
 	}

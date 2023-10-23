@@ -43,7 +43,8 @@ Data_Country Country::convertToData() const
 		_resources->convertToData(),
 		_points->convertToData(),
 		_locations->convertToData(),
-		_cards->convertToData()};
+		_cards->convertToData(),
+		_activity_points->convertToData()};
 }
 
 void Country::update()

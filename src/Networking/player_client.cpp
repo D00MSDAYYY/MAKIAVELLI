@@ -6,6 +6,50 @@
 #include "card.hpp"
 #include "card_bank.hpp"
 
+void Player_Client::OnMessage(olc::net::message<MSG_FROM> &msg)
+{
+	switch(msg.header.id)
+	{
+		
+		case MSG_FROM::SERVER_DATA_COUNTRY:
+		{
+			Data_Country data_country;
+			msg >> data_country;
+			_countries[data_country._data_index] = data_country;
+			break;
+		}
+		case MSG_FROM::SERVER_NEXT_TURN:
+		{
+			Data_Country data_country;
+			msg >> data_country;
+			_countries[data_country._data_index] = data_country;
+			break;
+		}
+		case MSG_FROM::SERVER_HANDSHAKE:
+		{
+			Data_Country data_this_country;
+			msg >> data_this_country;
+			_this_country_index = data_this_country._data_index;
+			_countries[data_this_country._data_index] = data_this_country;
+			break;
+		}
+		case MSG_FROM::SERVER_REQUEST_EXCHANGE_RES:
+		{
+			Data_Country data_sender_request_exchange;
+			Data_Country data_receiver_request_exchange;
+			msg >> data_sender_request_exchange >> data_receiver_request_exchange;
+			// TODO! here displaying the offer to the client and then accept/ignore it
+			if(/*accept = true */42)
+			{
+				olc::net::message<MSG_FROM> msg_accept_exchange{msg};
+				msg_accept_exchange.header.id = MSG_FROM::CLIENT_ACCEPT_EXCHANGE_RES;
+				Send(msg_accept_exchange);
+			}
+			break;
+		}
+	}
+}
+
 Player_Client::Player_Client(std::string address)
 {
 	// Connect(boost::tcp::ip::address::from_string("127.0.0.1"), )

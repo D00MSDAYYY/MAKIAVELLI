@@ -12,12 +12,9 @@ enum class SCOPE;
 class Player_Client : public olc::net::client_interface<MSG_FROM>
 {
 private:
-	std::string _game_server{};
+	int _this_country_index{};
+	std::unordered_map<uint32_t, Data_Country> _countries;
 
-	std::unordered_map<uint32_t, Data_Resources> _resources;
-	std::unordered_map<uint32_t, Data_Points> _points;
-	std::unordered_map<uint32_t, Data_Locations> _locations;
-	
 	void OnMessage(olc::net::message<MSG_FROM> &msg) override;
 	void redrawInterface();
 
