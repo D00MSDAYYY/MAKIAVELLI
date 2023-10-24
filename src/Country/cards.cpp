@@ -13,10 +13,6 @@ void CAR::Cards::setDependices(std::shared_ptr<Card_Bank> card_bank,
 	_points = points;
 }
 
-Data_Cards CAR::Cards::convertToData()
-{
-	return Data_Cards();
-}
 
 void Cards::getCard()
 {
@@ -29,12 +25,4 @@ void Cards::update()
 {
 	_cards.pop_front();
 	_cards.push_back({std::make_shared<Card>(Card(0))}); //! check this with debugger
-}
-
-void CAR::Cards::operator<<(olc::net::message<MSG_FROM> msg)
-{
-}
-
-void CAR::Cards::operator>>(olc::net::message<MSG_FROM> msg)
-{
 }

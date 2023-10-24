@@ -1,12 +1,8 @@
 #include <cstdint>
 #include <atomic>
+#include "game_network.hpp"
 
-struct Data_Activity_Points
-{
-	uint8_t _current_points;
-	uint8_t _max_points;
-};
-namespace ACPOI
+namespace AC_POI
 {
 	class Activity_Points
 	{
@@ -18,7 +14,11 @@ namespace ACPOI
 		Activity_Points( int max_p = 0);
 
 		Data_Activity_Points convertToData();
+		// TODO! dont forget to add FROM_SERVER_NEW_CARD
 		int currentPoints(int points = 0);
 		int maxPoints(int points = 0);
+
+		void operator<<(olc::net::message<MSG_FROM> msg);
+		void operator>>(olc::net::message<MSG_FROM> msg);
 	};
 }

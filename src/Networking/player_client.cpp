@@ -57,7 +57,7 @@ void Player_Client::buyPoints(SCOPE scope, const int points)
 	
 }
 
-void Player_Client::buyLocations(SCOPE scope, std::vector<std::pair<unsigned int, unsigned int>> coords)
+void Player_Client::buyLocations(SCOPE scope, std::vector<std::pair<uint32_t, uint32_t>> coords)
 {
 
 	

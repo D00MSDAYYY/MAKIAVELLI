@@ -1,16 +1,10 @@
 #include "activity_points.hpp"
 
-using ACPOI::Activity_Points;
+using AC_POI::Activity_Points;
 
-ACPOI::Activity_Points::Activity_Points(int max_p)
+AC_POI::Activity_Points::Activity_Points(int max_p)
 	: _current_points{max_p}, _max_points{max_p}
 {
-}
-
-Data_Activity_Points ACPOI::Activity_Points::convertToData()
-{
-	return Data_Activity_Points{uint8_t{_current_points},
-								uint8_t{_max_points}};
 }
 
 int Activity_Points::currentPoints(int points)
@@ -31,4 +25,14 @@ int Activity_Points::maxPoints(int points)
 	if (_max_points < 0)
 		_max_points = 0;
 	return 1;
+}
+
+void AC_POI::Activity_Points::operator<<(olc::net::message<MSG_FROM> msg)
+{
+	msg >> _max_points >> _current_points;
+}
+
+void AC_POI::Activity_Points::operator>>(olc::net::message<MSG_FROM> msg)
+{
+	msg << uint32_t(_current_points) << uint32_t(_max_points);
 }

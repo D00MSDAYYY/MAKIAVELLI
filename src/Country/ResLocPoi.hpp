@@ -69,7 +69,7 @@ namespace RES
 		bool operator>(const Resources &r) const;
 		bool operator>=(const Resources &r) const;
 		bool operator==(const Resources &r) const;
-		
+
 		const Resources operator+(const Resources &r) const;
 		const Resources &operator+=(const Resources &r);
 		const Resources operator-(const Resources &r) const;
@@ -85,7 +85,6 @@ namespace RES
 	Resources tag_invoke(boost::json::value_to_tag<Resources>, boost::json::value const &jv);
 	void tag_invoke(boost::json::value_from_tag, boost::json::value &jv, Resources const &res);
 }
-
 
 namespace POI
 {
@@ -116,7 +115,6 @@ namespace POI
 		float _farm_coef{1.0};
 		float _industry_coef{1.0};
 
-		
 		Resources _army_points_cost{0, 0, 0, 0};
 		Resources _science_points_cost{0, 0, 0, 0};
 		Resources _oil_points_cost{0, 0, 0, 0};
@@ -186,18 +184,18 @@ namespace POI
 	void tag_invoke(boost::json::value_from_tag, boost::json::value &jv, Points const &p);
 }
 
-
 class Map;
 namespace LOC
 {
 	using RES::Resources;
+
 	class Locations
 	{
 	private:
 		std::weak_ptr<Resources> _resources;
 		std::shared_ptr<Map> _map;
 
-		std::vector<std::pair<unsigned int, unsigned int>> _country_map{};
+		std::vector<std::pair<uint32_t, uint32_t>> _country_map{};
 
 		float _oil_coef{1.0};
 		float _mineral_coef{1.0};
@@ -210,7 +208,8 @@ namespace LOC
 		Resources _industry_loc_cost{0, 0, 0, 0};
 
 	public:
-		Locations(std::vector<std::pair<unsigned int, unsigned int>> country_map)
+		Locations() {}
+		Locations(std::vector<std::pair<uint32_t, uint32_t>> country_map)
 			: _country_map{country_map} {}
 
 		void setDependices(std::shared_ptr<Resources> resources);
@@ -220,17 +219,14 @@ namespace LOC
 		Locations &operator+=(const Locations &l);
 		Locations operator-(const Locations &l) const;
 		Locations &operator-=(const Locations &l);
-		
-		//! change to operator + -
 
 		std::shared_ptr<Map> map();
 
-		int oil(std::vector<std::pair<unsigned int, unsigned int>> loc_coord = {});
-		int mineral(std::vector<std::pair<unsigned int, unsigned int>> loc_coord = {});
-		int farm(std::vector<std::pair<unsigned int, unsigned int>> loc_coord = {});
-		int industry(std::vector<std::pair<unsigned int, unsigned int>> loc_coord = {});
-
-		//! bool changeCapital(std::pair<uint8_t, uint8_t> capital_coord);
+		std::vector<std::pair<uint32_t, uint32_t>> country_map() { return _country_map; }
+		int oil(std::vector<std::pair<uint32_t, uint32_t>> loc_coord = {});
+		int mineral(std::vector<std::pair<uint32_t, uint32_t>> loc_coord = {});
+		int farm(std::vector<std::pair<uint32_t, uint32_t>> loc_coord = {});
+		int industry(std::vector<std::pair<uint32_t, uint32_t>> loc_coord = {});
 
 		float oilCoef(float const coef = 0);
 		float mineralCoef(float const coef = 0);
