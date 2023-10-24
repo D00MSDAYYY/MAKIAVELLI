@@ -36,15 +36,18 @@ std::shared_ptr<Locations> Country::locations()
 	return _locations;
 }
 
-Data_Country Country::convertToData() const
+void Country::operator<<(olc::net::message<MSG_FROM> msg)
 {
-	return Data_Country{
-		uint8_t(_data_index),
-		_resources->convertToData(),
-		_points->convertToData(),
-		_locations->convertToData(),
-		_cards->convertToData(),
-		_activity_points->convertToData()};
+	msg >> *_activity_points >> *_cards >> *_locations >> *_points >> *_resources;
+}
+
+void Country::operator>>(olc::net::message<MSG_FROM> msg)
+{
+	msg << *_resources
+		<< *_points
+		<< *_locations
+		<< *_cards
+		<< *_activity_points;
 }
 
 void Country::update()

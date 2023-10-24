@@ -30,3 +30,11 @@ void Cards::update()
 	_cards.pop_front();
 	_cards.push_back({std::make_shared<Card>(Card(0))}); //! check this with debugger
 }
+
+void CAR::Cards::operator<<(olc::net::message<MSG_FROM> msg)
+{
+}
+
+void CAR::Cards::operator>>(olc::net::message<MSG_FROM> msg)
+{
+}

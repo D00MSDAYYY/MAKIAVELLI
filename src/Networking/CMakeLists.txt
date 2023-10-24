@@ -24,4 +24,5 @@ PUBLIC
   Country
   Game
   3rdParty
+  GUI
 )

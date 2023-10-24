@@ -134,7 +134,7 @@ void Game_Factory::createMap(std::unordered_map<uint32_t, Country> &p)
 			}
 
 			std::pair<int, int> new_border_cell{border_cell.first + x_step, border_cell.second + y_step};
-			map->cell({new_border_cell.first, new_border_cell.second}).mapCellOwner(country.locations());
+			map->cell({new_border_cell.first, new_border_cell.second}).mapCellOwner(country.locations().get());
 			map->cell({new_border_cell.first, new_border_cell.second}).mapCellType(Cell_Type::COUNTRY_AREA);
 
 			*country.locations() += Locations{{new_border_cell}};

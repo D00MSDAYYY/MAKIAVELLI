@@ -6,7 +6,6 @@
 enum class MSG_FROM : uint32_t
 {
 	SERVER_HANDSHAKE,
-	SERVER_NEXT_TURN,
 	
 	SERVER_DATA_COUNTRY, //! can be used to prove that activity was valid and activity points can be decreased
 

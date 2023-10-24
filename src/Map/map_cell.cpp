@@ -1,8 +1,8 @@
 #include "map_cell.hpp"
 
-std::weak_ptr<Locations> Map_Cell::mapCellOwner(std::weak_ptr<Locations> owner)
+Locations* Map_Cell::mapCellOwner(Locations* owner)
 {
-	if (owner.expired())
+	if (owner == nullptr)
 		return _cell_owner;
 	else
 	{

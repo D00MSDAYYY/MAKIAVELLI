@@ -46,18 +46,18 @@ void Game_Server::run()
 		{
 			country.activityPoints()->currentPoints(country.activityPoints()->maxPoints());
 
-			Data_Country data_active_country{country.convertToData()};
+			Country data_active_country{country.convertToData()};
 			olc::net::message<MSG_FROM> msg_data_active_country{};
-			msg_data_active_country.header.id = MSG_FROM::SERVER_NEXT_TURN;
+			msg_data_active_country.header.id = MSG_FROM::SERVER_DATA_COUNTRY;
 			msg_data_active_country << data_active_country;
 			MessageAllClients(msg_data_active_country);
 
 			std::this_thread::sleep_for(std::chrono::seconds(_thinking_time));
 			country.activityPoints()->currentPoints(-country.activityPoints()->maxPoints());
 
-			Data_Country data_inactive_country{country.convertToData()};
+			Country data_inactive_country{country.convertToData()};
 			olc::net::message<MSG_FROM> msg_data_inactive_country{};
-			msg_data_inactive_country.header.id = MSG_FROM::SERVER_NEXT_TURN;
+			msg_data_inactive_country.header.id = MSG_FROM::SERVER_DATA_COUNTRY;
 			msg_data_inactive_country << data_inactive_country;
 			MessageAllClients(msg_data_inactive_country);
 		}
@@ -124,13 +124,13 @@ void Game_Server::OnMessage(std::shared_ptr<olc::net::connection<MSG_FROM>> clie
 	{
 		if (_players.at(client->GetID()).activityPoints()->currentPoints() == 0)
 			return;
-		Data_Points data_points;
-		msg >> data_points;
+		Points data_buy_points;
+		msg >> data_buy_points;
 
 		bool is_bought{false};
 		if (!is_bought &&
-			data_points._army_points > 0 &&
-			_players.at(client->GetID()).points()->army(data_points._army_points))
+			data_buy_points.army() > 0 &&
+			_players.at(client->GetID()).points()->army(data_buy_points.army()))
 
 		{
 			_players.at(client->GetID()).activityPoints()->currentPoints(-1);
@@ -138,40 +138,40 @@ void Game_Server::OnMessage(std::shared_ptr<olc::net::connection<MSG_FROM>> clie
 		}
 
 		if (!is_bought &&
-			data_points._science_points > 0 &&
-			_players.at(client->GetID()).points()->army(data_points._science_points))
+			data_buy_points.science() > 0 &&
+			_players.at(client->GetID()).points()->army(data_buy_points.science()))
 		{
 			_players.at(client->GetID()).activityPoints()->currentPoints(-1);
 			is_bought = true;
 		}
 
 		if (!is_bought &&
-			data_points._oil_points > 0 &&
-			_players.at(client->GetID()).points()->army(data_points._oil_points))
+			data_buy_points._oil_points > 0 &&
+			_players.at(client->GetID()).points()->army(data_buy_points._oil_points))
 		{
 			_players.at(client->GetID()).activityPoints()->currentPoints(-1);
 			is_bought = true;
 		}
 
 		if (!is_bought &&
-			data_points._mineral_points > 0 &&
-			_players.at(client->GetID()).points()->army(data_points._mineral_points))
+			data_buy_points._mineral_points > 0 &&
+			_players.at(client->GetID()).points()->army(data_buy_points._mineral_points))
 		{
 			_players.at(client->GetID()).activityPoints()->currentPoints(-1);
 			is_bought = true;
 		}
 
 		if (!is_bought &&
-			data_points._farm_points > 0 &&
-			_players.at(client->GetID()).points()->army(data_points._farm_points))
+			data_buy_points._farm_points > 0 &&
+			_players.at(client->GetID()).points()->army(data_buy_points._farm_points))
 		{
 			_players.at(client->GetID()).activityPoints()->currentPoints(-1);
 			is_bought = true;
 		}
 
 		if (!is_bought &&
-			data_points._industry_points > 0 &&
-			_players.at(client->GetID()).points()->army(data_points._industry_points))
+			data_buy_points._industry_points > 0 &&
+			_players.at(client->GetID()).points()->army(data_buy_points._industry_points))
 		{
 			_players.at(client->GetID()).activityPoints()->currentPoints(-1);
 			is_bought = true;
@@ -189,8 +189,12 @@ void Game_Server::OnMessage(std::shared_ptr<olc::net::connection<MSG_FROM>> clie
 		if (_players.at(client->GetID()).activityPoints()->currentPoints() == 0)
 			return;
 		Data_Locations data_locations;
-		msg >> data_locations;
-
+		int size_of_coord_array{0};
+		msg >> size_of_coord_array;
+		for (int i{0}; i < size_of_coord_array; ++i)
+		{
+			msg >> data_locations._loc_coord[i];
+		}
 		bool is_bought{false};
 		if (!is_bought &&
 			data_locations._loc_type == LOC_TYPE::OIL &&
