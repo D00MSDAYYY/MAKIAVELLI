@@ -2,15 +2,7 @@
 
 #include <boost/json.hpp>
 #include <memory>
-
-
-struct Data_Resources
-{
-	uint32_t _oil_resources{};
-	uint32_t _mineral_resources{};
-	uint32_t _farm_resources{};
-	uint32_t _industry_resources{};
-};
+#include "game_network.hpp"
 
 namespace POI
 {
@@ -20,7 +12,6 @@ namespace LOC
 {
 	class Locations;
 }
-
 
 namespace RES
 {
@@ -59,9 +50,7 @@ namespace RES
 		{
 		}
 
-		Resources(Data_Resources &dr);
 		void setDependices(std::shared_ptr<Points> points, std::shared_ptr<Locations> locations);
-		Data_Resources convertToData() const;
 
 		int oil(int const resources = 0);
 		int mineral(int const resources = 0);
@@ -89,21 +78,14 @@ namespace RES
 		const Resources &operator*=(const float &coef);
 		const Resources operator/(const float &coef) const;
 		const Resources &operator/=(const float &coef);
+
+		void operator<<(olc::net::message<MSG_FROM> msg);
+		void operator>>(olc::net::message<MSG_FROM> msg);
 	};
 	Resources tag_invoke(boost::json::value_to_tag<Resources>, boost::json::value const &jv);
 	void tag_invoke(boost::json::value_from_tag, boost::json::value &jv, Resources const &res);
 }
 
-
-struct Data_Points
-{
-	uint32_t _army_points{};
-	uint32_t _science_points{};
-	uint32_t _oil_points{};
-	uint32_t _mineral_points{};
-	uint32_t _farm_points{};
-	uint32_t _industry_points{};
-};
 
 namespace POI
 {
@@ -168,7 +150,6 @@ namespace POI
 			setAllCost();
 		}
 		void setDependices(std::shared_ptr<Resources> resources);
-		Data_Points convertToData();
 
 		int army(int const points = 0);
 		int science(int const points = 0);
@@ -197,25 +178,14 @@ namespace POI
 		Points &operator-=(const Points &p);
 		Points operator*(const float &coef) const;
 		Points &operator*=(const float &coef);
+
+		void operator<<(olc::net::message<MSG_FROM> msg);
+		void operator>>(olc::net::message<MSG_FROM> msg);
 	};
 	Points tag_invoke(boost::json::value_to_tag<Points>, boost::json::value const &jv);
 	void tag_invoke(boost::json::value_from_tag, boost::json::value &jv, Points const &p);
 }
 
-enum class LOC_TYPE : uint8_t
-{
-	COUNTRY,
-
-	OIL,
-	MINERAL,
-	FARM,
-	INDUSTRY
-};
-struct Data_Locations
-{
-	LOC_TYPE _loc_type{LOC_TYPE::COUNTRY};
-	std::vector<std::pair<uint32_t, uint32_t>> _loc_coord{};
-};
 
 class Map;
 namespace LOC
@@ -246,8 +216,6 @@ namespace LOC
 		void setDependices(std::shared_ptr<Resources> resources);
 		void setDependices(std::shared_ptr<Map> map);
 
-		Data_Locations convertToData();
-
 		Locations operator+(const Locations &l) const;
 		Locations &operator+=(const Locations &l);
 		Locations operator-(const Locations &l) const;
@@ -270,8 +238,8 @@ namespace LOC
 		float industryCoef(float const coef = 0);
 		float allCoef(float const coef = 0);
 
-		bool operator<(const Locations &cl) const;
-		bool operator<=(const Locations &cl) const;
+		void operator<<(olc::net::message<MSG_FROM> msg);
+		void operator>>(olc::net::message<MSG_FROM> msg);
 	};
 	Locations tag_invoke(boost::json::value_to_tag<Locations>, boost::json::value const &jv);
 	void tag_invoke(boost::json::value_from_tag, boost::json::value &jv, Locations const &p);

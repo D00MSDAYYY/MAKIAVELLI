@@ -24,14 +24,13 @@ enum class Cell_Type
 class Map_Cell
 {
 private:
-	std::weak_ptr<Locations> _cell_owner{};
+	Locations *_cell_owner{};
 	Cell_Type _cell_type{Cell_Type::OCEAN};
 
 public:
 	Map_Cell(){};
 
 	int color{};
-	std::weak_ptr<Locations> mapCellOwner(std::weak_ptr<Locations> owner = {});
+	Locations *mapCellOwner(Locations *owner = nullptr);
 	Cell_Type mapCellType(Cell_Type type = Cell_Type::OCEAN);
-
 };

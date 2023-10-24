@@ -13,14 +13,13 @@ enum class SCOPE
 	OIL,
 	MINERAL,
 	FARM,
-	INDUSTRY,
-	ALL
+	INDUSTRY
 };
 
-struct Data_Cards
-{
-	std::vector<std::pair<uint8_t, uint8_t>> _cards; // duration and index
-};
+// struct Data_Cards
+// {
+// 	std::vector<std::pair<uint8_t, uint8_t>> _cards; // duration and index
+// };
 
 namespace CAR
 {
@@ -46,9 +45,11 @@ namespace CAR
 						   std::shared_ptr<Locations> locations,
 						   std::shared_ptr<Resources> resources,
 						   std::shared_ptr<Points> points);
-		Data_Cards convertToData();
 
 		void getCard();
 		void update();
+
+		void operator<<(olc::net::message<MSG_FROM> msg);
+		void operator>>(olc::net::message<MSG_FROM> msg);
 	};
 }

@@ -1,8 +1,8 @@
-#include <iostream>
-#include "game_server.hpp"
+#include "3rdParty/net_message.hpp"
+
+#include <QApplication>
 
 int main(int argc, char *argv[])
 {
-	Game_Server gs{2, 0, 100, 15, 0};
-	gs.run();
+	
 }

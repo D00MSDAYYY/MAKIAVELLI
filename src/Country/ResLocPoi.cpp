@@ -7,27 +7,10 @@
 
 using RES::Resources;
 
-Resources::Resources(Data_Resources &dr)
-{
-	_oil_resources = int(dr._oil_resources);
-	_mineral_resources = int(dr._mineral_resources);
-	_farm_resources = int(dr._farm_resources);
-	_industry_resources = int(dr._industry_resources);
-}
-
 void Resources::setDependices(std::shared_ptr<Points> points, std::shared_ptr<Locations> locations)
 {
 	_points = points;
 	_locations = locations;
-}
-
-Data_Resources RES::Resources::convertToData() const
-{
-	return Data_Resources{
-		uint32_t(_oil_resources),
-		uint32_t(_mineral_resources),
-		uint32_t(_farm_resources),
-		uint32_t(_industry_resources)};
 }
 
 int Resources::oil(int const resources)
@@ -222,6 +205,19 @@ const Resources &Resources::operator/=(const float &coef)
 	return *this;
 }
 
+void Resources::operator<<(olc::net::message<MSG_FROM> msg)
+{
+	msg >> _industry_resources >> _farm_resources >> _mineral_resources >> _oil_resources;
+}
+
+void Resources::operator>>(olc::net::message<MSG_FROM> msg)
+{
+	msg << uint32_t(_oil_resources)
+		<< uint32_t(_mineral_resources)
+		<< uint32_t(_farm_resources)
+		<< uint32_t(_industry_resources);
+}
+
 void Resources::updateRes()
 {
 	_oil_resources += OIL_BASE * _oil_coef * _locations.lock()->oil();
@@ -258,12 +254,6 @@ void Locations::setDependices(std::shared_ptr<Map> map)
 {
 	_map = map;
 }
-
-Data_Locations LOC::Locations::convertToData()
-{
-	return Data_Locations{LOC_TYPE::COUNTRY, _country_map};
-}
-
 
 Locations LOC::Locations::operator+(const Locations &l) const
 {
@@ -323,12 +313,13 @@ int LOC::Locations::oil(std::vector<std::pair<unsigned int, unsigned int>> coord
 		{
 			if (_oil_loc_cost * _oil_coef <= *_resources.lock())
 			{
-				if (_map->cell(coord).mapCellOwner().lock().get() == this &&
+				if (_map->cell(coord).mapCellOwner() == this &&
 					_map->find(Cell_Type::COUNTRY_AREA, coord))
 				{
 					*_resources.lock() -= _oil_loc_cost * _oil_coef;
-					_map->cell(coord).mapCellOwner(std::shared_ptr<Locations>(this));
+					_map->cell(coord).mapCellOwner(this);
 					_map->cell(coord).mapCellType(Cell_Type::OIL_LOCATION);
+					isChanged = true;
 				}
 			}
 			else
@@ -336,17 +327,11 @@ int LOC::Locations::oil(std::vector<std::pair<unsigned int, unsigned int>> coord
 				break;
 			}
 		}
-		int count{};
-		for (auto &country_coord : _country_map)
-		{
-			if (_map->find(Cell_Type::OIL_LOCATION, country_coord))
-				++count;
-		}
-		return count;
+		return isChanged;
 	}
 }
 
-int LOC::Locations::mineral(std::vector<std::pair<unsigned int, unsigned int>> coords)
+int Locations::mineral(std::vector<std::pair<unsigned int, unsigned int>> coords)
 {
 	if (coords.size() == 0)
 	{
@@ -365,12 +350,13 @@ int LOC::Locations::mineral(std::vector<std::pair<unsigned int, unsigned int>> c
 		{
 			if (_mineral_loc_cost * _mineral_coef <= *_resources.lock())
 			{
-				if (_map->cell(coord).mapCellOwner().lock().get() == this &&
+				if (_map->cell(coord).mapCellOwner() == this &&
 					_map->find(Cell_Type::COUNTRY_AREA, coord))
 				{
 					*_resources.lock() -= _mineral_loc_cost * _mineral_coef;
-					_map->cell(coord).mapCellOwner(std::shared_ptr<Locations>(this));
+					_map->cell(coord).mapCellOwner(this);
 					_map->cell(coord).mapCellType(Cell_Type::MINERAL_LOCATION);
+					isChanged = true;
 				}
 			}
 			else
@@ -378,13 +364,7 @@ int LOC::Locations::mineral(std::vector<std::pair<unsigned int, unsigned int>> c
 				break;
 			}
 		}
-		int count{};
-		for (auto &country_coord : _country_map)
-		{
-			if (_map->find(Cell_Type::MINERAL_LOCATION, country_coord))
-				++count;
-		}
-		return count;
+		return isChanged;
 	}
 }
 
@@ -407,12 +387,13 @@ int LOC::Locations::farm(std::vector<std::pair<unsigned int, unsigned int>> coor
 		{
 			if (_farm_loc_cost * _farm_coef <= *_resources.lock())
 			{
-				if (_map->cell(coord).mapCellOwner().lock().get() == this &&
+				if (_map->cell(coord).mapCellOwner() == this &&
 					_map->find(Cell_Type::COUNTRY_AREA, coord))
 				{
 					*_resources.lock() -= _farm_loc_cost * _farm_coef;
-					_map->cell(coord).mapCellOwner(std::shared_ptr<Locations>(this));
+					_map->cell(coord).mapCellOwner(this);
 					_map->cell(coord).mapCellType(Cell_Type::FARM_LOCATION);
+					isChanged = true;
 				}
 			}
 			else
@@ -420,13 +401,7 @@ int LOC::Locations::farm(std::vector<std::pair<unsigned int, unsigned int>> coor
 				break;
 			}
 		}
-		int count{};
-		for (auto &country_coord : _country_map)
-		{
-			if (_map->find(Cell_Type::FARM_LOCATION, country_coord))
-				++count;
-		}
-		return count;
+		return isChanged;
 	}
 }
 
@@ -450,12 +425,13 @@ int LOC::Locations::industry(std::vector<std::pair<unsigned int, unsigned int>> 
 		{
 			if (_industry_loc_cost * _industry_coef <= *_resources.lock())
 			{
-				if (_map->cell(coord).mapCellOwner().lock().get() == this &&
+				if (_map->cell(coord).mapCellOwner() == this &&
 					_map->find(Cell_Type::COUNTRY_AREA, coord))
 				{
 					*_resources.lock() -= _industry_loc_cost * _industry_coef;
-					_map->cell(coord).mapCellOwner(std::shared_ptr<Locations>(this));
+					_map->cell(coord).mapCellOwner(this);
 					_map->cell(coord).mapCellType(Cell_Type::INDUSTRY_LOCATION);
+					isChanged = true;
 				}
 			}
 			else
@@ -463,36 +439,10 @@ int LOC::Locations::industry(std::vector<std::pair<unsigned int, unsigned int>> 
 				break;
 			}
 		}
-		int count{};
-		for (auto &country_coord : _country_map)
-		{
-			if (_map->find(Cell_Type::INDUSTRY_LOCATION, country_coord))
-				++count;
-		}
-		return count;
+		return isChanged;
 	}
 }
 
-bool LOC::Locations::operator<(const Locations &cl) const
-{
-	auto _this{*this};
-	auto l{cl};
-	if (_this.oil() < l.oil() ||
-		_this.mineral() < l.mineral() ||
-		_this.farm() < l.farm() ||
-		_this.industry() < l.industry())
-		return true;
-	else
-		return false;
-}
-
-bool Locations::operator<=(const Locations &cl) const
-{
-	if (*this < cl || (!(*this < cl) && !(cl < *this)))
-		return true;
-	else
-		return false;
-}
 
 Locations LOC::tag_invoke(boost::json::value_to_tag<Locations>, boost::json::value const &jv)
 {
@@ -709,17 +659,6 @@ void Points::setDependices(std::shared_ptr<Resources> resources)
 	_resources = resources;
 }
 
-Data_Points POI::Points::convertToData()
-{
-	return Data_Points{
-		uint32_t(_army_points),
-		uint32_t(_science_points),
-		uint32_t(_oil_points),
-		uint32_t(_mineral_points),
-		uint32_t(_farm_points),
-		uint32_t(_industry_points)};
-}
-
 int Points::army(int const points)
 {
 	if (points == 0)
@@ -730,7 +669,7 @@ int Points::army(int const points)
 		if (_army_points < 0)
 			_army_points = 0;
 		setArmyCost();
-		return 1;
+		return 0;
 	}
 	bool isChanged = false;
 	while (_army_points < MAX_ARMY_POINTS &&
@@ -756,7 +695,7 @@ int Points::science(int const points)
 		if (_science_points < 0)
 			_science_points = 0;
 		setScienceCost();
-		return 1;
+		return 0;
 	}
 	bool isChanged = false;
 	while (_science_points < MAX_SCIENCE_POINTS &&
@@ -782,7 +721,7 @@ int Points::oil(int const points)
 		if (_oil_points < 0)
 			_oil_points = 0;
 		setOilCost();
-		return 1;
+		return 0;
 	}
 	bool isChanged = false;
 	while (_oil_points < MAX_OIL_POINTS &&
@@ -808,7 +747,7 @@ int Points::mineral(int const points)
 		if (_mineral_points < 0)
 			_mineral_points = 0;
 		setMineralCost();
-		return 1;
+		return 0;
 	}
 	bool isChanged = false;
 	while (_mineral_points < MAX_MINERAL_POINTS &&
@@ -834,7 +773,7 @@ int Points::farm(int const points)
 		if (_farm_points < 0)
 			_farm_points = 0;
 		setFarmCost();
-		return 1;
+		return 0;
 	}
 	bool isChanged = false;
 	while (_farm_points < MAX_FARM_POINTS &&
@@ -860,7 +799,7 @@ int Points::industry(int const points)
 		if (_industry_points < 0)
 			_industry_points = 0;
 		setIndustryCost();
-		return 1;
+		return 0;
 	}
 	bool isChanged = false;
 	while (_industry_points < MAX_INDUSTRY_POINTS &&
@@ -1063,6 +1002,21 @@ Points &Points::operator*=(const float &coef)
 	return *this;
 }
 
+void Points::operator<<(olc::net::message<MSG_FROM> msg)
+{
+	msg >> _industry_points >> _farm_points >> _mineral_points >> _oil_points >> _science_points >> _army_points;
+}
+
+void Points::operator>>(olc::net::message<MSG_FROM> msg)
+{
+	msg << uint32_t(_army_points)
+		<< uint32_t(_science_points)
+		<< uint32_t(_oil_points)
+		<< uint32_t(_mineral_points)
+		<< uint32_t(_farm_points)
+		<< uint32_t(_industry_points);
+}
+
 Points POI::tag_invoke(boost::json::value_to_tag<Points>, boost::json::value const &jv)
 {
 	boost::json::object const &obj = jv.as_object();
@@ -1082,4 +1036,26 @@ void POI::tag_invoke(boost::json::value_from_tag, boost::json::value &jv, Points
 		  {"mineral", temp.mineral()},
 		  {"farm", temp.farm()},
 		  {"industry", temp.industry()}};
+}
+
+void Locations::operator<<(olc::net::message<MSG_FROM> msg)
+{
+	unsigned int size{};
+	msg >> size;
+	unsigned int x;
+	unsigned int y;
+	for (int i{0}; i < size; ++i)
+	{
+		msg >> x >> y;
+		_country_map.push_back({x, y});
+	}
+}
+
+void Locations::operator>>(olc::net::message<MSG_FROM> msg)
+{
+	for (auto &[x,y] : _country_map)
+	{
+		msg << y << x;
+	}
+	msg << _country_map.size();
 }
