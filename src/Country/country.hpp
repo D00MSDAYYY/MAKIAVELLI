@@ -6,7 +6,7 @@
 #include "activity_points.hpp"
 #include "game_network.hpp"
 
-using ACPOI::Activity_Points;
+using AC_POI::Activity_Points;
 using CAR::Cards;
 using LOC::Locations;
 using POI::Points;

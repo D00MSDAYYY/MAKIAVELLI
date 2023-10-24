@@ -82,7 +82,7 @@ void Game_Factory::createMap(std::unordered_map<uint32_t, Country> &p)
 			 y += 2)
 		{
 		}
-		map->cell({x, y}).mapCellOwner(country.locations());
+		map->cell({x, y}).mapCellOwner(country.locations().get());
 		map->cell({x, y}).mapCellType(Cell_Type::CAPITAL);
 
 		const int MIN_COUNTRY_SIZE{50};

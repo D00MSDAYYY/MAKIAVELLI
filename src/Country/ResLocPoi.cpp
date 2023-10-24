@@ -294,14 +294,14 @@ std::shared_ptr<Map> LOC::Locations::map()
 	return _map;
 }
 
-int LOC::Locations::oil(std::vector<std::pair<unsigned int, unsigned int>> coords)
+int LOC::Locations::oil(std::vector<std::pair<uint32_t, uint32_t>> coords)
 {
 	if (coords.size() == 0)
 	{
 		int count{};
 		for (auto &country_coord : _country_map)
 		{
-			if (_map->find(Cell_Type::OIL_LOCATION, country_coord))
+			if (_map->find(Cell_Type::OIL, country_coord))
 				++count;
 		}
 		return count;
@@ -318,7 +318,7 @@ int LOC::Locations::oil(std::vector<std::pair<unsigned int, unsigned int>> coord
 				{
 					*_resources.lock() -= _oil_loc_cost * _oil_coef;
 					_map->cell(coord).mapCellOwner(this);
-					_map->cell(coord).mapCellType(Cell_Type::OIL_LOCATION);
+					_map->cell(coord).mapCellType(Cell_Type::OIL);
 					isChanged = true;
 				}
 			}
@@ -331,14 +331,14 @@ int LOC::Locations::oil(std::vector<std::pair<unsigned int, unsigned int>> coord
 	}
 }
 
-int Locations::mineral(std::vector<std::pair<unsigned int, unsigned int>> coords)
+int Locations::mineral(std::vector<std::pair<uint32_t, uint32_t>> coords)
 {
 	if (coords.size() == 0)
 	{
 		int count{};
 		for (auto &country_coord : _country_map)
 		{
-			if (_map->find(Cell_Type::MINERAL_LOCATION, country_coord))
+			if (_map->find(Cell_Type::MINERAL, country_coord))
 				++count;
 		}
 		return count;
@@ -355,7 +355,7 @@ int Locations::mineral(std::vector<std::pair<unsigned int, unsigned int>> coords
 				{
 					*_resources.lock() -= _mineral_loc_cost * _mineral_coef;
 					_map->cell(coord).mapCellOwner(this);
-					_map->cell(coord).mapCellType(Cell_Type::MINERAL_LOCATION);
+					_map->cell(coord).mapCellType(Cell_Type::MINERAL);
 					isChanged = true;
 				}
 			}
@@ -368,14 +368,14 @@ int Locations::mineral(std::vector<std::pair<unsigned int, unsigned int>> coords
 	}
 }
 
-int LOC::Locations::farm(std::vector<std::pair<unsigned int, unsigned int>> coords)
+int LOC::Locations::farm(std::vector<std::pair<uint32_t, uint32_t>> coords)
 {
 	if (coords.size() == 0)
 	{
 		int count{};
 		for (auto &country_coord : _country_map)
 		{
-			if (_map->find(Cell_Type::FARM_LOCATION, country_coord))
+			if (_map->find(Cell_Type::FARM, country_coord))
 				++count;
 		}
 		return count;
@@ -392,7 +392,7 @@ int LOC::Locations::farm(std::vector<std::pair<unsigned int, unsigned int>> coor
 				{
 					*_resources.lock() -= _farm_loc_cost * _farm_coef;
 					_map->cell(coord).mapCellOwner(this);
-					_map->cell(coord).mapCellType(Cell_Type::FARM_LOCATION);
+					_map->cell(coord).mapCellType(Cell_Type::FARM);
 					isChanged = true;
 				}
 			}
@@ -405,7 +405,7 @@ int LOC::Locations::farm(std::vector<std::pair<unsigned int, unsigned int>> coor
 	}
 }
 
-int LOC::Locations::industry(std::vector<std::pair<unsigned int, unsigned int>> coords)
+int LOC::Locations::industry(std::vector<std::pair<uint32_t, uint32_t>> coords)
 {
 
 	if (coords.size() == 0)
@@ -413,7 +413,7 @@ int LOC::Locations::industry(std::vector<std::pair<unsigned int, unsigned int>> 
 		int count{};
 		for (auto &country_coord : _country_map)
 		{
-			if (_map->find(Cell_Type::INDUSTRY_LOCATION, country_coord))
+			if (_map->find(Cell_Type::INDUSTRY, country_coord))
 				++count;
 		}
 		return count;
@@ -430,7 +430,7 @@ int LOC::Locations::industry(std::vector<std::pair<unsigned int, unsigned int>> 
 				{
 					*_resources.lock() -= _industry_loc_cost * _industry_coef;
 					_map->cell(coord).mapCellOwner(this);
-					_map->cell(coord).mapCellType(Cell_Type::INDUSTRY_LOCATION);
+					_map->cell(coord).mapCellType(Cell_Type::INDUSTRY);
 					isChanged = true;
 				}
 			}
@@ -448,7 +448,7 @@ Locations LOC::tag_invoke(boost::json::value_to_tag<Locations>, boost::json::val
 {
 	boost::json::object const &obj = jv.as_object();
 
-	std::vector<std::pair<unsigned int, unsigned int>> country_map;
+	std::vector<std::pair<uint32_t, uint32_t>> country_map;
 	country_map.resize(boost::json::value_to<int>(obj.at("country map")));
 
 	return Locations{country_map};
@@ -1040,10 +1040,10 @@ void POI::tag_invoke(boost::json::value_from_tag, boost::json::value &jv, Points
 
 void Locations::operator<<(olc::net::message<MSG_FROM> msg)
 {
-	unsigned int size{};
+	uint32_t size{};
 	msg >> size;
-	unsigned int x;
-	unsigned int y;
+	uint32_t x;
+	uint32_t y;
 	for (int i{0}; i < size; ++i)
 	{
 		msg >> x >> y;

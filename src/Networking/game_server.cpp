@@ -46,20 +46,18 @@ void Game_Server::run()
 		{
 			country.activityPoints()->currentPoints(country.activityPoints()->maxPoints());
 
-			Country data_active_country{country.convertToData()};
-			olc::net::message<MSG_FROM> msg_data_active_country{};
-			msg_data_active_country.header.id = MSG_FROM::SERVER_DATA_COUNTRY;
-			msg_data_active_country << data_active_country;
-			MessageAllClients(msg_data_active_country);
+			olc::net::message<MSG_FROM> msg_active_country{};
+			msg_active_country.header.id = MSG_FROM::SERVER_DATA_COUNTRY;
+			country >> msg_active_country;
+			MessageAllClients(msg_active_country);
 
 			std::this_thread::sleep_for(std::chrono::seconds(_thinking_time));
 			country.activityPoints()->currentPoints(-country.activityPoints()->maxPoints());
 
-			Country data_inactive_country{country.convertToData()};
-			olc::net::message<MSG_FROM> msg_data_inactive_country{};
-			msg_data_inactive_country.header.id = MSG_FROM::SERVER_DATA_COUNTRY;
-			msg_data_inactive_country << data_inactive_country;
-			MessageAllClients(msg_data_inactive_country);
+			olc::net::message<MSG_FROM> msg_inactive_country{};
+			msg_inactive_country.header.id = MSG_FROM::SERVER_DATA_COUNTRY;
+			country >> msg_inactive_country;
+			MessageAllClients(msg_inactive_country);
 		}
 	}
 	thread_updating.request_stop();
@@ -86,14 +84,14 @@ void Game_Server::OnClientValidated(std::shared_ptr<olc::net::connection<MSG_FRO
 
 				olc::net::message<MSG_FROM> msg;
 				msg.header.id = MSG_FROM::SERVER_HANDSHAKE;
-				msg << country.convertToData()._data_index;
+				country >> msg;
 				MessageClient(client, msg);
 
 				for (auto &[ID, country] : _players)
 				{
 					olc::net::message<MSG_FROM> msg;
 					msg.header.id = MSG_FROM::SERVER_DATA_COUNTRY;
-					msg << country.convertToData();
+					country >> msg;
 					MessageClient(client, msg);
 				}
 				return;
@@ -124,13 +122,13 @@ void Game_Server::OnMessage(std::shared_ptr<olc::net::connection<MSG_FROM>> clie
 	{
 		if (_players.at(client->GetID()).activityPoints()->currentPoints() == 0)
 			return;
-		Points data_buy_points;
-		msg >> data_buy_points;
+		Points buy_points;
+		buy_points << msg;
 
 		bool is_bought{false};
 		if (!is_bought &&
-			data_buy_points.army() > 0 &&
-			_players.at(client->GetID()).points()->army(data_buy_points.army()))
+			buy_points.army() > 0 &&
+			_players.at(client->GetID()).points()->army(buy_points.army()))
 
 		{
 			_players.at(client->GetID()).activityPoints()->currentPoints(-1);
@@ -138,127 +136,122 @@ void Game_Server::OnMessage(std::shared_ptr<olc::net::connection<MSG_FROM>> clie
 		}
 
 		if (!is_bought &&
-			data_buy_points.science() > 0 &&
-			_players.at(client->GetID()).points()->army(data_buy_points.science()))
+			buy_points.science() > 0 &&
+			_players.at(client->GetID()).points()->army(buy_points.science()))
 		{
 			_players.at(client->GetID()).activityPoints()->currentPoints(-1);
 			is_bought = true;
 		}
 
 		if (!is_bought &&
-			data_buy_points._oil_points > 0 &&
-			_players.at(client->GetID()).points()->army(data_buy_points._oil_points))
+			buy_points.oil() > 0 &&
+			_players.at(client->GetID()).points()->army(buy_points.oil()))
 		{
 			_players.at(client->GetID()).activityPoints()->currentPoints(-1);
 			is_bought = true;
 		}
 
 		if (!is_bought &&
-			data_buy_points._mineral_points > 0 &&
-			_players.at(client->GetID()).points()->army(data_buy_points._mineral_points))
+			buy_points.mineral() > 0 &&
+			_players.at(client->GetID()).points()->army(buy_points.mineral()))
 		{
 			_players.at(client->GetID()).activityPoints()->currentPoints(-1);
 			is_bought = true;
 		}
 
 		if (!is_bought &&
-			data_buy_points._farm_points > 0 &&
-			_players.at(client->GetID()).points()->army(data_buy_points._farm_points))
+
+			_players.at(client->GetID()).points()->army(buy_points.farm()))
 		{
 			_players.at(client->GetID()).activityPoints()->currentPoints(-1);
 			is_bought = true;
 		}
 
 		if (!is_bought &&
-			data_buy_points._industry_points > 0 &&
-			_players.at(client->GetID()).points()->army(data_buy_points._industry_points))
+
+			_players.at(client->GetID()).points()->army(buy_points.industry()))
 		{
 			_players.at(client->GetID()).activityPoints()->currentPoints(-1);
 			is_bought = true;
 		}
 
-		olc::net::message<MSG_FROM> msg_data_country{};
-		msg_data_country.header.id = MSG_FROM::SERVER_DATA_COUNTRY;
-		msg_data_country << _players.at(client->GetID()).convertToData();
-		MessageAllClients(msg_data_country);
-		//! send the whole country data coz everything is changed
+		olc::net::message<MSG_FROM> msg_country{};
+		msg_country.header.id = MSG_FROM::SERVER_DATA_COUNTRY;
+		_players.at(client->GetID()) >> msg_country;
+		MessageAllClients(msg_country);
 		break;
 	}
 	case MSG_FROM::CLIENT_BUY_LOCATIONS:
 	{
 		if (_players.at(client->GetID()).activityPoints()->currentPoints() == 0)
 			return;
-		Data_Locations data_locations;
-		int size_of_coord_array{0};
-		msg >> size_of_coord_array;
-		for (int i{0}; i < size_of_coord_array; ++i)
-		{
-			msg >> data_locations._loc_coord[i];
-		}
+
+		Locations buy_locations{};
+		buy_locations << msg;
+
 		bool is_bought{false};
 		if (!is_bought &&
-			data_locations._loc_type == LOC_TYPE::OIL &&
-			data_locations._loc_coord.size() > 0 &&
-			_players.at(client->GetID()).locations()->oil(data_locations._loc_coord))
+			buy_locations.oil() > 0 &&
+			_players.at(client->GetID()).locations()->oil(buy_locations.country_map()))
 		{
 			_players.at(client->GetID()).activityPoints()->currentPoints(-1);
 			is_bought = true;
 		}
 
 		if (!is_bought &&
-			data_locations._loc_type == LOC_TYPE::MINERAL &&
-			data_locations._loc_coord.size() > 0 &&
-			_players.at(client->GetID()).locations()->mineral(data_locations._loc_coord))
+			buy_locations.mineral() > 0 &&
+			_players.at(client->GetID()).locations()->mineral(buy_locations.country_map()))
 		{
 			_players.at(client->GetID()).activityPoints()->currentPoints(-1);
 			is_bought = true;
 		}
 
 		if (!is_bought &&
-			data_locations._loc_type == LOC_TYPE::FARM &&
-			data_locations._loc_coord.size() > 0 &&
-			_players.at(client->GetID()).locations()->farm(data_locations._loc_coord))
+			buy_locations.farm() > 0 &&
+			_players.at(client->GetID()).locations()->farm(buy_locations.country_map()))
 		{
 			_players.at(client->GetID()).activityPoints()->currentPoints(-1);
 			is_bought = true;
 		}
 
 		if (!is_bought &&
-			data_locations._loc_type == LOC_TYPE::INDUSTRY &&
-			data_locations._loc_coord.size() > 0 &&
-			_players.at(client->GetID()).locations()->industry(data_locations._loc_coord))
+			buy_locations.industry() > 0 &&
+			_players.at(client->GetID()).locations()->industry(buy_locations.country_map()))
 		{
 			_players.at(client->GetID()).activityPoints()->currentPoints(-1);
 			is_bought = true;
 		}
 
-		olc::net::message<MSG_FROM> msg_data_country{};
-		msg_data_country.header.id = MSG_FROM::SERVER_DATA_COUNTRY;
-		msg_data_country << _players.at(client->GetID()).convertToData();
-		MessageAllClients(msg_data_country);
+		olc::net::message<MSG_FROM> msg_country{};
+		msg_country.header.id = MSG_FROM::SERVER_DATA_COUNTRY;
+		_players.at(client->GetID()) >> msg_country;
+		MessageAllClients(msg_country);
 		break;
 	}
 	case MSG_FROM::CLIENT_REQUEST_EXCHANGE_RES:
 	{
-		Data_Country data_sender_request_exchange;
-		Data_Country data_receiver_request_exchange;
-		msg >> data_sender_request_exchange >> data_receiver_request_exchange;
+		Country sender_request_exchange;
+		Country receiver_request_exchange;
+
+		sender_request_exchange << msg;
+		receiver_request_exchange << msg;
 
 		auto receiver_client{
 			std::find_if(
 				m_deqConnections.begin(),
 				m_deqConnections.end(),
-				[&data_sender_request_exchange, this](const auto &connection)
+				[&sender_request_exchange, this](const auto &connection)
 				{
-					return _players.at(connection->GetID()).index() == data_sender_request_exchange._data_index;
+					return _players.at(connection->GetID()).index() == sender_request_exchange.index();
 				})};
 
 		if (receiver_client != m_deqConnections.end())
 		{
 			olc::net::message<MSG_FROM> msg_request_exchange{};
 			msg_request_exchange.header.id = MSG_FROM::SERVER_REQUEST_EXCHANGE_RES;
-			data_sender_request_exchange._data_index = _players.at(client->GetID()).index();
-			msg_request_exchange << data_receiver_request_exchange << data_sender_request_exchange;
+
+			receiver_request_exchange >> msg_request_exchange;
+			sender_request_exchange >> msg_request_exchange;
 			MessageClient(*receiver_client, msg_request_exchange);
 		}
 
@@ -267,40 +260,47 @@ void Game_Server::OnMessage(std::shared_ptr<olc::net::connection<MSG_FROM>> clie
 
 	case MSG_FROM::CLIENT_ACCEPT_EXCHANGE_RES: //! maybe remove it to simplicity ERROR LOGIC
 	{
-		Data_Country data_sender_accept_exchange;
-		Data_Country data_receiver_accept_exchange;
-		msg >> data_sender_accept_exchange >> data_receiver_accept_exchange;
-		auto sender_client{
+		Country sender_accept_exchange;
+		Country receiver_accept_exchange;
+
+		sender_accept_exchange << msg;
+		receiver_accept_exchange << msg;
+
+		auto receiver_accept_client{
 			std::find_if(
 				m_deqConnections.begin(),
 				m_deqConnections.end(),
-				[&data_sender_accept_exchange, this](const auto &connection)
+				[&receiver_accept_exchange, this](const auto &client)
 				{
-					return _players.at(connection->GetID()).index() == data_sender_accept_exchange._data_index;
+					return _players.at(client->GetID()).index() == receiver_accept_exchange.index();
 				})};
-		if (sender_client != m_deqConnections.end())
+		if (receiver_accept_client != m_deqConnections.end())
 		{
 			if (_players.at(client->GetID()).activityPoints()->currentPoints() != 0 ||
-				_players.at((*sender_client)->GetID()).activityPoints()->currentPoints() != 0)
+				_players.at((*receiver_accept_client)->GetID()).activityPoints()->currentPoints() != 0)
 			{
 				_players.at(client->GetID()).activityPoints()->currentPoints(-1);
-				_players.at((*sender_client)->GetID()).activityPoints()->currentPoints(-1);
+				_players.at((*receiver_accept_client)->GetID()).activityPoints()->currentPoints(-1);
 
-				*_players.at(client->GetID()).resources() +=
-					Resources(data_receiver_accept_exchange._data_resources);
+				*_players.at(client->GetID()).resources() += // TODO! check this logic precisely and consider the condition then the order of this operations affect the final number of resources at both sides
+					*receiver_accept_exchange.resources();
+				*_players.at(client->GetID()).resources() -=
+					*sender_accept_exchange.resources();
 
-				*_players.at((*sender_client)->GetID()).resources() -=
-					Resources(data_sender_accept_exchange._data_resources);
+				*_players.at((*receiver_accept_client)->GetID()).resources() +=
+					*sender_accept_exchange.resources();
+				*_players.at((*receiver_accept_client)->GetID()).resources() -=
+					*receiver_accept_exchange.resources();
 
-				olc::net::message<MSG_FROM> msg_sender_data_country{};
-				msg_sender_data_country.header.id = MSG_FROM::SERVER_DATA_COUNTRY;
-				msg_sender_data_country << _players.at(client->GetID()).convertToData();
-				MessageAllClients(msg_sender_data_country);
+				olc::net::message<MSG_FROM> msg_sender_accept_country{};
+				msg_sender_accept_country.header.id = MSG_FROM::SERVER_DATA_COUNTRY;
+				_players.at(client->GetID()) >> msg_sender_accept_country;
+				MessageAllClients(msg_sender_accept_country);
 
-				olc::net::message<MSG_FROM> msg_receiver_data_country{};
-				msg_receiver_data_country.header.id = MSG_FROM::SERVER_DATA_COUNTRY;
-				msg_receiver_data_country << _players.at((*sender_client)->GetID()).convertToData();
-				MessageAllClients(msg_receiver_data_country);
+				olc::net::message<MSG_FROM> msg_receiver_accept_country{};
+				msg_receiver_accept_country.header.id = MSG_FROM::SERVER_DATA_COUNTRY;
+				_players.at((*receiver_accept_client)->GetID()) >> msg_receiver_accept_country;
+				MessageAllClients(msg_receiver_accept_country);
 			}
 		}
 		break;
