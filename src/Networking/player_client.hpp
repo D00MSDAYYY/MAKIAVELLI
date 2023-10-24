@@ -16,7 +16,7 @@ private:
 	std::unordered_map<uint32_t, Data_Country> _countries;
 
 	void OnMessage(olc::net::message<MSG_FROM> &msg) override;
-	void redrawInterface();
+	//! void redrawInterface();
 
 public:
 	Player_Client(std::string address);
