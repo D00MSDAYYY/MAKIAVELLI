@@ -12,6 +12,7 @@ namespace LOC
 {
 	class Locations;
 }
+class Country;
 
 namespace RES
 {
@@ -20,8 +21,7 @@ namespace RES
 	class Resources
 	{
 	private:
-		std::weak_ptr<Points> _points;
-		std::weak_ptr<Locations> _locations;
+		std::weak_ptr<Country> _country;
 
 		int _oil_resources{};
 		int _mineral_resources{};
@@ -50,7 +50,7 @@ namespace RES
 		{
 		}
 
-		void setDependices(std::shared_ptr<Points> points, std::shared_ptr<Locations> locations);
+		void setDependices(std::shared_ptr<Country> country);
 
 		int oil(int const resources = 0);
 		int mineral(int const resources = 0);
@@ -99,7 +99,7 @@ namespace POI
 		static const int MAX_FARM_POINTS{10};
 		static const int MAX_INDUSTRY_POINTS{10};
 
-		std::weak_ptr<Resources> _resources;
+		std::weak_ptr<Country> _country;
 
 		int _army_points{};
 		int _science_points{};
@@ -147,7 +147,7 @@ namespace POI
 		{
 			setAllCost();
 		}
-		void setDependices(std::shared_ptr<Resources> resources);
+		void setDependices(std::shared_ptr<Country> country);
 
 		int army(int const points = 0);
 		int science(int const points = 0);
@@ -192,10 +192,10 @@ namespace LOC
 	class Locations
 	{
 	private:
-		std::weak_ptr<Resources> _resources;
+		std::weak_ptr<Country> _country;
 		std::shared_ptr<Map> _map;
 
-		std::vector<std::pair<uint32_t, uint32_t>> _country_map{};
+		std::vector<std::pair<int, int>> _country_map{};
 
 		float _oil_coef{1.0};
 		float _mineral_coef{1.0};
@@ -209,10 +209,10 @@ namespace LOC
 
 	public:
 		Locations() {}
-		Locations(std::vector<std::pair<uint32_t, uint32_t>> country_map)
+		Locations(std::vector<std::pair<int, int>> country_map)
 			: _country_map{country_map} {}
 
-		void setDependices(std::shared_ptr<Resources> resources);
+		void setDependices(std::shared_ptr<Country> country);
 		void setDependices(std::shared_ptr<Map> map);
 
 		const Locations operator+(const Locations &l) const;
@@ -222,11 +222,11 @@ namespace LOC
 
 		std::shared_ptr<Map> map();
 
-		std::vector<std::pair<uint32_t, uint32_t>> country_map() { return _country_map; }
-		int oil(std::vector<std::pair<uint32_t, uint32_t>> loc_coord = {});
-		int mineral(std::vector<std::pair<uint32_t, uint32_t>> loc_coord = {});
-		int farm(std::vector<std::pair<uint32_t, uint32_t>> loc_coord = {});
-		int industry(std::vector<std::pair<uint32_t, uint32_t>> loc_coord = {});
+		std::vector<std::pair<int, int>> country_map();
+		int oil(std::vector<std::pair<int, int>> loc_coord = {});
+		int mineral(std::vector<std::pair<int, int>> loc_coord = {});
+		int farm(std::vector<std::pair<int, int>> loc_coord = {});
+		int industry(std::vector<std::pair<int, int>> loc_coord = {});
 
 		float oilCoef(float const coef = 0);
 		float mineralCoef(float const coef = 0);

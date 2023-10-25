@@ -23,5 +23,5 @@ enum class MSG_FROM : uint32_t
 	CLIENT_BUY_POINTS,
 	CLIENT_BUY_LOCATIONS,
 
-	CLIENT_TEXT_MESSAGE // TODO! update client's OnMessage
+	CLIENT_TEXT_MESSAGE 
 };

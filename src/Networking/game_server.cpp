@@ -17,7 +17,7 @@ Game_Server::Game_Server(int play_num, int bot_num,
 	  _thinking_time{thinking_time}
 {
 	Game_Factory factory{_play_num + _bot_num};
-	_players = std::move(factory.createPlayers());
+	_players = factory.createPlayers();
 }
 
 Game_Server::~Game_Server()
@@ -305,6 +305,11 @@ void Game_Server::OnMessage(std::shared_ptr<olc::net::connection<MSG_FROM>> clie
 				MessageAllClients(msg_receiver_accept_country);
 			}
 		}
+		break;
+	}
+	case MSG_FROM::CLIENT_TEXT_MESSAGE:
+	{
+		
 		break;
 	}
 	}

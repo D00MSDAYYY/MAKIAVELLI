@@ -29,7 +29,7 @@ class Country
 private:
 	bool is_busy{false};
 
-	int _index{0};
+	int _index{0}; //TODO! maybe in future delete this and only COUNTRY_COLOR and use it like index
 
 	COUNTRY_COLOR _color{COUNTRY_COLOR::PINK};
 
@@ -41,18 +41,13 @@ private:
 
 public:
 	Country() {}
-	Country(int ndx,
+	Country(int index,
 			std::shared_ptr<Resources> r,
 			std::shared_ptr<Points> p,
 			std::shared_ptr<Locations> l,
 			std::shared_ptr<Cards> cards,
-			std::shared_ptr<Activity_Points> activity_p)
-		: _index{ndx},
-		  _resources{r},
-		  _points{p},
-		  _locations{l},
-		  _cards{cards},
-		  _activity_points{activity_p} {}
+			std::shared_ptr<Activity_Points> activity_p);
+
 
 	bool busy(int flag = -1);
 	const int index() const { return _index; }
