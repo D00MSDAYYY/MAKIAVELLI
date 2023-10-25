@@ -170,12 +170,12 @@ namespace POI
 		bool operator>=(const Points &p) const;
 		bool operator==(const Points &p) const;
 
-		Points operator+(const Points &p) const;
-		Points &operator+=(const Points &p);
-		Points operator-(const Points &p) const;
-		Points &operator-=(const Points &p);
-		Points operator*(const float &coef) const;
-		Points &operator*=(const float &coef);
+		const Points operator+(const Points &p) const;
+		const Points &operator+=(const Points &p);
+		const Points operator-(const Points &p) const;
+		const Points &operator-=(const Points &p);
+		const Points operator*(const float &coef) const;
+		const Points &operator*=(const float &coef);
 
 		void operator<<(olc::net::message<MSG_FROM> msg);
 		void operator>>(olc::net::message<MSG_FROM> msg);
@@ -215,10 +215,10 @@ namespace LOC
 		void setDependices(std::shared_ptr<Resources> resources);
 		void setDependices(std::shared_ptr<Map> map);
 
-		Locations operator+(const Locations &l) const;
-		Locations &operator+=(const Locations &l);
-		Locations operator-(const Locations &l) const;
-		Locations &operator-=(const Locations &l);
+		const Locations operator+(const Locations &l) const;
+		const Locations &operator+=(const Locations &l);
+		const Locations operator-(const Locations &l) const;
+		const Locations &operator-=(const Locations &l);
 
 		std::shared_ptr<Map> map();
 
@@ -232,7 +232,7 @@ namespace LOC
 		float mineralCoef(float const coef = 0);
 		float farmCoef(float const coef = 0);
 		float industryCoef(float const coef = 0);
-		float allCoef(float const coef = 0);
+		float allCoef(float const coef);
 
 		void operator<<(olc::net::message<MSG_FROM> msg);
 		void operator>>(olc::net::message<MSG_FROM> msg);

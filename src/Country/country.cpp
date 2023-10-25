@@ -38,16 +38,20 @@ std::shared_ptr<Locations> Country::locations()
 
 void Country::operator<<(olc::net::message<MSG_FROM> msg)
 {
-	msg >> *_activity_points >> *_cards >> *_locations >> *_points >> *_resources;
+	*_resources << msg;
+	*_points << msg;
+	*_locations << msg;
+	*_cards << msg;
+	*_activity_points << msg;
 }
 
 void Country::operator>>(olc::net::message<MSG_FROM> msg)
 {
-	msg << *_resources
-		<< *_points
-		<< *_locations
-		<< *_cards
-		<< *_activity_points;
+	*_resources >> msg;
+	*_points >> msg;
+	*_locations >> msg;
+	*_cards >> msg;
+	*_activity_points >> msg;
 }
 
 void Country::update()

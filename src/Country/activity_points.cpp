@@ -2,11 +2,6 @@
 
 using AC_POI::Activity_Points;
 
-AC_POI::Activity_Points::Activity_Points(int max_p)
-	: _current_points{max_p}, _max_points{max_p}
-{
-}
-
 int Activity_Points::currentPoints(int points)
 {
 	if (points == 0)

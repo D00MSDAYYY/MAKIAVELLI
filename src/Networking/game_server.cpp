@@ -1,6 +1,5 @@
 #include "game_server.hpp"
 
-
 #include "country.hpp"
 
 #include <algorithm>
@@ -17,7 +16,7 @@ Game_Server::Game_Server(int play_num, int bot_num,
 	  _rounds{rounds},
 	  _thinking_time{thinking_time}
 {
-	Game_Factory factory(_play_num + _bot_num);
+	Game_Factory factory{_play_num + _bot_num};
 	_players = std::move(factory.createPlayers());
 }
 
@@ -39,7 +38,7 @@ void Game_Server::run()
 								 Update(-1, true); //! with true it can lead to deadlock coz wait shall never wake up
 							 }
 						 }};
-	std::jthread thread_updating{lambda_updating}; // TODO! maybe relocate threads in class body
+	std::jthread thread_updating{lambda_updating};
 
 	for (int curr_round{0}; curr_round < _rounds; ++curr_round)
 	{
@@ -72,39 +71,42 @@ bool Game_Server::OnClientConnect(std::shared_ptr<olc::net::connection<MSG_FROM>
 
 void Game_Server::OnClientValidated(std::shared_ptr<olc::net::connection<MSG_FROM>> client)
 {
-	if (client) // TODO! for optimization might be needed bool is_full_of_connections_to_server{};
+	if (client) 
 	{
-		for (auto &[ID, country] : _players)
+		if (m_deqConnections.size() != _play_num)
 		{
-			if (!country.busy())
+			for (auto &[ID, country] : _players)
 			{
-				country.busy(true);
-				auto node{_players.extract(ID)};
-				node.key() = client->GetID();
-				_players.insert(std::move(node));
-
-				olc::net::message<MSG_FROM> msg;
-				msg.header.id = MSG_FROM::SERVER_HANDSHAKE;
-				country >> msg;
-				MessageClient(client, msg);
-
-				for (auto &[ID, country] : _players)
+				if (!country.busy())
 				{
+					country.busy(true);
+					auto node{_players.extract(ID)};
+					node.key() = client->GetID();
+					_players.insert(std::move(node));
+
 					olc::net::message<MSG_FROM> msg;
-					msg.header.id = MSG_FROM::SERVER_DATA_COUNTRY;
+					msg.header.id = MSG_FROM::SERVER_HANDSHAKE;
 					country >> msg;
 					MessageClient(client, msg);
+
+					for (auto &[ID, country] : _players)
+					{
+						olc::net::message<MSG_FROM> msg;
+						msg.header.id = MSG_FROM::SERVER_DATA_COUNTRY;
+						country >> msg;
+						MessageClient(client, msg);
+					}
+					return;
 				}
-				return;
 			}
 		}
-		client.reset();
-		m_deqConnections.erase(
-			std::remove(m_deqConnections.begin(),
-						m_deqConnections.end(),
-						client),
-			m_deqConnections.end());
 	}
+	client.reset();
+	m_deqConnections.erase(
+		std::remove(m_deqConnections.begin(),
+					m_deqConnections.end(),
+					client),
+		m_deqConnections.end());
 }
 void Game_Server::OnClientDisconnect(std::shared_ptr<olc::net::connection<MSG_FROM>> client)
 {
@@ -116,7 +118,6 @@ void Game_Server::OnClientDisconnect(std::shared_ptr<olc::net::connection<MSG_FR
 
 void Game_Server::OnMessage(std::shared_ptr<olc::net::connection<MSG_FROM>> client, olc::net::message<MSG_FROM> &msg)
 {
-
 	switch (msg.header.id)
 	{
 	case MSG_FROM::CLIENT_BUY_POINTS:
@@ -259,7 +260,7 @@ void Game_Server::OnMessage(std::shared_ptr<olc::net::connection<MSG_FROM>> clie
 		break;
 	}
 
-	case MSG_FROM::CLIENT_ACCEPT_EXCHANGE_RES: //! maybe remove it to simplicity ERROR LOGIC
+	case MSG_FROM::CLIENT_ACCEPT_EXCHANGE_RES: 
 	{
 		Country sender_accept_exchange;
 		Country receiver_accept_exchange;
@@ -283,7 +284,7 @@ void Game_Server::OnMessage(std::shared_ptr<olc::net::connection<MSG_FROM>> clie
 				_players.at(client->GetID()).activityPoints()->currentPoints(-1);
 				_players.at((*receiver_accept_client)->GetID()).activityPoints()->currentPoints(-1);
 
-				*_players.at(client->GetID()).resources() += // TODO! check this logic precisely and consider the condition then the order of this operations affect the final number of resources at both sides
+				*_players.at(client->GetID()).resources() += // TODO! check this logic precisely and consider the situation then the order of this operations affect the final number of resources at both sides
 					*receiver_accept_exchange.resources();
 				*_players.at(client->GetID()).resources() -=
 					*sender_accept_exchange.resources();

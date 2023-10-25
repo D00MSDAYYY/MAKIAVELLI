@@ -211,38 +211,40 @@ std::unordered_map<uint32_t, Country> Game_Factory::createPlayers()
 	players.reserve(_num_of_players);
 
 	
-	// auto card_bank{createCardBank()};
+	auto card_bank{createCardBank()};
 
-	// int index;
-	// std::unordered_map<int, bool> used_indexes;
-	// std::uniform_int_distribution<int> di_index(0, MAX_JSON_INDEX);
+	int index;
+	std::unordered_map<int, bool> used_indexes;
+	std::uniform_int_distribution<int> di_index(0, MAX_JSON_INDEX);
 
-	// for (int i = 0; i < _num_of_players; ++i)
-	// {
-	// 	for (index = di_index(dre); used_indexes[index] == true; ++index % MAX_JSON_INDEX)
-	// 	{
-	// 		; // TODO! maybe bad probability
-	// 	}
-	// 	used_indexes[index] = true;
+	for (int i = 0; i < _num_of_players; ++i)
+	{
+		for (index = di_index(dre); used_indexes[index] == true; ++index % MAX_JSON_INDEX)
+		{
+			; // TODO! maybe bad probability
+		}
+		used_indexes[index] = true;
 
-	// 	auto res{createResources(index)};
-	// 	auto loc{createLocations(index)}; // TODO! change index logic with sepate index for each func
-	// 	auto points{createPoints(index)};
-	// 	auto cards{createCards(index)};
+		auto res{createResources(index)};
+		auto loc{createLocations(index)}; // TODO! change index logic with sepate index for each func
+		auto points{createPoints(index)};
+		auto cards{createCards(index)};
+		auto activity_points{std::shared_ptr<Activity_Points>(new Activity_Points{3})};
 
-	// 	loc->setDependices(res);
-	// 	res->setDependices(points, loc);
-	// 	points->setDependices(res);
-	// 	cards->setDependices(card_bank, loc, res, points);
+		loc->setDependices(res);
+		res->setDependices(points, loc);
+		points->setDependices(res);
+		cards->setDependices(card_bank, loc, res, points);
 
-	// 	players.emplace(DEFAULT_ID + i,
-	// 					Country(index,
-	// 							res,
-	// 							points,
-	// 							loc,
-	// 							cards));
-	// }
-	// createMap(players);
+		players.emplace(DEFAULT_ID + i,
+						Country(index,
+								res,
+								points,
+								loc,
+								cards,
+								activity_points));
+	}
+	createMap(players);
 
 	return players;
 }

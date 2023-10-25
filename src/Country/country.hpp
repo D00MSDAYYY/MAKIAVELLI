@@ -12,16 +12,6 @@ using LOC::Locations;
 using POI::Points;
 using RES::Resources;
 
-// struct Data_Country
-// {
-// 	uint8_t _data_index;
-// 	Data_Resources _data_resources;
-// 	Data_Points _data_points;
-// 	Data_Locations _data_locations;
-// 	Data_Cards _data_cards;
-// 	Data_Activity_Points _data_activity_points;
-// };
-
 enum class COUNTRY_COLOR : uint8_t
 {
 	GREEN,
