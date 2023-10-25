@@ -150,7 +150,7 @@ namespace olc
 											  if (empty())
 											  {
 												  anti_deadlock_flag = true;
-												  cvBlocking.notify_one();
+												  cvBlocking.notify_all();
 											  }
 										  }};
 				anti_deadlock_thread = std::jthread{anti_deadlock_lambda};

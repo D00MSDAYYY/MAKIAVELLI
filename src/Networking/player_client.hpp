@@ -22,7 +22,7 @@ private:
 	std::shared_ptr<Player_GUI> player_gui{new Player_GUI{this}};
 
 public:
-	Player_Client(std::string address);
+	Player_Client(){};
 
 	void exchangeRes(SCOPE give_scope, const int give_res,
 					 SCOPE receive_scope, const int receive_res);
@@ -30,8 +30,4 @@ public:
 	void buyLocations(SCOPE scope, std::vector<std::pair<uint32_t, uint32_t>> coords);
 
 	void run(const std::string &host, const uint16_t port);
-
-	// Data_Points points() const;
-	// Data_Resources resources() const;
-	// Data_Locations location() const;
 };

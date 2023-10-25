@@ -7,13 +7,13 @@ namespace AC_POI
 	class Activity_Points
 	{
 	private:
-		std::atomic<int> _current_points{};
-		int _max_points{};
+		std::atomic<int> _current_points{0};
+		int _max_points{0};
 
 	public:
-		Activity_Points(int max_p = 0);
+		Activity_Points(int max_p = 0)
+			: _current_points{max_p}, _max_points{max_p} {}
 
-		// TODO! dont forget to add FROM_SERVER_NEW_CARD
 		int currentPoints(int points = 0);
 		int maxPoints(int points = 0);
 

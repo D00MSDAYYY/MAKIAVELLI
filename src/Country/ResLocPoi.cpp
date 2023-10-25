@@ -59,7 +59,7 @@ float Resources::oilCoef(float const coef)
 	else
 	{
 		_oil_coef *= coef;
-		return 1.0;
+		return 1.0f;
 	}
 }
 
@@ -148,7 +148,7 @@ bool Resources::operator<=(const Resources &r) const
 const Resources Resources::operator+(const Resources &r) const
 {
 	Resources result(*this);
-	return Resources(result += r); //! std::move
+	return std::move(Resources(std::move(result += r)));
 }
 
 const Resources &Resources::operator+=(const Resources &r)
@@ -163,7 +163,7 @@ const Resources &Resources::operator+=(const Resources &r)
 const Resources Resources::operator-(const Resources &r) const
 {
 	Resources result(*this);
-	return Resources(result -= r);
+	return std::move(Resources(std::move(result -= r)));
 }
 
 const Resources &Resources::operator-=(const Resources &r)
@@ -178,7 +178,7 @@ const Resources &Resources::operator-=(const Resources &r)
 const Resources Resources::operator*(const float &coef) const
 {
 	Resources result(*this);
-	return Resources(result *= coef);
+	return std::move(Resources(std::move(result *= coef)));
 }
 
 const Resources &Resources::operator*=(const float &coef)
@@ -193,7 +193,7 @@ const Resources &Resources::operator*=(const float &coef)
 const Resources Resources::operator/(const float &coef) const
 {
 	Resources result(*this);
-	return Resources(result /= coef);
+	return std::move(Resources(std::move(result /= coef)));
 }
 
 const Resources &Resources::operator/=(const float &coef)
@@ -215,7 +215,7 @@ void Resources::operator<<(olc::net::message<MSG_FROM> msg)
 	_oil_resources = ores;
 	_mineral_resources = mres;
 	_farm_resources = fres;
-	_industry_resources = ires
+	_industry_resources = ires;
 }
 
 void Resources::operator>>(olc::net::message<MSG_FROM> msg)
@@ -263,13 +263,13 @@ void Locations::setDependices(std::shared_ptr<Map> map)
 	_map = map;
 }
 
-Locations LOC::Locations::operator+(const Locations &l) const
+const Locations LOC::Locations::operator+(const Locations &l) const
 {
 	Locations result(*this);
-	return Locations{result += l}; //! std::move
+	return std::move(Locations{std::move(result += l)}); //! std::move
 }
 
-Locations &LOC::Locations::operator+=(const Locations &l)
+const Locations &LOC::Locations::operator+=(const Locations &l)
 {
 	for (auto &country_coord : l._country_map)
 	{
@@ -279,13 +279,13 @@ Locations &LOC::Locations::operator+=(const Locations &l)
 	return *this;
 }
 
-Locations LOC::Locations::operator-(const Locations &l) const
+const Locations LOC::Locations::operator-(const Locations &l) const
 {
 	Locations result(*this);
-	return Locations{result -= l}; //! std::move
+	return std::move(Locations{std::move(result -= l)}); //! std::move
 }
 
-Locations &LOC::Locations::operator-=(const Locations &l)
+const Locations &LOC::Locations::operator-=(const Locations &l)
 {
 	for (auto &country_coord : l._country_map)
 	{
@@ -449,6 +449,68 @@ int LOC::Locations::industry(std::vector<std::pair<uint32_t, uint32_t>> coords)
 		}
 		return isChanged;
 	}
+}
+
+float LOC::Locations::oilCoef(float const coef)
+{
+	if (coef == 0)
+	{
+		return _oil_coef;
+	}
+	else
+	{
+		_oil_coef *= coef;
+		return 1.0;
+	}
+}
+
+float LOC::Locations::mineralCoef(float const coef)
+{
+	if (coef == 0)
+	{
+		return _mineral_coef;
+	}
+	else
+	{
+		_mineral_coef *= coef;
+		return 1.0;
+	}
+}
+
+float LOC::Locations::farmCoef(float const coef)
+{
+	if (coef == 0)
+	{
+		return _farm_coef;
+	}
+	else
+	{
+		_farm_coef *= coef;
+		return 1.0;
+	}
+}
+
+float Locations::industryCoef(float const coef)
+{
+	if (coef == 0)
+	{
+		return _industry_coef;
+	}
+	else
+	{
+		_industry_coef *= coef;
+		return 1.0;
+	}
+}
+
+float Locations::allCoef(float const coef)
+{
+	oilCoef(coef);
+	mineralCoef(coef);
+	farmCoef(coef);
+	industryCoef(coef);
+
+	return 1.0f;
 }
 
 Locations LOC::tag_invoke(boost::json::value_to_tag<Locations>, boost::json::value const &jv)
@@ -958,13 +1020,13 @@ bool POI::Points::operator==(const Points &p) const
 		return false;
 }
 
-Points Points::operator+(const Points &p) const
+const Points Points::operator+(const Points &p) const
 {
 	Points result(*this);
-	return Points(result += p);
+	return std::move(Points{std::move(result += p)});
 }
 
-Points &Points::operator+=(const Points &p)
+const Points &Points::operator+=(const Points &p)
 {
 	army(p._army_points);
 	science(p._science_points);
@@ -975,13 +1037,13 @@ Points &Points::operator+=(const Points &p)
 	return *this;
 }
 
-Points Points::operator-(const Points &p) const
+const Points Points::operator-(const Points &p) const
 {
 	Points result(*this);
 	return Points(result -= p);
 }
 
-Points &Points::operator-=(const Points &p)
+const Points &Points::operator-=(const Points &p)
 {
 	army(-p._army_points);
 	science(-p._science_points);
@@ -992,13 +1054,13 @@ Points &Points::operator-=(const Points &p)
 	return *this;
 }
 
-Points Points::operator*(const float &coef) const
+const Points Points::operator*(const float &coef) const
 {
 	Points result(*this);
 	return Points(result *= coef);
 }
 
-Points &Points::operator*=(const float &coef)
+const Points &Points::operator*=(const float &coef)
 {
 	_army_points *= coef;
 	_science_points *= coef;
