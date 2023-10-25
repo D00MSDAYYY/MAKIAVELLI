@@ -43,10 +43,14 @@ void Country::operator<<(olc::net::message<MSG_FROM> msg)
 	*_locations << msg;
 	*_cards << msg;
 	*_activity_points << msg;
+	msg >> _index;
+	msg >> _color; //TODO! check the order of insertion/extraction
 }
 
 void Country::operator>>(olc::net::message<MSG_FROM> msg)
 {
+	msg << uint32_t(_index);
+	msg << uint32_t(_color);
 	*_resources >> msg;
 	*_points >> msg;
 	*_locations >> msg;

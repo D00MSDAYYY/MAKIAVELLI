@@ -12,14 +12,16 @@ using LOC::Locations;
 using POI::Points;
 using RES::Resources;
 
-enum class COUNTRY_COLOR : uint8_t
+enum class COUNTRY_COLOR : uint32_t
 {
+	RED,
 	GREEN,
 	YELLOW,
 	GRAY,
 	MAGENTA,
 	CYAN,
 	PINK
+
 	// ...
 };
 class Country
@@ -29,7 +31,7 @@ private:
 
 	int _index{0};
 
-	COUNTRY_COLOR color; // TODO ! maybe change
+	COUNTRY_COLOR _color{COUNTRY_COLOR::PINK};
 
 	std::shared_ptr<Resources> _resources;
 	std::shared_ptr<Points> _points;
@@ -52,7 +54,6 @@ public:
 		  _cards{cards},
 		  _activity_points{activity_p} {}
 
-
 	bool busy(int flag = -1);
 	const int index() const { return _index; }
 
@@ -65,5 +66,5 @@ public:
 	void operator<<(olc::net::message<MSG_FROM> msg);
 	void operator>>(olc::net::message<MSG_FROM> msg);
 
-	void update(); //! calls updateOilRes() ... then activity_points== 0
+	void update();
 };
