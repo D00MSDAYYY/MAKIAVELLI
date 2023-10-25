@@ -43,10 +43,14 @@ void Country::operator<<(olc::net::message<MSG_FROM> msg)
 	*_locations << msg;
 	*_cards << msg;
 	*_activity_points << msg;
+	msg >> _index;
+	msg >> _color; // TODO! check the order of insertion/extraction
 }
 
 void Country::operator>>(olc::net::message<MSG_FROM> msg)
 {
+	msg << uint32_t(_index);
+	msg << uint32_t(_color);
 	*_resources >> msg;
 	*_points >> msg;
 	*_locations >> msg;
@@ -57,4 +61,24 @@ void Country::operator>>(olc::net::message<MSG_FROM> msg)
 void Country::update()
 {
 	_resources->updateRes();
+}
+
+Country::Country(int index,
+				 std::shared_ptr<Resources> r,
+				 std::shared_ptr<Points> p,
+				 std::shared_ptr<Locations> l,
+				 std::shared_ptr<Cards> cards,
+				 std::shared_ptr<Activity_Points> activity_p)
+	: _index{index},
+	  _resources{r},
+	  _points{p},
+	  _locations{l},
+	  _cards{cards},
+	  _activity_points{activity_p}
+{
+
+	_locations->setDependices(std::shared_ptr<Country>(this));
+	_resources->setDependices(std::shared_ptr<Country>(this));
+	_points->setDependices(std::shared_ptr<Country>(this));
+	_cards->setDependices(std::shared_ptr<Country>(this));
 }

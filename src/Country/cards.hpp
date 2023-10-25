@@ -16,10 +16,6 @@ enum class SCOPE
 	INDUSTRY
 };
 
-// struct Data_Cards
-// {
-// 	std::vector<std::pair<uint8_t, uint8_t>> _cards; // duration and index
-// };
 
 namespace CAR
 {
@@ -32,7 +28,9 @@ namespace CAR
 		std::deque<std::list<std::shared_ptr<Card>>>
 			_cards{MAX_YEARS_DEPTH, {{}}};
 
-		std::shared_ptr<Card_Bank> _card_bank;
+		std::shared_ptr<Country> _country;
+		std::shared_ptr<Card_Bank>
+			_card_bank;
 
 		std::shared_ptr<Resources> _resources;
 		std::shared_ptr<Locations> _locations;
@@ -40,11 +38,8 @@ namespace CAR
 
 	public:
 		Cards() {} //! maybe change
-
-		void setDependices(std::shared_ptr<Card_Bank> card_bank,
-						   std::shared_ptr<Locations> locations,
-						   std::shared_ptr<Resources> resources,
-						   std::shared_ptr<Points> points);
+		void setDependices(std::shared_ptr<Card_Bank> card_bank);
+		void setDependices(std::shared_ptr<Country> country);
 
 		void getCard();
 		void update();

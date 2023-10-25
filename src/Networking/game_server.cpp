@@ -1,12 +1,12 @@
-#include "game_server.hpp"
-
-#include "country.hpp"
-
 #include <algorithm>
 #include <utility>
 #include <thread>
 #include <stop_token>
 #include <chrono>
+
+#include "game_server.hpp"
+#include "text_message.hpp"
+#include "country.hpp"
 
 Game_Server::Game_Server(int play_num, int bot_num,
 						 int rounds, int thinking_time, uint16_t port)
@@ -17,7 +17,7 @@ Game_Server::Game_Server(int play_num, int bot_num,
 	  _thinking_time{thinking_time}
 {
 	Game_Factory factory{_play_num + _bot_num};
-	_players = std::move(factory.createPlayers());
+	_players = factory.createPlayers();
 }
 
 Game_Server::~Game_Server()
@@ -71,7 +71,7 @@ bool Game_Server::OnClientConnect(std::shared_ptr<olc::net::connection<MSG_FROM>
 
 void Game_Server::OnClientValidated(std::shared_ptr<olc::net::connection<MSG_FROM>> client)
 {
-	if (client) 
+	if (client)
 	{
 		if (m_deqConnections.size() != _play_num)
 		{
@@ -260,7 +260,7 @@ void Game_Server::OnMessage(std::shared_ptr<olc::net::connection<MSG_FROM>> clie
 		break;
 	}
 
-	case MSG_FROM::CLIENT_ACCEPT_EXCHANGE_RES: 
+	case MSG_FROM::CLIENT_ACCEPT_EXCHANGE_RES:
 	{
 		Country sender_accept_exchange;
 		Country receiver_accept_exchange;
@@ -304,6 +304,30 @@ void Game_Server::OnMessage(std::shared_ptr<olc::net::connection<MSG_FROM>> clie
 				_players.at((*receiver_accept_client)->GetID()) >> msg_receiver_accept_country;
 				MessageAllClients(msg_receiver_accept_country);
 			}
+		}
+		break;
+	}
+	case MSG_FROM::CLIENT_TEXT_MESSAGE:
+	{
+		Text_Message txt_mes{};
+		txt_mes << msg;
+
+		auto receiver_txt_mes{
+			std::find_if(
+				m_deqConnections.begin(),
+				m_deqConnections.end(),
+				[&txt_mes, this](const auto &client)
+				{
+					return _players.at(client->GetID()).index() == txt_mes._index;
+				})};
+				
+		if (receiver_txt_mes != m_deqConnections.end())
+		{
+			olc::net::message<MSG_FROM> msg_txt_mes{};
+			msg_txt_mes.header.id = MSG_FROM::SERVER_TEXT_MESSAGE;
+			txt_mes._index = _players.at(client->GetID()).index();
+			txt_mes >> msg_txt_mes;
+			MessageClient(*receiver_txt_mes, msg_txt_mes);
 		}
 		break;
 	}

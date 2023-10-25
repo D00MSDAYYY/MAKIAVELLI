@@ -12,14 +12,16 @@ using LOC::Locations;
 using POI::Points;
 using RES::Resources;
 
-enum class COUNTRY_COLOR : uint8_t
+enum class COUNTRY_COLOR : uint32_t
 {
+	RED,
 	GREEN,
 	YELLOW,
 	GRAY,
 	MAGENTA,
 	CYAN,
 	PINK
+
 	// ...
 };
 class Country
@@ -27,9 +29,9 @@ class Country
 private:
 	bool is_busy{false};
 
-	int _index{0};
+	int _index{0}; //TODO! maybe in future delete this and only COUNTRY_COLOR and use it like index
 
-	COUNTRY_COLOR color; // TODO ! maybe change
+	COUNTRY_COLOR _color{COUNTRY_COLOR::PINK};
 
 	std::shared_ptr<Resources> _resources;
 	std::shared_ptr<Points> _points;
@@ -39,18 +41,12 @@ private:
 
 public:
 	Country() {}
-	Country(int ndx,
+	Country(int index,
 			std::shared_ptr<Resources> r,
 			std::shared_ptr<Points> p,
 			std::shared_ptr<Locations> l,
 			std::shared_ptr<Cards> cards,
-			std::shared_ptr<Activity_Points> activity_p)
-		: _index{ndx},
-		  _resources{r},
-		  _points{p},
-		  _locations{l},
-		  _cards{cards},
-		  _activity_points{activity_p} {}
+			std::shared_ptr<Activity_Points> activity_p);
 
 
 	bool busy(int flag = -1);
@@ -65,5 +61,5 @@ public:
 	void operator<<(olc::net::message<MSG_FROM> msg);
 	void operator>>(olc::net::message<MSG_FROM> msg);
 
-	void update(); //! calls updateOilRes() ... then activity_points== 0
+	void update();
 };
