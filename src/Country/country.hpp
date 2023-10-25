@@ -37,7 +37,7 @@ class Country
 private:
 	bool is_busy{false};
 
-	int _data_index{0};
+	int _index{0};
 
 	COUNTRY_COLOR color; // TODO ! maybe change
 
@@ -55,7 +55,7 @@ public:
 			std::shared_ptr<Locations> l,
 			std::shared_ptr<Cards> cards,
 			std::shared_ptr<Activity_Points> activity_p)
-		: _data_index{ndx},
+		: _index{ndx},
 		  _resources{r},
 		  _points{p},
 		  _locations{l},
@@ -64,7 +64,7 @@ public:
 
 
 	bool busy(int flag = -1);
-	const int index() const { return _data_index; }
+	const int index() const { return _index; }
 
 	std::shared_ptr<Resources> resources();
 	std::shared_ptr<Points> points();

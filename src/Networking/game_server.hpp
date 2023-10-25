@@ -2,8 +2,8 @@
 #include <memory>
 #include <unordered_map>
 
-#include "game_factory.hpp"
 #include "game_network.hpp"
+#include "game_factory.hpp"
 
 class Game_Server : olc::net::server_interface<MSG_FROM>
 {

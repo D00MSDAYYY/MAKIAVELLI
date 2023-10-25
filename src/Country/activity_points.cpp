@@ -29,7 +29,11 @@ int Activity_Points::maxPoints(int points)
 
 void AC_POI::Activity_Points::operator<<(olc::net::message<MSG_FROM> msg)
 {
-	msg >> _max_points >> _current_points;
+	uint32_t mp{};
+	uint32_t cp{};
+	msg >> mp >> cp;
+	_current_points = cp;
+	_max_points = mp;
 }
 
 void AC_POI::Activity_Points::operator>>(olc::net::message<MSG_FROM> msg)

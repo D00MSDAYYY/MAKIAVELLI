@@ -7,9 +7,13 @@ enum class MSG_FROM : uint32_t
 {
 	SERVER_HANDSHAKE,
 	
-	SERVER_DATA_COUNTRY, //! can be used to prove that activity was valid and activity points can be decreased
+	SERVER_DATA_COUNTRY, 
 
 	SERVER_REQUEST_EXCHANGE_RES,
+
+	SERVER_NEW_CARD, 
+
+	SERVER_TEXT_MESSAGE,
 
 	// CLIENT_NEXT_TURN,
 
@@ -17,5 +21,7 @@ enum class MSG_FROM : uint32_t
 	CLIENT_ACCEPT_EXCHANGE_RES,
 
 	CLIENT_BUY_POINTS,
-	CLIENT_BUY_LOCATIONS
+	CLIENT_BUY_LOCATIONS,
+
+	CLIENT_TEXT_MESSAGE
 };

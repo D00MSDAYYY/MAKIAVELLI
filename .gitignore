@@ -44,4 +44,5 @@ _deps
 ehthumbs.db
 Thumbs.db
 
-/build/*
+/build/
+/.vscode/

@@ -207,7 +207,15 @@ const Resources &Resources::operator/=(const float &coef)
 
 void Resources::operator<<(olc::net::message<MSG_FROM> msg)
 {
-	msg >> _industry_resources >> _farm_resources >> _mineral_resources >> _oil_resources;
+	uint32_t ores{};
+	uint32_t mres{};
+	uint32_t fres{};
+	uint32_t ires{};
+	msg >> ires >> fres >> mres >> ores;
+	_oil_resources = ores;
+	_mineral_resources = mres;
+	_farm_resources = fres;
+	_industry_resources = ires
 }
 
 void Resources::operator>>(olc::net::message<MSG_FROM> msg)
@@ -442,7 +450,6 @@ int LOC::Locations::industry(std::vector<std::pair<uint32_t, uint32_t>> coords)
 		return isChanged;
 	}
 }
-
 
 Locations LOC::tag_invoke(boost::json::value_to_tag<Locations>, boost::json::value const &jv)
 {
@@ -1004,7 +1011,19 @@ Points &Points::operator*=(const float &coef)
 
 void Points::operator<<(olc::net::message<MSG_FROM> msg)
 {
-	msg >> _industry_points >> _farm_points >> _mineral_points >> _oil_points >> _science_points >> _army_points;
+	uint32_t ipoi{};
+	uint32_t fpoi{};
+	uint32_t mpoi{};
+	uint32_t opoi{};
+	uint32_t spoi{};
+	uint32_t apoi{};
+	msg >> ipoi >> fpoi >> mpoi >> opoi >> spoi >> apoi;
+	_army_points = apoi;
+	_science_points = spoi;
+	_oil_points = opoi;
+	_mineral_points = mpoi;
+	_farm_points = fpoi;
+	_industry_points = ipoi;
 }
 
 void Points::operator>>(olc::net::message<MSG_FROM> msg)
@@ -1053,9 +1072,9 @@ void Locations::operator<<(olc::net::message<MSG_FROM> msg)
 
 void Locations::operator>>(olc::net::message<MSG_FROM> msg)
 {
-	for (auto &[x,y] : _country_map)
+	for (auto &[x, y] : _country_map)
 	{
 		msg << y << x;
 	}
-	msg << _country_map.size();
+	msg << uint32_t(_country_map.size());
 }
