@@ -7,40 +7,54 @@
 
 std::shared_ptr<Resources> Game_Factory::createResources(int index)
 {
+	if (res_ar.size() == 0)
+	{
+		std::ifstream res_input{};
+		std::string res_str_input{};
 
-	res_input.open("resources.json");
-	res_input.seekg(0, std::ios::end);
-	res_str_input.resize(res_input.tellg());
-	res_input.seekg(0, std::ios::beg);
-	res_input.read(&res_str_input[0], res_str_input.size());
-	res_input.close();
-	res_ar = boost::json::parse(res_str_input).as_array();
-
+		res_input.open("resources.json");
+		res_input.seekg(0, std::ios::end);
+		res_str_input.resize(res_input.tellg());
+		res_input.seekg(0, std::ios::beg);
+		res_input.read(&res_str_input[0], res_str_input.size());
+		res_input.close();
+		res_ar = boost::json::parse(res_str_input).as_array();
+	}
 	return std::shared_ptr<Resources>(new Resources(boost::json::value_to<Resources>(res_ar.at(index))));
 }
 
 std::shared_ptr<Points> Game_Factory::createPoints(int index)
 {
-	points_input.open("points.json");
-	points_input.seekg(0, std::ios::end);
-	points_str_input.resize(points_input.tellg());
-	points_input.seekg(0, std::ios::beg);
-	points_input.read(&points_str_input[0], points_str_input.size());
-	points_input.close();
-	points_ar = boost::json::parse(points_str_input).as_array();
+	if (points_ar.size() == 0)
+	{
+		std::ifstream points_input{};
+		std::string points_str_input{};
+		points_input.open("points.json");
+		points_input.seekg(0, std::ios::end);
+		points_str_input.resize(points_input.tellg());
+		points_input.seekg(0, std::ios::beg);
+		points_input.read(&points_str_input[0], points_str_input.size());
+		points_input.close();
+		points_ar = boost::json::parse(points_str_input).as_array();
+	}
 
 	return std::shared_ptr<Points>(new Points(boost::json::value_to<Points>(points_ar.at(index))));
 }
 
 std::shared_ptr<Locations> Game_Factory::createLocations(int index)
 {
-	loc_input.open("locations.json");
-	loc_input.seekg(0, std::ios::end);
-	loc_str_input.resize(loc_input.tellg());
-	loc_input.seekg(0, std::ios::beg);
-	loc_input.read(&loc_str_input[0], loc_str_input.size());
-	loc_input.close();
-	loc_ar = boost::json::parse(loc_str_input).as_array();
+	if(loc_ar.size() == 0)
+	{
+		std::ifstream loc_input{};
+		std::string loc_str_input{};
+		loc_input.open("locations.json");
+		loc_input.seekg(0, std::ios::end);
+		loc_str_input.resize(loc_input.tellg());
+		loc_input.seekg(0, std::ios::beg);
+		loc_input.read(&loc_str_input[0], loc_str_input.size());
+		loc_input.close();
+		loc_ar = boost::json::parse(loc_str_input).as_array();
+	}
 
 	return std::shared_ptr<Locations>(new Locations(boost::json::value_to<Locations>(loc_ar.at(index))));
 }
@@ -57,9 +71,9 @@ std::shared_ptr<Activity_Points> Game_Factory::createActivityPoints(int index)
 
 void Game_Factory::createCardBank(std::unordered_map<uint32_t, Country> &pl)
 {
-	if(_card_bank.get() == nullptr)
+	if (_card_bank.get() == nullptr)
 		_card_bank = std::shared_ptr<Card_Bank>(new Card_Bank{});
-	for (auto& [ID, country] : pl)
+	for (auto &[ID, country] : pl)
 	{
 		country.cards()->setDependices(_card_bank); // TODO! card_bank
 	}
@@ -178,8 +192,7 @@ std::unordered_map<uint32_t, Country> Game_Factory::createPlayers()
 								createActivityPoints(index)));
 	}
 	createMap(players);
-	createCardBank(players); //TODO! change this logic and use this methods inside createLocations() and createCards()
+	createCardBank(players); // TODO! change this logic and use this methods inside createLocations() and createCards()
 
 	return std::move(players);
 }
-

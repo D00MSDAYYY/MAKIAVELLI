@@ -6,17 +6,18 @@
 
 #include "card.hpp"
 
-class Card_Bank
+namespace CAR
 {
-private:
-	std::vector<Card> _card_buffer{};
+	class Card_Bank
+	{
+	private:
+		std::vector<std::shared_ptr<Card>> _main_card_buffer{}; //! change this in future to hold only boost::json::array cards_ar like in game_factory
+		std::vector<std::shared_ptr<Card>> _secondary_card_buffer{};
 
-	std::ifstream cards_input;
-	std::string cards_str_input;
-	boost::json::array cards_ar;
+	public:
+		Card_Bank();
+		~Card_Bank() {}
 
-public:
-	Card_Bank(){};
-	~Card_Bank() {}
-	std::shared_ptr<Card> card(std::weak_ptr<Country> country);
-};
+		std::shared_ptr<Card> card(std::weak_ptr<Country> country);
+	};
+}
