@@ -62,7 +62,7 @@ namespace RES
 		float farmCoef(float const coef = 0);
 		float industryCoef(float const coef = 0);
 
-		void updateRes();
+		void update();
 
 		bool operator<(const Resources &r) const;
 		bool operator<=(const Resources &r) const;

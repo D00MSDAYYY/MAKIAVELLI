@@ -60,7 +60,7 @@ void Country::operator>>(olc::net::message<MSG_FROM> msg)
 
 void Country::update()
 {
-	_resources->updateRes();
+	_resources->update();
 }
 
 Country::Country(int index,

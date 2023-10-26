@@ -18,14 +18,7 @@ void Player_Client::OnMessage(olc::net::message<MSG_FROM> &msg)
 		_countries[country.index()] = std::move(country); 
 		break;
 	}
-	case MSG_FROM::SERVER_HANDSHAKE:
-	{
-		Country data_this_country;
-		data_this_country << msg;
-		_this_country_index = data_this_country.index();
-		_countries[data_this_country.index()] = std::move(data_this_country);
-		break;
-	}
+	
 	case MSG_FROM::SERVER_REQUEST_EXCHANGE_RES:
 	{
 		Country data_sender_request_exchange;
@@ -36,10 +29,17 @@ void Player_Client::OnMessage(olc::net::message<MSG_FROM> &msg)
 		// TODO! GUI here displaying the offer to the client and then accept/ignore it
 		if (/*accept = true */ 0)
 		{
-			olc::net::message<MSG_FROM> msg_accept_exchange{msg_copy};
-			msg_accept_exchange.header.id = MSG_FROM::CLIENT_ACCEPT_EXCHANGE_RES;
-			Send(msg_accept_exchange);
+			msg_copy.header.id = MSG_FROM::CLIENT_ACCEPT_EXCHANGE_RES;
+			Send(msg_copy);
 		}
+		break;
+	}
+	case MSG_FROM::SERVER_HANDSHAKE:
+	{
+		Country this_country;
+		this_country << msg;
+		_this_country_index = this_country.index();
+		_countries[this_country.index()] = std::move(this_country);
 		break;
 	}
 	}

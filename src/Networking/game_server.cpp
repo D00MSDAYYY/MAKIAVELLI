@@ -45,13 +45,14 @@ void Game_Server::run()
 		for (auto &[ID, country] : _players) //! this is very silly way to iterate over the players, because then we extract the node with country on disconnection of the client and after connect again and set the node  new (bigger) index we violate the order of players in queue
 		{
 			country.activityPoints()->currentPoints(country.activityPoints()->maxPoints());
-
+			country.update();
 			olc::net::message<MSG_FROM> msg_active_country{};
 			msg_active_country.header.id = MSG_FROM::SERVER_DATA_COUNTRY;
 			country >> msg_active_country;
 			MessageAllClients(msg_active_country);
 
 			std::this_thread::sleep_for(std::chrono::seconds(_thinking_time));
+
 			country.activityPoints()->currentPoints(-country.activityPoints()->maxPoints());
 
 			olc::net::message<MSG_FROM> msg_inactive_country{};

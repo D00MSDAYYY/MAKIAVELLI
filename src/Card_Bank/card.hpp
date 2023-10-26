@@ -1,28 +1,26 @@
 #pragma once
 #include <memory>
 
+class Country;
+
 namespace CAR
 {
-	class Cards;
+	class Card
+	{
+	private:
+		int _card_index;
+		int _duration;
+		std::weak_ptr<Country> _country;
+
+		virtual void unexecute() = 0;
+		virtual void execute() = 0;
+
+	public:
+		Card(std::weak_ptr<Country> country, int duration);
+
+		int duration() { return _duration; }
+
+		virtual ~Card();
+	};
+
 }
-using CAR::Cards;
-
-class Card
-{
-private:
-	int _index;
-	int _duration;
-	Cards* _cards;
-	virtual void unexecute(){};
-
-public:
-	Card() {}
-
-	Card(int duration)
-		: _duration{duration}{}
-
-	int duration() { return _duration; }
-
-	virtual void execute(Cards *cards){};
-	virtual ~Card() {}
-};

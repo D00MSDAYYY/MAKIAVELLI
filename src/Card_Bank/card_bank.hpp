@@ -1,17 +1,23 @@
 #pragma once
 #include <vector>
 #include <memory>
+#include <fstream>
+#include <boost/json.hpp>
 
 #include "card.hpp"
 
-class Card_Bank
+namespace CAR
 {
-private:
-	std::vector<Card> _card_buffer{};
+	class Card_Bank
+	{
+	private:
+		std::vector<std::shared_ptr<Card>> _main_card_buffer{}; //! change this in future to hold only boost::json::array cards_ar like in game_factory
+		std::vector<std::shared_ptr<Card>> _secondary_card_buffer{};
 
-public:
-	Card_Bank(){};
-	Card_Bank(int number_of_players){};
-	~Card_Bank() {}
-	std::shared_ptr<Card> card();
-};
+	public:
+		Card_Bank();
+		~Card_Bank() {}
+
+		std::shared_ptr<Card> card(std::weak_ptr<Country> country);
+	};
+}
