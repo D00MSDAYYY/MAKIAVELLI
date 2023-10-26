@@ -1,6 +1,5 @@
 #include <random>
 #include <chrono>
-
 #include <cstdlib>
 
 #include "game_factory.hpp"
@@ -59,7 +58,7 @@ std::shared_ptr<Activity_Points> Game_Factory::createActivityPoints(int index)
 void Game_Factory::createCardBank(std::unordered_map<uint32_t, Country> &pl)
 {
 	if(_card_bank.get() == nullptr)
-		_card_bank = std::shared_ptr<Card_Bank>(new Card_Bank{_num_of_players});
+		_card_bank = std::shared_ptr<Card_Bank>(new Card_Bank{});
 	for (auto& [ID, country] : pl)
 	{
 		country.cards()->setDependices(_card_bank); // TODO! card_bank

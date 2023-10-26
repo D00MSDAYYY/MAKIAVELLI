@@ -1,6 +1,5 @@
 #pragma once
 #include <boost/json.hpp>
-
 #include <memory>
 #include <string>
 #include <fstream>

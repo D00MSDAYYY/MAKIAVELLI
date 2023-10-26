@@ -226,7 +226,7 @@ void Resources::operator>>(olc::net::message<MSG_FROM> msg)
 		<< uint32_t(_industry_resources);
 }
 
-void Resources::updateRes()
+void Resources::update()
 {
 	_oil_resources += OIL_BASE * _oil_coef * _country.lock()->locations()->oil();
 	_mineral_resources += MINERAL_BASE * _mineral_coef * _country.lock()->locations()->mineral();

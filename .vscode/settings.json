@@ -100,7 +100,8 @@
 		"shared_mutex": "cpp",
 		"stack": "cpp",
 		"strstream": "cpp",
-		"qmainwindow": "cpp"
+		"qmainwindow": "cpp",
+		"executor": "cpp"
 	},
 	"C_Cpp.default.compilerPath": "/usr/bin/clang++",
 	"cmake.sourceDirectory": "/Users/matvejzajcev/Desktop/MAKIAVELLI",
