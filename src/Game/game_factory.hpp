@@ -22,11 +22,11 @@ private:
 
 	int _num_of_players;
 
-	std::shared_ptr<Resources> createResources(int index);
-	std::shared_ptr<Points> createPoints(int index);
-	std::shared_ptr<Locations> createLocations(int index);
-	std::shared_ptr<Cards_Holder> createCardsHolder(int index);
-	std::shared_ptr<Activity_Points> createActivityPoints(int index);
+	std::unique_ptr<Resources> createResources(int index);
+	std::unique_ptr<Points> createPoints(int index);
+	std::unique_ptr<Locations> createLocations(int index);
+	std::unique_ptr<Cards_Holder> createCardsHolder(int index);
+	std::unique_ptr<Activity_Points> createActivityPoints(int index);
 
 	std::shared_ptr<Card_Bank> _card_bank{nullptr};
 	void createCardBank(std::unordered_map<uint32_t, Country> &pl);

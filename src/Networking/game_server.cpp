@@ -130,8 +130,8 @@ void Game_Server::OnMessage(std::shared_ptr<olc::net::connection<MSG_FROM>> clie
 
 		bool is_bought{false};
 		if (!is_bought &&
-			buy_points.army() > 0 &&
-			_players.at(client->GetID()).points()->army(buy_points.army()))
+			buy_points.armyNum() > 0 &&
+			_players.at(client->GetID()).points()->armyNum(buy_points.armyNum()))
 
 		{
 			_players.at(client->GetID()).activityPoints()->currentPoints(-1);
@@ -139,32 +139,24 @@ void Game_Server::OnMessage(std::shared_ptr<olc::net::connection<MSG_FROM>> clie
 		}
 
 		if (!is_bought &&
-			buy_points.science() > 0 &&
-			_players.at(client->GetID()).points()->army(buy_points.science()))
+			buy_points.scienceNum() > 0 &&
+			_players.at(client->GetID()).points()->armyNum(buy_points.scienceNum()))
 		{
 			_players.at(client->GetID()).activityPoints()->currentPoints(-1);
 			is_bought = true;
 		}
 
 		if (!is_bought &&
-			buy_points.oil() > 0 &&
-			_players.at(client->GetID()).points()->army(buy_points.oil()))
+			buy_points.oilNum() > 0 &&
+			_players.at(client->GetID()).points()->armyNum(buy_points.oilNum()))
 		{
 			_players.at(client->GetID()).activityPoints()->currentPoints(-1);
 			is_bought = true;
 		}
 
 		if (!is_bought &&
-			buy_points.mineral() > 0 &&
-			_players.at(client->GetID()).points()->army(buy_points.mineral()))
-		{
-			_players.at(client->GetID()).activityPoints()->currentPoints(-1);
-			is_bought = true;
-		}
-
-		if (!is_bought &&
-
-			_players.at(client->GetID()).points()->army(buy_points.farm()))
+			buy_points.mineralNum() > 0 &&
+			_players.at(client->GetID()).points()->armyNum(buy_points.mineralNum()))
 		{
 			_players.at(client->GetID()).activityPoints()->currentPoints(-1);
 			is_bought = true;
@@ -172,7 +164,15 @@ void Game_Server::OnMessage(std::shared_ptr<olc::net::connection<MSG_FROM>> clie
 
 		if (!is_bought &&
 
-			_players.at(client->GetID()).points()->army(buy_points.industry()))
+			_players.at(client->GetID()).points()->armyNum(buy_points.farmNum()))
+		{
+			_players.at(client->GetID()).activityPoints()->currentPoints(-1);
+			is_bought = true;
+		}
+
+		if (!is_bought &&
+
+			_players.at(client->GetID()).points()->armyNum(buy_points.industryNum()))
 		{
 			_players.at(client->GetID()).activityPoints()->currentPoints(-1);
 			is_bought = true;
@@ -194,32 +194,32 @@ void Game_Server::OnMessage(std::shared_ptr<olc::net::connection<MSG_FROM>> clie
 
 		bool is_bought{false};
 		if (!is_bought &&
-			buy_locations.oil() > 0 &&
-			_players.at(client->GetID()).locations()->oil(buy_locations.country_map()))
+			buy_locations.oilNum() > 0 &&
+			_players.at(client->GetID()).locations()->oilNum(buy_locations.country_map()))
 		{
 			_players.at(client->GetID()).activityPoints()->currentPoints(-1);
 			is_bought = true;
 		}
 
 		if (!is_bought &&
-			buy_locations.mineral() > 0 &&
-			_players.at(client->GetID()).locations()->mineral(buy_locations.country_map()))
+			buy_locations.mineralNum() > 0 &&
+			_players.at(client->GetID()).locations()->mineralNum(buy_locations.country_map()))
 		{
 			_players.at(client->GetID()).activityPoints()->currentPoints(-1);
 			is_bought = true;
 		}
 
 		if (!is_bought &&
-			buy_locations.farm() > 0 &&
-			_players.at(client->GetID()).locations()->farm(buy_locations.country_map()))
+			buy_locations.farmNum() > 0 &&
+			_players.at(client->GetID()).locations()->farmNum(buy_locations.country_map()))
 		{
 			_players.at(client->GetID()).activityPoints()->currentPoints(-1);
 			is_bought = true;
 		}
 
 		if (!is_bought &&
-			buy_locations.industry() > 0 &&
-			_players.at(client->GetID()).locations()->industry(buy_locations.country_map()))
+			buy_locations.industryNum() > 0 &&
+			_players.at(client->GetID()).locations()->industryNum(buy_locations.country_map()))
 		{
 			_players.at(client->GetID()).activityPoints()->currentPoints(-1);
 			is_bought = true;

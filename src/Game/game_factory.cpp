@@ -5,7 +5,7 @@
 #include "game_factory.hpp"
 #include "map.hpp"
 
-std::shared_ptr<Resources> Game_Factory::createResources(int index)
+std::unique_ptr<Resources> Game_Factory::createResources(int index)
 {
 	if (res_ar.size() == 0)
 	{
@@ -20,10 +20,10 @@ std::shared_ptr<Resources> Game_Factory::createResources(int index)
 		res_input.close();
 		res_ar = boost::json::parse(res_str_input).as_array();
 	}
-	return std::shared_ptr<Resources>(new Resources(boost::json::value_to<Resources>(res_ar.at(index))));
+	return std::unique_ptr<Resources>(new Resources(boost::json::value_to<Resources>(res_ar.at(index))));
 }
 
-std::shared_ptr<Points> Game_Factory::createPoints(int index)
+std::unique_ptr<Points> Game_Factory::createPoints(int index)
 {
 	if (points_ar.size() == 0)
 	{
@@ -38,10 +38,10 @@ std::shared_ptr<Points> Game_Factory::createPoints(int index)
 		points_ar = boost::json::parse(points_str_input).as_array();
 	}
 
-	return std::shared_ptr<Points>(new Points(boost::json::value_to<Points>(points_ar.at(index))));
+	return std::unique_ptr<Points>(new Points(boost::json::value_to<Points>(points_ar.at(index))));
 }
 
-std::shared_ptr<Locations> Game_Factory::createLocations(int index)
+std::unique_ptr<Locations> Game_Factory::createLocations(int index)
 {
 	if(loc_ar.size() == 0)
 	{
@@ -56,17 +56,17 @@ std::shared_ptr<Locations> Game_Factory::createLocations(int index)
 		loc_ar = boost::json::parse(loc_str_input).as_array();
 	}
 
-	return std::shared_ptr<Locations>(new Locations(boost::json::value_to<Locations>(loc_ar.at(index))));
+	return std::unique_ptr<Locations>(new Locations(boost::json::value_to<Locations>(loc_ar.at(index))));
 }
 
-std::shared_ptr<Cards_Holder> Game_Factory::createCardsHolder(int index)
+std::unique_ptr<Cards_Holder> Game_Factory::createCardsHolder(int index)
 {
-	return std::shared_ptr<Cards_Holder>(new Cards_Holder());
+	return std::unique_ptr<Cards_Holder>(new Cards_Holder());
 }
 
-std::shared_ptr<Activity_Points> Game_Factory::createActivityPoints(int index)
+std::unique_ptr<Activity_Points> Game_Factory::createActivityPoints(int index)
 {
-	return std::shared_ptr<Activity_Points>(new Activity_Points{3});
+	return std::unique_ptr<Activity_Points>(new Activity_Points{3});
 }
 
 void Game_Factory::createCardBank(std::unordered_map<uint32_t, Country> &pl)
