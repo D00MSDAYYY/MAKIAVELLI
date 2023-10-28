@@ -1,3 +1,5 @@
+cmake_minimum_required(VERSION 3.26.4)
+
 project(3rdParty)
 
 add_library(${PROJECT_NAME} INTERFACE)
