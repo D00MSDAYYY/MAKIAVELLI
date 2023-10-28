@@ -73,6 +73,7 @@ namespace CARD
 		const int duration() { return _duration; }
 		const SCOPE scope() { return _scope; }
 		const TARGET target() { return _target; }
+		const EFFECT effect() { return _effect; }
 		const std::string &descriprion() { return _description; }
 
 		// boost::json::value jv convertToJSONValue(); //! this is not important function
