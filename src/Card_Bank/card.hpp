@@ -3,6 +3,30 @@
 #include <string>
 #include <boost/json.hpp>
 
+enum class SCOPE
+{
+	ARMY,
+	SCIENCE,
+	OIL,
+	MINERAL,
+	FARM,
+	INDUSTRY,
+	ALL
+};
+
+enum class TARGET
+{
+	LOCATIONS,
+	POINTS,
+	RESOURCES
+};
+
+enum class EFFECT
+{
+	NUMBER,
+	COEFFICIENT
+};
+
 class Country;
 
 namespace CARD
@@ -10,30 +34,55 @@ namespace CARD
 	class Card
 	{
 	private:
-		int _card_index{0};
+		int _index{0};
 		int _duration{0};
 		std::string _description{};
-		std::weak_ptr<Country> _country{};
-		std::unique_ptr<Card> _next{nullptr};
 
-		virtual void unexecute() = 0;
-		virtual void execute() = 0;
+		int _num_or_coef{};
+
+		TARGET _target{};
+		SCOPE _scope{};
+		EFFECT _effect{};
+
+		std::shared_ptr<Country> _country{};
+
+		void execute();
+		void unexecute();
 
 	public:
-		Card(int card_index,
+		Card(std::shared_ptr<Country> country,
+			 int index,
 			 int duration,
-			 std::string dercription,
-			 std::weak_ptr<Country> country);
-		void addNext(std::shared_ptr<Card> next_card);
+			 SCOPE scope,
+			 TARGET target,
+			 EFFECT effect,
+			 int num_or_coef,
+			 std::string description) : _country{country},
+										_index{index},
+										_duration{duration},
+										_scope{scope},
+										_target{target},
+										_effect{effect},
+										_num_or_coef{num_or_coef},
+										_description{std::move(description)}
+		{
+			execute();
+		}
 
-		int duration() { return _duration; }
-		virtual boost::json::value convertToJSONValue() = 0;
+		const int index() { return _index; }
+		const int duration() { return _duration; }
+		const SCOPE scope() { return _scope; }
+		const TARGET target() { return _target; }
+		const std::string &descriprion() { return _description; }
 
-		virtual ~Card();
+		// boost::json::value jv convertToJSONValue(); //! this is not important function
+
+		~Card()
+		{
+			unexecute();
+		};
 	};
 	std::shared_ptr<Card> tag_invoke(boost::json::value_to_tag<std::shared_ptr<Card>>,
 									 boost::json::value const &jv);
-	void tag_invoke(boost::json::value_from_tag,
-					boost::json::value &jv,
-					std::shared_ptr<Card> const &c);
+
 }

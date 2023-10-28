@@ -28,9 +28,9 @@ namespace RES
 		int _farm_resources{};
 		int _industry_resources{};
 
-		float _oil_coef{1.0}; //! changes coef of producing resources in countries
-		float _mineral_coef{1.0};
-		float _farm_coef{1.0};
+		float _oil_coef_cost{1.0}; //! changes coef of producing resources in countries
+		float _mineral_coef_cost{1.0};
+		float _farm_coef_cost{1.0};
 		float _industry_coef{1.0};
 
 		static const int OIL_BASE{};
@@ -52,10 +52,10 @@ namespace RES
 
 		void setDependices(std::shared_ptr<Country> country);
 
-		int oil(int const resources = 0);
-		int mineral(int const resources = 0);
-		int farm(int const resources = 0);
-		int industry(int const resources = 0);
+		int oilNum(int const resources = 0);
+		int mineralNum(int const resources = 0);
+		int farmNum(int const resources = 0);
+		int industryNum(int const resources = 0);
 
 		float oilCoef(float const coef = 0);
 		float mineralCoef(float const coef = 0);
@@ -110,9 +110,9 @@ namespace POI
 
 		float _army_coef{1.0};
 		float _science_coef{1.0};
-		float _oil_coef{1.0};
-		float _mineral_coef{1.0};
-		float _farm_coef{1.0};
+		float _oil_coef_cost{1.0};
+		float _mineral_coef_cost{1.0};
+		float _farm_coef_cost{1.0};
 		float _industry_coef{1.0};
 
 		Resources _army_points_cost{0, 0, 0, 0};
@@ -149,12 +149,12 @@ namespace POI
 		}
 		void setDependices(std::shared_ptr<Country> country);
 
-		int army(int const points = 0);
-		int science(int const points = 0);
-		int oil(int const points = 0);
-		int mineral(int const points = 0);
-		int farm(int const points = 0);
-		int industry(int const points = 0);
+		int armyNum(int const points = 0);
+		int scienceNum(int const points = 0);
+		int oilNum(int const points = 0);
+		int mineralNum(int const points = 0);
+		int farmNum(int const points = 0);
+		int industryNum(int const points = 0);
 
 		float armyCoef(float const coef = 0);
 		float scienceCoef(float const coef = 0);
@@ -197,9 +197,9 @@ namespace LOC
 
 		std::vector<std::pair<int, int>> _country_map{};
 
-		float _oil_coef{1.0};
-		float _mineral_coef{1.0};
-		float _farm_coef{1.0};
+		float _oil_coef_cost{1.0};
+		float _mineral_coef_cost{1.0};
+		float _farm_coef_cost{1.0};
 		float _industry_coef{1.0};
 
 		Resources _oil_loc_cost{0, 0, 0, 0};
@@ -223,10 +223,10 @@ namespace LOC
 		std::shared_ptr<Map> map();
 
 		std::vector<std::pair<int, int>> country_map();
-		int oil(std::vector<std::pair<int, int>> loc_coord = {});
-		int mineral(std::vector<std::pair<int, int>> loc_coord = {});
-		int farm(std::vector<std::pair<int, int>> loc_coord = {});
-		int industry(std::vector<std::pair<int, int>> loc_coord = {});
+		int oilNum(std::vector<std::pair<int, int>> loc_coord = {});
+		int mineralNum(std::vector<std::pair<int, int>> loc_coord = {});
+		int farmNum(std::vector<std::pair<int, int>> loc_coord = {});
+		int industryNum(std::vector<std::pair<int, int>> loc_coord = {});
 
 		float oilCoef(float const coef = 0);
 		float mineralCoef(float const coef = 0);

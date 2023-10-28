@@ -13,7 +13,7 @@ void RES::Resources::setDependices(std::shared_ptr<Country> country)
 	_country = country;
 }
 
-int Resources::oil(int const resources)
+int Resources::oilNum(int const resources)
 {
 	if (resources == 0)
 		return _oil_resources;
@@ -22,7 +22,7 @@ int Resources::oil(int const resources)
 		_oil_resources = 0;
 	return 1;
 }
-int Resources::mineral(int const resources)
+int Resources::mineralNum(int const resources)
 {
 	if (resources == 0)
 		return _mineral_resources;
@@ -31,7 +31,7 @@ int Resources::mineral(int const resources)
 		_mineral_resources = 0;
 	return 1;
 }
-int Resources::farm(int const resources)
+int Resources::farmNum(int const resources)
 {
 	if (resources == 0)
 		return _farm_resources;
@@ -40,7 +40,7 @@ int Resources::farm(int const resources)
 		_farm_resources = 0;
 	return 1;
 }
-int Resources::industry(int const resources)
+int Resources::industryNum(int const resources)
 {
 	if (resources == 0)
 		return _industry_resources;
@@ -54,11 +54,11 @@ float Resources::oilCoef(float const coef)
 {
 	if (coef == 0)
 	{
-		return _oil_coef;
+		return _oil_coef_cost;
 	}
 	else
 	{
-		_oil_coef *= coef;
+		_oil_coef_cost *= coef;
 		return 1.0f;
 	}
 }
@@ -67,11 +67,11 @@ float Resources::mineralCoef(float const coef)
 {
 	if (coef == 0)
 	{
-		return _mineral_coef;
+		return _mineral_coef_cost;
 	}
 	else
 	{
-		_mineral_coef *= coef;
+		_mineral_coef_cost *= coef;
 		return 1.0;
 	}
 }
@@ -80,11 +80,11 @@ float Resources::farmCoef(float const coef)
 {
 	if (coef == 0)
 	{
-		return _farm_coef;
+		return _farm_coef_cost;
 	}
 	else
 	{
-		_farm_coef *= coef;
+		_farm_coef_cost *= coef;
 		return 1.0;
 	}
 }
@@ -153,10 +153,10 @@ const Resources Resources::operator+(const Resources &r) const
 
 const Resources &Resources::operator+=(const Resources &r)
 {
-	oil(r._oil_resources);
-	mineral(r._mineral_resources);
-	farm(r._farm_resources);
-	industry(r._industry_resources);
+	oilNum(r._oil_resources);
+	mineralNum(r._mineral_resources);
+	farmNum(r._farm_resources);
+	industryNum(r._industry_resources);
 	return *this;
 }
 
@@ -168,10 +168,10 @@ const Resources Resources::operator-(const Resources &r) const
 
 const Resources &Resources::operator-=(const Resources &r)
 {
-	oil(-r._oil_resources);
-	mineral(-r._mineral_resources);
-	farm(-r._farm_resources);
-	industry(-r._industry_resources);
+	oilNum(-r._oil_resources);
+	mineralNum(-r._mineral_resources);
+	farmNum(-r._farm_resources);
+	industryNum(-r._industry_resources);
 	return *this;
 }
 
@@ -228,10 +228,10 @@ void Resources::operator>>(olc::net::message<MSG_FROM> msg)
 
 void Resources::update()
 {
-	_oil_resources += OIL_BASE * _oil_coef * _country.lock()->locations()->oil();
-	_mineral_resources += MINERAL_BASE * _mineral_coef * _country.lock()->locations()->mineral();
-	_farm_resources += FARM_BASE * _farm_coef * _country.lock()->locations()->farm();
-	_industry_resources += INDUSTRY_BASE * _industry_coef * _country.lock()->locations()->industry();
+	_oil_resources += OIL_BASE * _oil_coef_cost * _country.lock()->locations()->oilNum();
+	_mineral_resources += MINERAL_BASE * _mineral_coef_cost * _country.lock()->locations()->mineralNum();
+	_farm_resources += FARM_BASE * _farm_coef_cost * _country.lock()->locations()->farmNum();
+	_industry_resources += INDUSTRY_BASE * _industry_coef * _country.lock()->locations()->industryNum();
 }
 
 Resources RES::tag_invoke(boost::json::value_to_tag<Resources>, boost::json::value const &jv)
@@ -245,10 +245,10 @@ Resources RES::tag_invoke(boost::json::value_to_tag<Resources>, boost::json::val
 void RES::tag_invoke(boost::json::value_from_tag, boost::json::value &jv, Resources const &res)
 {
 	Resources temp = res; //! dont change this coz res must be const
-	jv = {{"oil", temp.oil()},
-		  {"mineral", temp.mineral()},
-		  {"farm", temp.farm()},
-		  {"industry", temp.industry()}};
+	jv = {{"oil", temp.oilNum()},
+		  {"mineral", temp.mineralNum()},
+		  {"farm", temp.farmNum()},
+		  {"industry", temp.industryNum()}};
 }
 
 using LOC::Locations;
@@ -307,7 +307,7 @@ std::vector<std::pair<int, int>> LOC::Locations::country_map()
 	return std::vector<std::pair<int, int>>();
 }
 
-int LOC::Locations::oil(std::vector<std::pair<int, int>> coords)
+int LOC::Locations::oilNum(std::vector<std::pair<int, int>> coords)
 {
 	if (coords.size() == 0)
 	{
@@ -324,12 +324,12 @@ int LOC::Locations::oil(std::vector<std::pair<int, int>> coords)
 		bool isChanged{false};
 		for (auto &coord : coords)
 		{
-			if (_oil_loc_cost * _oil_coef <= *_country.lock()->resources())
+			if (_oil_loc_cost * _oil_coef_cost <= *_country.lock()->resources())
 			{
 				if (_map->cell(coord).mapCellOwner() == this &&
 					_map->find(Cell_Type::COUNTRY_AREA, coord))
 				{
-					*_country.lock()->resources() -= _oil_loc_cost * _oil_coef;
+					*_country.lock()->resources() -= _oil_loc_cost * _oil_coef_cost;
 					_map->cell(coord).mapCellOwner(this);
 					_map->cell(coord).mapCellType(Cell_Type::OIL);
 					isChanged = true;
@@ -344,7 +344,7 @@ int LOC::Locations::oil(std::vector<std::pair<int, int>> coords)
 	}
 }
 
-int Locations::mineral(std::vector<std::pair<int, int>> coords)
+int Locations::mineralNum(std::vector<std::pair<int, int>> coords)
 {
 	if (coords.size() == 0)
 	{
@@ -361,12 +361,12 @@ int Locations::mineral(std::vector<std::pair<int, int>> coords)
 		bool isChanged{false};
 		for (auto &coord : coords)
 		{
-			if (_mineral_loc_cost * _mineral_coef <= *_country.lock()->resources())
+			if (_mineral_loc_cost * _mineral_coef_cost <= *_country.lock()->resources())
 			{
 				if (_map->cell(coord).mapCellOwner() == this &&
 					_map->find(Cell_Type::COUNTRY_AREA, coord))
 				{
-					*_country.lock()->resources() -= _mineral_loc_cost * _mineral_coef;
+					*_country.lock()->resources() -= _mineral_loc_cost * _mineral_coef_cost;
 					_map->cell(coord).mapCellOwner(this);
 					_map->cell(coord).mapCellType(Cell_Type::MINERAL);
 					isChanged = true;
@@ -381,7 +381,7 @@ int Locations::mineral(std::vector<std::pair<int, int>> coords)
 	}
 }
 
-int LOC::Locations::farm(std::vector<std::pair<int, int>> coords)
+int LOC::Locations::farmNum(std::vector<std::pair<int, int>> coords)
 {
 	if (coords.size() == 0)
 	{
@@ -398,12 +398,12 @@ int LOC::Locations::farm(std::vector<std::pair<int, int>> coords)
 		bool isChanged{false};
 		for (auto &coord : coords)
 		{
-			if (_farm_loc_cost * _farm_coef <= *_country.lock()->resources())
+			if (_farm_loc_cost * _farm_coef_cost <= *_country.lock()->resources())
 			{
 				if (_map->cell(coord).mapCellOwner() == this &&
 					_map->find(Cell_Type::COUNTRY_AREA, coord))
 				{
-					*_country.lock()->resources() -= _farm_loc_cost * _farm_coef;
+					*_country.lock()->resources() -= _farm_loc_cost * _farm_coef_cost;
 					_map->cell(coord).mapCellOwner(this);
 					_map->cell(coord).mapCellType(Cell_Type::FARM);
 					isChanged = true;
@@ -418,7 +418,7 @@ int LOC::Locations::farm(std::vector<std::pair<int, int>> coords)
 	}
 }
 
-int LOC::Locations::industry(std::vector<std::pair<int, int>> coords)
+int LOC::Locations::industryNum(std::vector<std::pair<int, int>> coords)
 {
 
 	if (coords.size() == 0)
@@ -460,11 +460,11 @@ float LOC::Locations::oilCoef(float const coef)
 {
 	if (coef == 0)
 	{
-		return _oil_coef;
+		return _oil_coef_cost;
 	}
 	else
 	{
-		_oil_coef *= coef;
+		_oil_coef_cost *= coef;
 		return 1.0;
 	}
 }
@@ -473,11 +473,11 @@ float LOC::Locations::mineralCoef(float const coef)
 {
 	if (coef == 0)
 	{
-		return _mineral_coef;
+		return _mineral_coef_cost;
 	}
 	else
 	{
-		_mineral_coef *= coef;
+		_mineral_coef_cost *= coef;
 		return 1.0;
 	}
 }
@@ -486,11 +486,11 @@ float LOC::Locations::farmCoef(float const coef)
 {
 	if (coef == 0)
 	{
-		return _farm_coef;
+		return _farm_coef_cost;
 	}
 	else
 	{
-		_farm_coef *= coef;
+		_farm_coef_cost *= coef;
 		return 1.0;
 	}
 }
@@ -530,10 +530,10 @@ Locations LOC::tag_invoke(boost::json::value_to_tag<Locations>, boost::json::val
 void LOC::tag_invoke(boost::json::value_from_tag, boost::json::value &jv, Locations const &p)
 {
 	Locations temp = p; //! dont change this coz loc must be const
-	jv = {{"oil", temp.oil()},
-		  {"mineral", temp.mineral()},
-		  {"farm", temp.farm()},
-		  {"industry", temp.industry()}};
+	jv = {{"oil", temp.oilNum()},
+		  {"mineral", temp.mineralNum()},
+		  {"farm", temp.farmNum()},
+		  {"industry", temp.industryNum()}};
 }
 
 using POI::Points;
@@ -733,7 +733,7 @@ void POI::Points::setDependices(std::shared_ptr<Country> country)
 	_country = country;
 }
 
-int Points::army(int const points)
+int Points::armyNum(int const points)
 {
 	if (points == 0)
 		return _army_points;
@@ -759,7 +759,7 @@ int Points::army(int const points)
 	return 0;
 }
 
-int Points::science(int const points)
+int Points::scienceNum(int const points)
 {
 	if (points == 0)
 		return _science_points;
@@ -785,7 +785,7 @@ int Points::science(int const points)
 	return 0;
 }
 
-int Points::oil(int const points)
+int Points::oilNum(int const points)
 {
 	if (points == 0)
 		return _oil_points;
@@ -799,9 +799,9 @@ int Points::oil(int const points)
 	}
 	bool isChanged = false;
 	while (_oil_points < MAX_OIL_POINTS &&
-		   _oil_points_cost * _oil_coef <= *_country.lock()->resources())
+		   _oil_points_cost * _oil_coef_cost <= *_country.lock()->resources())
 	{
-		*_country.lock()->resources() -= _oil_points_cost * _oil_coef;
+		*_country.lock()->resources() -= _oil_points_cost * _oil_coef_cost;
 		++_oil_points;
 		isChanged = true;
 		setOilCost();
@@ -811,7 +811,7 @@ int Points::oil(int const points)
 	return 0;
 }
 
-int Points::mineral(int const points)
+int Points::mineralNum(int const points)
 {
 	if (points == 0)
 		return _mineral_points;
@@ -825,9 +825,9 @@ int Points::mineral(int const points)
 	}
 	bool isChanged = false;
 	while (_mineral_points < MAX_MINERAL_POINTS &&
-		   _mineral_points_cost * _mineral_coef <= *_country.lock()->resources())
+		   _mineral_points_cost * _mineral_coef_cost <= *_country.lock()->resources())
 	{
-		*_country.lock()->resources() -= _mineral_points_cost * _mineral_coef;
+		*_country.lock()->resources() -= _mineral_points_cost * _mineral_coef_cost;
 		++_mineral_points;
 		isChanged = true;
 		setMineralCost();
@@ -837,7 +837,7 @@ int Points::mineral(int const points)
 	return 0;
 }
 
-int Points::farm(int const points)
+int Points::farmNum(int const points)
 {
 	if (points == 0)
 		return _farm_points;
@@ -851,9 +851,9 @@ int Points::farm(int const points)
 	}
 	bool isChanged = false;
 	while (_farm_points < MAX_FARM_POINTS &&
-		   _farm_points_cost * _farm_coef <= *_country.lock()->resources())
+		   _farm_points_cost * _farm_coef_cost <= *_country.lock()->resources())
 	{
-		*_country.lock()->resources() -= _farm_points_cost * _farm_coef;
+		*_country.lock()->resources() -= _farm_points_cost * _farm_coef_cost;
 		++_farm_points;
 		isChanged = true;
 		setFarmCost();
@@ -863,7 +863,7 @@ int Points::farm(int const points)
 	return 0;
 }
 
-int Points::industry(int const points)
+int Points::industryNum(int const points)
 {
 	if (points == 0)
 		return _industry_points;
@@ -919,11 +919,11 @@ float Points::oilCoef(float const coef)
 {
 	if (coef == 0)
 	{
-		return _oil_coef;
+		return _oil_coef_cost;
 	}
 	else
 	{
-		_oil_coef *= coef;
+		_oil_coef_cost *= coef;
 		return 1.0;
 	}
 }
@@ -932,11 +932,11 @@ float Points::mineralCoef(float const coef)
 {
 	if (coef == 0)
 	{
-		return _mineral_coef;
+		return _mineral_coef_cost;
 	}
 	else
 	{
-		_mineral_coef *= coef;
+		_mineral_coef_cost *= coef;
 		return 1.0;
 	}
 }
@@ -945,11 +945,11 @@ float Points::farmCoef(float const coef)
 {
 	if (coef == 0)
 	{
-		return _farm_coef;
+		return _farm_coef_cost;
 	}
 	else
 	{
-		_farm_coef *= coef;
+		_farm_coef_cost *= coef;
 		return 1.0;
 	}
 }
@@ -1033,12 +1033,12 @@ const Points Points::operator+(const Points &p) const
 
 const Points &Points::operator+=(const Points &p)
 {
-	army(p._army_points);
-	science(p._science_points);
-	oil(p._oil_points);
-	mineral(p._mineral_points);
-	farm(p._farm_points);
-	industry(p._industry_points);
+	armyNum(p._army_points);
+	scienceNum(p._science_points);
+	oilNum(p._oil_points);
+	mineralNum(p._mineral_points);
+	farmNum(p._farm_points);
+	industryNum(p._industry_points);
 	return *this;
 }
 
@@ -1050,12 +1050,12 @@ const Points Points::operator-(const Points &p) const
 
 const Points &Points::operator-=(const Points &p)
 {
-	army(-p._army_points);
-	science(-p._science_points);
-	oil(-p._oil_points);
-	mineral(-p._mineral_points);
-	farm(-p._farm_points);
-	industry(-p._industry_points);
+	armyNum(-p._army_points);
+	scienceNum(-p._science_points);
+	oilNum(-p._oil_points);
+	mineralNum(-p._mineral_points);
+	farmNum(-p._farm_points);
+	industryNum(-p._industry_points);
 	return *this;
 }
 
@@ -1116,12 +1116,12 @@ Points POI::tag_invoke(boost::json::value_to_tag<Points>, boost::json::value con
 void POI::tag_invoke(boost::json::value_from_tag, boost::json::value &jv, Points const &p)
 {
 	Points temp = p; //! dont change this coz res must be const
-	jv = {{"army", temp.army()},
-		  {"science", temp.science()},
-		  {"oil", temp.oil()},
-		  {"mineral", temp.mineral()},
-		  {"farm", temp.farm()},
-		  {"industry", temp.industry()}};
+	jv = {{"army", temp.armyNum()},
+		  {"science", temp.scienceNum()},
+		  {"oil", temp.oilNum()},
+		  {"mineral", temp.mineralNum()},
+		  {"farm", temp.farmNum()},
+		  {"industry", temp.industryNum()}};
 }
 
 void Locations::operator<<(olc::net::message<MSG_FROM> msg)

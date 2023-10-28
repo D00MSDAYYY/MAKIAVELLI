@@ -6,15 +6,7 @@
 
 const int MAX_YEARS_DEPTH = 5;
 
-enum class SCOPE
-{
-	ARMY,
-	SCIENCE,
-	OIL,
-	MINERAL,
-	FARM,
-	INDUSTRY
-};
+
 
 
 namespace CARD

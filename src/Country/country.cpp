@@ -10,28 +10,27 @@ bool Country::busy(int flag)
 		is_busy = true;
 	return 42;
 }
-
-std::shared_ptr<Cards_Holder> Country::cardsHolder()
+const std::unique_ptr<Cards_Holder>& Country::cardsHolder()
 {
 	return _cards_holder;
 }
 
-std::shared_ptr<Activity_Points> Country::activityPoints()
+const std::unique_ptr<Activity_Points>& Country::activityPoints()
 {
 	return _activity_points;
 }
 
-std::shared_ptr<Points> Country::points()
+const std::unique_ptr<Points>& Country::points()
 {
 	return _points;
 }
 
-std::shared_ptr<Resources> Country::resources()
+const std::unique_ptr<Resources>& Country::resources()
 {
 	return _resources;
 }
 
-std::shared_ptr<Locations> Country::locations()
+const std::unique_ptr<Locations>& Country::locations()
 {
 	return _locations;
 }
@@ -64,21 +63,21 @@ void Country::update()
 }
 
 Country::Country(int index,
-				 std::shared_ptr<Resources> r,
-				 std::shared_ptr<Points> p,
-				 std::shared_ptr<Locations> l,
-				 std::shared_ptr<Cards_Holder> cards_holder,
-				 std::shared_ptr<Activity_Points> activity_p)
+				 std::unique_ptr<Resources> r,
+				 std::unique_ptr<Points> p,
+				 std::unique_ptr<Locations> l,
+				 std::unique_ptr<Cards_Holder> cards_holder,
+				 std::unique_ptr<Activity_Points> activity_p)
 	: _index{index},
-	  _resources{r},
-	  _points{p},
-	  _locations{l},
-	  _cards_holder{cards_holder},
-	  _activity_points{activity_p}
+	  _resources{std::move(r)},
+	  _points{std::move(p)},
+	  _locations{std::move(l)},
+	  _cards_holder{std::move(cards_holder)},
+	  _activity_points{std::move(activity_p)}
 {
 
-	_locations->setDependices(std::shared_ptr<Country>(this));
-	_resources->setDependices(std::shared_ptr<Country>(this));
-	_points->setDependices(std::shared_ptr<Country>(this));
-	_cards_holder->setDependices(std::shared_ptr<Country>(this));
+	_locations->setDependices(std::unique_ptr<Country>(this));
+	_resources->setDependices(std::unique_ptr<Country>(this));
+	_points->setDependices(std::unique_ptr<Country>(this));
+	_cards_holder->setDependices(std::unique_ptr<Country>(this));
 }
