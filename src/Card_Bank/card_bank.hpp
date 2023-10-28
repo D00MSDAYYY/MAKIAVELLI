@@ -6,7 +6,7 @@
 
 #include "card.hpp"
 
-namespace CAR
+namespace CARD
 {
 	class Card_Bank
 	{

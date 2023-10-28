@@ -11,9 +11,9 @@ bool Country::busy(int flag)
 	return 42;
 }
 
-std::shared_ptr<Cards> Country::cards()
+std::shared_ptr<Cards_Holder> Country::cardsHolder()
 {
-	return _cards;
+	return _cards_holder;
 }
 
 std::shared_ptr<Activity_Points> Country::activityPoints()
@@ -41,7 +41,7 @@ void Country::operator<<(olc::net::message<MSG_FROM> msg)
 	*_resources << msg;
 	*_points << msg;
 	*_locations << msg;
-	*_cards << msg;
+	*_cards_holder << msg;
 	*_activity_points << msg;
 	msg >> _index;
 	msg >> _color; // TODO! check the order of insertion/extraction
@@ -54,7 +54,7 @@ void Country::operator>>(olc::net::message<MSG_FROM> msg)
 	*_resources >> msg;
 	*_points >> msg;
 	*_locations >> msg;
-	*_cards >> msg;
+	*_cards_holder >> msg;
 	*_activity_points >> msg;
 }
 
@@ -67,18 +67,18 @@ Country::Country(int index,
 				 std::shared_ptr<Resources> r,
 				 std::shared_ptr<Points> p,
 				 std::shared_ptr<Locations> l,
-				 std::shared_ptr<Cards> cards,
+				 std::shared_ptr<Cards_Holder> cards_holder,
 				 std::shared_ptr<Activity_Points> activity_p)
 	: _index{index},
 	  _resources{r},
 	  _points{p},
 	  _locations{l},
-	  _cards{cards},
+	  _cards_holder{cards_holder},
 	  _activity_points{activity_p}
 {
 
 	_locations->setDependices(std::shared_ptr<Country>(this));
 	_resources->setDependices(std::shared_ptr<Country>(this));
 	_points->setDependices(std::shared_ptr<Country>(this));
-	_cards->setDependices(std::shared_ptr<Country>(this));
+	_cards_holder->setDependices(std::shared_ptr<Country>(this));
 }

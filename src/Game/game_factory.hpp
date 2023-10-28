@@ -10,7 +10,7 @@
 
 using LOC::Locations;
 using POI::Points;
-using CAR::Card_Bank;
+using CARD::Card_Bank;
 using RES::Resources;
 
 static const int DEFAULT_ID{0};
@@ -25,7 +25,7 @@ private:
 	std::shared_ptr<Resources> createResources(int index);
 	std::shared_ptr<Points> createPoints(int index);
 	std::shared_ptr<Locations> createLocations(int index);
-	std::shared_ptr<Cards> createCards(int index);
+	std::shared_ptr<Cards_Holder> createCardsHolder(int index);
 	std::shared_ptr<Activity_Points> createActivityPoints(int index);
 
 	std::shared_ptr<Card_Bank> _card_bank{nullptr};
