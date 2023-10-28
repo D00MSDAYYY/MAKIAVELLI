@@ -10,7 +10,7 @@ namespace CARD
 	class Card
 	{
 	private:
-		int _card_index{0};
+		int _index{0};
 		int _duration{0};
 		std::string _description{};
 		std::weak_ptr<Country> _country{};
@@ -20,13 +20,25 @@ namespace CARD
 		virtual void execute() = 0;
 
 	public:
-		Card(int card_index,
+		Card(int index,
 			 int duration,
-			 std::string dercription,
-			 std::weak_ptr<Country> country);
-		void addNext(std::shared_ptr<Card> next_card);
+			 std::string description,
+			 std::weak_ptr<Country> country,
+			 std::shared_ptr<Card> card = nullptr) : _index{index},
+													 _duration{duration},
+													 _description{description},
+													 _country{country},
+													 _next{std::move(card.get())} {}
 
+		Card(std::shared_ptr<Card> card) : Card(card->_index,
+												card->_duration,
+												card->_description,
+												card->_country,
+												card) {}
+
+		int index() { return _index; }
 		int duration() { return _duration; }
+		std::string descriprion() { return _description; }
 		virtual boost::json::value convertToJSONValue() = 0;
 
 		virtual ~Card();
