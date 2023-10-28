@@ -2,8 +2,8 @@
 
 #include "card_bank.hpp"
 
-using CAR::Card_Bank;
-using CAR::Card;
+using CARD::Card_Bank;
+using CARD::Card;
 
 Card_Bank::Card_Bank()
 {

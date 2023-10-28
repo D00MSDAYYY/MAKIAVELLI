@@ -9,12 +9,12 @@ find_package(Boost REQUIRED COMPONENTS json)
 target_sources(${PROJECT_NAME}
 PRIVATE
   activity_points.cpp
-  cards.cpp 
+  cards_holder.cpp 
   country.cpp 
   ResLocPoi.cpp 
 PUBLIC
   ${CMAKE_CURRENT_LIST_DIR}/activity_points.hpp
-  ${CMAKE_CURRENT_LIST_DIR}/cards.hpp 
+  ${CMAKE_CURRENT_LIST_DIR}/cards_holder.hpp 
   ${CMAKE_CURRENT_LIST_DIR}/country.hpp 
   ${CMAKE_CURRENT_LIST_DIR}/ResLocPoi.hpp 
 )

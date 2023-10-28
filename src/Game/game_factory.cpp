@@ -59,9 +59,9 @@ std::shared_ptr<Locations> Game_Factory::createLocations(int index)
 	return std::shared_ptr<Locations>(new Locations(boost::json::value_to<Locations>(loc_ar.at(index))));
 }
 
-std::shared_ptr<Cards> Game_Factory::createCards(int index)
+std::shared_ptr<Cards_Holder> Game_Factory::createCardsHolder(int index)
 {
-	return std::shared_ptr<Cards>(new Cards());
+	return std::shared_ptr<Cards_Holder>(new Cards_Holder());
 }
 
 std::shared_ptr<Activity_Points> Game_Factory::createActivityPoints(int index)
@@ -75,7 +75,7 @@ void Game_Factory::createCardBank(std::unordered_map<uint32_t, Country> &pl)
 		_card_bank = std::shared_ptr<Card_Bank>(new Card_Bank{});
 	for (auto &[ID, country] : pl)
 	{
-		country.cards()->setDependices(_card_bank); // TODO! card_bank
+		country.cardsHolder()->setDependices(_card_bank); // TODO! card_bank
 	}
 }
 
@@ -188,7 +188,7 @@ std::unordered_map<uint32_t, Country> Game_Factory::createPlayers()
 								createResources(index),
 								createPoints(index),
 								createLocations(index),
-								createCards(index),
+								createCardsHolder(index),
 								createActivityPoints(index)));
 	}
 	createMap(players);

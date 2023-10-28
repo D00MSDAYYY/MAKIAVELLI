@@ -17,12 +17,12 @@ enum class SCOPE
 };
 
 
-namespace CAR
+namespace CARD
 {
 	using LOC::Locations;
 	using POI::Points;
 	using RES::Resources;
-	class Cards
+	class Cards_Holder
 	{
 	private:
 		std::deque<std::list<std::shared_ptr<Card>>> _cards{MAX_YEARS_DEPTH, {{}}};
@@ -35,7 +35,7 @@ namespace CAR
 		std::shared_ptr<Points> _points;
 
 	public:
-		Cards() {}
+		Cards_Holder() {}
 		void setDependices(std::shared_ptr<Card_Bank> card_bank);
 		void setDependices(std::shared_ptr<Country> country);
 
