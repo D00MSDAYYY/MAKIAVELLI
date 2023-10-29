@@ -79,5 +79,5 @@ Country::Country(int index,
 	_locations->setDependices(std::unique_ptr<Country>(this));
 	_resources->setDependices(std::unique_ptr<Country>(this));
 	_points->setDependices(std::unique_ptr<Country>(this));
-	_cards_holder->setDependices(std::unique_ptr<Country>(this));
+	_cards_holder->setDependices(std::shared_ptr<Country>(this));
 }

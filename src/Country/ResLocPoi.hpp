@@ -28,9 +28,9 @@ namespace RES
 		int _farm_resources{};
 		int _industry_resources{};
 
-		float _oil_coef_cost{1.0}; //! changes coef of producing resources in countries
-		float _mineral_coef_cost{1.0};
-		float _farm_coef_cost{1.0};
+		float _oil_coef{1.0}; //! changes coef of producing resources in countries
+		float _mineral_coef{1.0};
+		float _farm_coef{1.0};
 		float _industry_coef{1.0};
 
 		static const int OIL_BASE{};
@@ -108,12 +108,12 @@ namespace POI
 		int _farm_points{};
 		int _industry_points{};
 
-		float _army_coef{1.0};
-		float _science_coef{1.0};
+		float _army_coef_cost{1.0};
+		float _science_coef_cost{1.0};
 		float _oil_coef_cost{1.0};
 		float _mineral_coef_cost{1.0};
 		float _farm_coef_cost{1.0};
-		float _industry_coef{1.0};
+		float _industry_coef_cost{1.0};
 
 		Resources _army_points_cost{0, 0, 0, 0};
 		Resources _science_points_cost{0, 0, 0, 0};
@@ -156,13 +156,13 @@ namespace POI
 		int farmNum(int const points = 0);
 		int industryNum(int const points = 0);
 
-		float armyCoef(float const coef = 0);
-		float scienceCoef(float const coef = 0);
-		float oilCoef(float const coef = 0);
-		float mineralCoef(float const coef = 0);
-		float farmCoef(float const coef = 0);
-		float industryCoef(float const coef = 0);
-		float allCoef(float const coef = 0);
+		float armyCoefCost(float const coef = 0);
+		float scienceCoefCost(float const coef = 0);
+		float oilCoefCost(float const coef = 0);
+		float mineralCoefCost(float const coef = 0);
+		float farmCoefCost(float const coef = 0);
+		float industryCoefCost(float const coef = 0);
+		float allCoefCost(float const coef = 0);
 
 		bool operator<(const Points &p) const;
 		bool operator<=(const Points &p) const;
@@ -200,7 +200,7 @@ namespace LOC
 		float _oil_coef_cost{1.0};
 		float _mineral_coef_cost{1.0};
 		float _farm_coef_cost{1.0};
-		float _industry_coef{1.0};
+		float _industry_coef_cost{1.0};
 
 		Resources _oil_loc_cost{0, 0, 0, 0};
 		Resources _mineral_loc_cost{0, 0, 0, 0};

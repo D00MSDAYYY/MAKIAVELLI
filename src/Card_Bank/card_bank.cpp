@@ -2,8 +2,8 @@
 
 #include "card_bank.hpp"
 
-using CARD::Card_Bank;
 using CARD::Card;
+using CARD::Card_Bank;
 
 Card_Bank::Card_Bank()
 {
@@ -17,22 +17,29 @@ Card_Bank::Card_Bank()
 	cards_input.read(&cards_str_input[0], cards_str_input.size());
 	cards_input.close();
 	cards_ar = boost::json::parse(cards_str_input).as_array();
-
-	for(auto& card : cards_ar)
-	{
-
-	}
 }
 
 std::shared_ptr<Card> Card_Bank::card(std::weak_ptr<Country> country)
 {
-	if (!_main_card_buffer.empty()) //! maybe optimize this using if(!_main_card_buffer.empty() && _main_card_buffer.size() != 1) and shuffle in another thread then returning last card
-	{ 
+	auto returning_lambda = [this, &country]() -> auto
+	{
 		auto tmp{_main_card_buffer.back()};
 		_main_card_buffer.pop_back();
 		_secondary_card_buffer.push_back(tmp);
 
+		for (; !tmp->attach(country);)
+		{
+			tmp = _main_card_buffer.back();
+			_main_card_buffer.pop_back();
+			_secondary_card_buffer.push_back(tmp);
+		}
 		return tmp;
+	};
+
+	if (!_main_card_buffer.empty()) //! maybe optimize this using if(!_main_card_buffer.empty() && _main_card_buffer.size() != 1) and shuffle in another thread then returning last card
+	{
+
+		return returning_lambda();
 	}
 	else
 	{
@@ -41,10 +48,6 @@ std::shared_ptr<Card> Card_Bank::card(std::weak_ptr<Country> country)
 		std::shuffle(_secondary_card_buffer.begin(), _secondary_card_buffer.end(), dre);
 		_main_card_buffer = std::move(_secondary_card_buffer);
 
-		auto tmp{_main_card_buffer.back()};
-		_main_card_buffer.pop_back();
-		_secondary_card_buffer.push_back(tmp);
-
-		return tmp;
+		return returning_lambda();
 	}
 }
