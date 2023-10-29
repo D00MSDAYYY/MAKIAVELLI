@@ -3,137 +3,84 @@
 
 using CARD::Card;
 
-void CARD::Card::execute()
+CARD::Card::Card(int index,
+				 SCOPE scope,
+				 TARGET target,
+				 EFFECT effect,
+				 std::string description,
+				 int probability,
+				 int duration,
+				 int num_or_coef) : _index{index},
+									_duration{duration},
+									_probability{probability},
+									_scope{scope},
+									_target{target},
+									_effect{effect},
+									_num_or_coef{num_or_coef},
+									_description{std::move(description)} {}
+
+CARD::Card::Card(const Card &card, std::weak_ptr<Country> country) : Card{card}
 {
-	if (_target == TARGET::LOCATIONS)
-	{
-		if (_scope == SCOPE::ARMY)
-			; //!-----------
-		if (_scope == SCOPE::SCIENCE)
-			; //!-----------
-		if (_scope == SCOPE::OIL)
-		{
-			if (_effect == EFFECT::COEFFICIENT)
-				_country->locations()->oilCoef(_num_or_coef);
+	_country = country;
+	execute();
+}
 
-			if (_effect == EFFECT::NUMBER)
-				; //!-----------
-		}
-		if (_scope == SCOPE::MINERAL)
-		{
-			if (_effect == EFFECT::COEFFICIENT)
-				_country->locations()->mineralCoef(_num_or_coef);
+CARD::Card::~Card()
+{
+	if (!_country.expired())
+		unexecute();
+}
 
-			if (_effect == EFFECT::NUMBER)
-				; //!-----------
-		}
-		if (_scope == SCOPE::FARM)
-		{
-			if (_effect == EFFECT::COEFFICIENT)
-				_country->locations()->farmCoef(_num_or_coef);
+Card CARD::tag_invoke(boost::json::value_to_tag<Card>, boost::json::value const &jv)
+{
+	using namespace boost::json;
 
-			if (_effect == EFFECT::NUMBER)
-				; //!-----------
-		}
-		if (_scope == SCOPE::INDUSTRY)
-		{
-			if (_effect == EFFECT::COEFFICIENT)
-				_country->locations()->industryCoef(_num_or_coef);
+	boost::json::object const &obj = jv.as_object();
+	return Card{value_to<int>(obj.at("index")),
+				toSCOPE(value_to<std::string>(obj.at("SCOPE"))),
+				toTARGET(value_to<std::string>(obj.at("TARGET"))),
+				toEFFECT(value_to<std::string>(obj.at("EFFECT"))),
+				value_to<std::string>(obj.at("descriprton")),
+				value_to<int>(obj.at("probability")),
+				value_to<int>(obj.at("duration")),
+				value_to<int>(obj.at("num_or_coef"))};
+}
 
-			if (_effect == EFFECT::NUMBER)
-				; //!-----------
-		}
-	}
+SCOPE CARD::toSCOPE(std::string str)
+{
+	if (str == "ARMY")
+		return SCOPE::ARMY;
+	if (str == "SCIENCE")
+		return SCOPE::SCIENCE;
+	if (str == "OIL")
+		return SCOPE::OIL;
+	if (str == "MINERAL")
+		return SCOPE::MINERAL;
+	if (str == "FARM")
+		return SCOPE::FARM;
+	if (str == "INDUSTRY")
+		return SCOPE::INDUSTRY;
+	if (str == "ALL")
+		return SCOPE::ALL;
+	return SCOPE::ALL; // TODO! what if string is ill?
+}
 
-	if (_target == TARGET::POINTS)
-	{
-		if (_scope == SCOPE::ARMY)
-		{
-			if (_effect == EFFECT::COEFFICIENT)
-				_country->points()->armyCoef(_num_or_coef);
+TARGET CARD::toTARGET(std::string str)
+{
+	if (str == "LOCATIONS")
+		return TARGET::LOCATIONS;
+	if (str == "POINTS")
+		return TARGET::POINTS;
+	if (str == "RESOURCES")
+		return TARGET::RESOURCES;
+	return TARGET::RESOURCES;
+}
 
-			if (_effect == EFFECT::NUMBER)
-				_country->points()->armyNum(_num_or_coef);
-		}
-		if (_scope == SCOPE::SCIENCE)
-		{
-			if (_effect == EFFECT::COEFFICIENT)
-				_country->points()->scienceCoef(_num_or_coef); //TODO! create a buffer variable to store the half/ third or etc part of initial number of ... to add on a call of unexecute()
- 
-			if (_effect == EFFECT::NUMBER)
-				_country->points()->scienceNum(_num_or_coef);
-		}
-		if (_scope == SCOPE::OIL)
-		{
-			if (_effect == EFFECT::COEFFICIENT)
-				_country->points()->oilCoef(_num_or_coef); // TODO! create a buffer variable to store the half/ third or etc part of initial number of ... to add on a call of unexecute()
-
-			if (_effect == EFFECT::NUMBER)
-				_country->points()->oilNum(_num_or_coef);
-		}
-		if (_scope == SCOPE::MINERAL)
-		{
-			if (_effect == EFFECT::COEFFICIENT)
-				_country->points()->mineralCoef(_num_or_coef); // TODO! create a buffer variable to store the half/ third or etc part of initial number of ... to add on a call of unexecute()
-
-			if (_effect == EFFECT::NUMBER)
-				_country->points()->mineralNum(_num_or_coef); // TODO! create a buffer variable to store the half/ third or etc part of initial number of ... to add on a call of unexecute()
-		}
-		if (_scope == SCOPE::FARM)
-		{
-			if (_effect == EFFECT::COEFFICIENT)
-				_country->points()->farmCoef(_num_or_coef);
-
-			if (_effect == EFFECT::NUMBER)
-				_country->points()->farmNum(_num_or_coef);
-		}
-		if (_scope == SCOPE::INDUSTRY)
-		{
-			if (_effect == EFFECT::COEFFICIENT)
-				_country->points()->industryCoef(_num_or_coef);
-
-			if (_effect == EFFECT::NUMBER)
-				_country->points()->industryNum(_num_or_coef);
-		}
-	}
-
-	if (_target == TARGET::RESOURCES)
-	{
-		if (_scope == SCOPE::ARMY)
-			;
-		if (_scope == SCOPE::SCIENCE)
-			;
-		if (_scope == SCOPE::OIL)
-		{
-			if (_effect == EFFECT::COEFFICIENT)
-				_country->resources()->oilCoef(_num_or_coef); //TODO! add option to increase/decrease capital of resources in ... times
-
-			if (_effect == EFFECT::NUMBER)
-				_country->resources()->oilNum(_num_or_coef);
-		}
-		if (_scope == SCOPE::MINERAL)
-		{
-			if (_effect == EFFECT::COEFFICIENT)
-				_country->resources()->mineralCoef(_num_or_coef);
-
-			if (_effect == EFFECT::NUMBER)
-				_country->resources()->mineralNum(_num_or_coef);
-		}
-		if (_scope == SCOPE::FARM)
-		{
-			if (_effect == EFFECT::COEFFICIENT)
-				_country->resources()->farmCoef(_num_or_coef);
-
-			if (_effect == EFFECT::NUMBER)
-				_country->resources()->farmNum(_num_or_coef);
-		}
-		if (_scope == SCOPE::INDUSTRY)
-		{
-			if (_effect == EFFECT::COEFFICIENT)
-				_country->points()->industryCoef(_num_or_coef);
-
-			if (_effect == EFFECT::NUMBER)
-				_country->points()->industryNum(_num_or_coef);
-		}
-	}
+EFFECT CARD::toEFFECT(std::string str)
+{
+	if (str == "NUMBER")
+		return EFFECT::EFFECT;
+	if (str == "COEFFICIENT")
+		return EFFECT::COEFFICIENT;
+	return EFFECT::EFFECT;
 }

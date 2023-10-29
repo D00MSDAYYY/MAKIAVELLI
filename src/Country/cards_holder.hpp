@@ -6,9 +6,6 @@
 
 const int MAX_YEARS_DEPTH = 5;
 
-
-
-
 namespace CARD
 {
 	using LOC::Locations;
@@ -28,8 +25,9 @@ namespace CARD
 
 	public:
 		Cards_Holder() {}
+
 		void setDependices(std::shared_ptr<Card_Bank> card_bank);
-		void setDependices(std::shared_ptr<Country> country);
+		void setDependices(std::weak_ptr<Country> country);
 
 		void addCard();
 

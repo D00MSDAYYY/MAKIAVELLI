@@ -54,11 +54,11 @@ float Resources::oilCoef(float const coef)
 {
 	if (coef == 0)
 	{
-		return _oil_coef_cost;
+		return _oil_coef;
 	}
 	else
 	{
-		_oil_coef_cost *= coef;
+		_oil_coef *= coef;
 		return 1.0f;
 	}
 }
@@ -67,11 +67,11 @@ float Resources::mineralCoef(float const coef)
 {
 	if (coef == 0)
 	{
-		return _mineral_coef_cost;
+		return _mineral_coef;
 	}
 	else
 	{
-		_mineral_coef_cost *= coef;
+		_mineral_coef *= coef;
 		return 1.0;
 	}
 }
@@ -80,11 +80,11 @@ float Resources::farmCoef(float const coef)
 {
 	if (coef == 0)
 	{
-		return _farm_coef_cost;
+		return _farm_coef;
 	}
 	else
 	{
-		_farm_coef_cost *= coef;
+		_farm_coef *= coef;
 		return 1.0;
 	}
 }
@@ -228,9 +228,9 @@ void Resources::operator>>(olc::net::message<MSG_FROM> msg)
 
 void Resources::update()
 {
-	_oil_resources += OIL_BASE * _oil_coef_cost * _country.lock()->locations()->oilNum();
-	_mineral_resources += MINERAL_BASE * _mineral_coef_cost * _country.lock()->locations()->mineralNum();
-	_farm_resources += FARM_BASE * _farm_coef_cost * _country.lock()->locations()->farmNum();
+	_oil_resources += OIL_BASE * _oil_coef * _country.lock()->locations()->oilNum();
+	_mineral_resources += MINERAL_BASE * _mineral_coef * _country.lock()->locations()->mineralNum();
+	_farm_resources += FARM_BASE * _farm_coef * _country.lock()->locations()->farmNum();
 	_industry_resources += INDUSTRY_BASE * _industry_coef * _country.lock()->locations()->industryNum();
 }
 
@@ -436,12 +436,12 @@ int LOC::Locations::industryNum(std::vector<std::pair<int, int>> coords)
 		bool isChanged{false};
 		for (auto &coord : coords)
 		{
-			if (_industry_loc_cost * _industry_coef <= *_country.lock()->resources())
+			if (_industry_loc_cost * _industry_coef_cost <= *_country.lock()->resources())
 			{
 				if (_map->cell(coord).mapCellOwner() == this &&
 					_map->find(Cell_Type::COUNTRY_AREA, coord))
 				{
-					*_country.lock()->resources() -= _industry_loc_cost * _industry_coef;
+					*_country.lock()->resources() -= _industry_loc_cost * _industry_coef_cost;
 					_map->cell(coord).mapCellOwner(this);
 					_map->cell(coord).mapCellType(Cell_Type::INDUSTRY);
 					isChanged = true;
@@ -499,11 +499,11 @@ float Locations::industryCoef(float const coef)
 {
 	if (coef == 0)
 	{
-		return _industry_coef;
+		return _industry_coef_cost;
 	}
 	else
 	{
-		_industry_coef *= coef;
+		_industry_coef_cost *= coef;
 		return 1.0;
 	}
 }
@@ -747,9 +747,9 @@ int Points::armyNum(int const points)
 	}
 	bool isChanged = false;
 	while (_army_points < MAX_ARMY_POINTS &&
-		   _army_points_cost * _army_coef <= *_country.lock()->resources())
+		   _army_points_cost * _army_coef_cost <= *_country.lock()->resources())
 	{
-		*_country.lock()->resources() -= _army_points_cost * _army_coef;
+		*_country.lock()->resources() -= _army_points_cost * _army_coef_cost;
 		++_army_points;
 		isChanged = true;
 		setArmyCost();
@@ -773,9 +773,9 @@ int Points::scienceNum(int const points)
 	}
 	bool isChanged = false;
 	while (_science_points < MAX_SCIENCE_POINTS &&
-		   _science_points_cost * _science_coef <= *_country.lock()->resources())
+		   _science_points_cost * _science_coef_cost <= *_country.lock()->resources())
 	{
-		*_country.lock()->resources() -= _science_points_cost * _science_coef;
+		*_country.lock()->resources() -= _science_points_cost * _science_coef_cost;
 		++_science_points;
 		isChanged = true;
 		setScienceCost();
@@ -877,9 +877,9 @@ int Points::industryNum(int const points)
 	}
 	bool isChanged = false;
 	while (_industry_points < MAX_INDUSTRY_POINTS &&
-		   _industry_points_cost * _industry_coef <= *_country.lock()->resources())
+		   _industry_points_cost * _industry_coef_cost <= *_country.lock()->resources())
 	{
-		*_country.lock()->resources() -= _industry_points_cost * _industry_coef;
+		*_country.lock()->resources() -= _industry_points_cost * _industry_coef_cost;
 		++_industry_points;
 		isChanged = true;
 		setIndustryCost();
@@ -889,33 +889,33 @@ int Points::industryNum(int const points)
 	return 0;
 }
 
-float Points::armyCoef(float const coef)
+float Points::armyCoefCost(float const coef)
 {
 	if (coef == 0)
 	{
-		return _army_coef;
+		return _army_coef_cost;
 	}
 	else
 	{
-		_army_coef *= coef;
+		_army_coef_cost *= coef;
 		return 1.0;
 	}
 }
 
-float Points::scienceCoef(float const coef)
+float Points::scienceCoefCost(float const coef)
 {
 	if (coef == 0)
 	{
-		return _science_coef;
+		return _science_coef_cost;
 	}
 	else
 	{
-		_science_coef *= coef;
+		_science_coef_cost *= coef;
 		return 1.0;
 	}
 }
 
-float Points::oilCoef(float const coef)
+float Points::oilCoefCost(float const coef)
 {
 	if (coef == 0)
 	{
@@ -928,7 +928,7 @@ float Points::oilCoef(float const coef)
 	}
 }
 
-float Points::mineralCoef(float const coef)
+float Points::mineralCoefCost(float const coef)
 {
 	if (coef == 0)
 	{
@@ -941,7 +941,7 @@ float Points::mineralCoef(float const coef)
 	}
 }
 
-float Points::farmCoef(float const coef)
+float Points::farmCoefCost(float const coef)
 {
 	if (coef == 0)
 	{
@@ -954,28 +954,28 @@ float Points::farmCoef(float const coef)
 	}
 }
 
-float Points::industryCoef(float const coef)
+float Points::industryCoefCost(float const coef)
 {
 	if (coef == 0)
 	{
-		return _industry_coef;
+		return _industry_coef_cost;
 	}
 	else
 	{
-		_industry_coef *= coef;
+		_industry_coef_cost *= coef;
 		return 1.0;
 	}
 }
 
-float Points::allCoef(float const coef)
+float Points::allCoefCost(float const coef)
 {
 	if (coef == 0)
 	{
-		return _industry_coef;
+		return _industry_coef_cost;
 	}
 	else
 	{
-		_industry_coef *= coef;
+		_industry_coef_cost *= coef;
 		return 1.0;
 	}
 }

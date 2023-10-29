@@ -16,7 +16,7 @@ namespace CARD
 
 	public:
 		Card_Bank();
-		~Card_Bank() {}
+		~Card_Bank(){}
 
 		std::shared_ptr<Card> card(std::weak_ptr<Country> country);
 	};

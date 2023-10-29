@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_subdirectory(Country)
-add_subdirectory(Game)
+add_subdirectory(Game_Factory)
 add_subdirectory(Map)
 add_subdirectory(Card_Bank)
 add_subdirectory(Networking)
@@ -32,7 +32,7 @@ add_executable(${PROJECT_NAME} main.cpp)
 target_link_libraries(${PROJECT_NAME}
   PRIVATE
     Map
-    Game
+    Game_Factory
     Card_Bank
     Country
     Networking

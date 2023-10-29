@@ -1,3 +1,12 @@
 [
-	
+	{
+		"index": 0,
+		"SCOPE": "OIL",
+		"TARGET": "LOCATIONS",
+		"EFFECT": "NUMBER",
+		"descriprton": "abcdefg",
+		"probability": 70,
+		"duration" : 1,
+		"num_or_coef" : 10
+	}
 ]
