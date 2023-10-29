@@ -45,3 +45,5 @@ std::shared_ptr<Card> Card_Bank::card(std::weak_ptr<Country> country)
 		return returning_lambda();
 	}
 }
+
+
