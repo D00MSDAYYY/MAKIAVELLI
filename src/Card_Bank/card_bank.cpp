@@ -2,8 +2,9 @@
 
 #include "card_bank.hpp"
 
-using CARD::Card;
+using CARD::Card_Wrapper;
 using CARD::Card_Bank;
+using CARD::Card_Core;
 
 Card_Bank::Card_Bank()
 {
@@ -17,28 +18,22 @@ Card_Bank::Card_Bank()
 	cards_input.read(&cards_str_input[0], cards_str_input.size());
 	cards_input.close();
 	cards_ar = boost::json::parse(cards_str_input).as_array();
+	//TODO! insert code to fill the buffer of cards
 }
 
-std::shared_ptr<Card> Card_Bank::card(std::weak_ptr<Country> country)
+std::shared_ptr<Card_Wrapper> Card_Bank::card(std::weak_ptr<Country> country)
 {
-	auto returning_lambda = [this, &country]() -> auto
-	{
-		auto tmp{_main_card_buffer.back()};
-		_main_card_buffer.pop_back();
-		_secondary_card_buffer.push_back(tmp);
+	auto returning_lambda{[this, country]() -> auto
+						  {
+							  auto tmp{_main_card_buffer.back()};
+							  _main_card_buffer.pop_back();
+							  _secondary_card_buffer.push_back(tmp);
 
-		for (; !tmp->attach(country);)
-		{
-			tmp = _main_card_buffer.back();
-			_main_card_buffer.pop_back();
-			_secondary_card_buffer.push_back(tmp);
-		}
-		return tmp;
-	};
+							  return std::shared_ptr<Card_Wrapper>{new Card_Wrapper{*tmp, country}};
+						  }};
 
 	if (!_main_card_buffer.empty()) //! maybe optimize this using if(!_main_card_buffer.empty() && _main_card_buffer.size() != 1) and shuffle in another thread then returning last card
 	{
-
 		return returning_lambda();
 	}
 	else

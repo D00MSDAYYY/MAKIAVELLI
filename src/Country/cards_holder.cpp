@@ -22,5 +22,4 @@ void Cards_Holder::update()
 {
 	_cards.pop_front();
 	// _cards.push_back(std::shared_ptr<Card>(new Card(nullptr,0)));
-
 }
