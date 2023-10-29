@@ -14,7 +14,7 @@ namespace CARD
 	class Cards_Holder
 	{
 	private:
-		std::deque<std::list<std::shared_ptr<Card_Wrapper>>> _cards{MAX_YEARS_DEPTH, {{}}};
+		std::deque<std::list<std::shared_ptr<Card>>> _cards{MAX_YEARS_DEPTH, {{}}};
 
 		std::weak_ptr<Country> _country;
 		std::shared_ptr<Card_Bank> _card_bank;

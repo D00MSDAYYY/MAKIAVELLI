@@ -23,7 +23,7 @@ enum class TARGET
 
 enum class EFFECT
 {
-	NUMBER,
+	EFFECT,
 	COEFFICIENT
 };
 
@@ -31,7 +31,7 @@ class Country;
 
 namespace CARD
 {
-	class Card_Core
+	class Card
 	{
 	private:
 		int _index{0};
@@ -43,11 +43,18 @@ namespace CARD
 		int _duration{0};
 		int _num_or_coef{0};
 
+		std::weak_ptr<Country> _country{};
+
 	public:
-		Card_Core(SCOPE scope, TARGET target,
-				  EFFECT effect, int index,
-				  int duration, int probability,
-				  int num_or_coef, std::string description);
+		Card(int index,
+			 SCOPE scope,
+			 TARGET target,
+			 EFFECT effect,
+			 std::string description,
+			 int probability,
+			 int duration,
+			 int num_or_coef);
+		Card(const Card &c, std::weak_ptr<Country> country);
 
 		const SCOPE scope() { return _scope; }
 		const TARGET target() { return _target; }
@@ -56,21 +63,13 @@ namespace CARD
 		const int duration() { return _duration; }
 		const std::string &descriprion() { return _description; }
 
-		~Card_Core(){};
-	};
-	std::shared_ptr<Card_Core> tag_invoke(boost::json::value_to_tag<std::shared_ptr<Card_Core>>,
-										  boost::json::value const &jv);
-
-	class Card_Wrapper : public Card_Core
-	{
-	private:
-		std::weak_ptr<Country> _country{};
 		void execute();
 		void unexecute();
 
-	public:
-		Card_Wrapper(Card_Core cd, std::weak_ptr<Country> country)
-			: Card_Core{cd}, _country{country} { execute(); }
-		~Card_Wrapper() { unexecute(); };
+		~Card();
 	};
+	Card tag_invoke(boost::json::value_to_tag<Card>, boost::json::value const &jv);
+	SCOPE toSCOPE(std::string str);
+	TARGET toTARGET(std::string str);
+	EFFECT toEFFECT(std::string str);
 }
