@@ -21,6 +21,7 @@ private:
 	void OnClientDisconnect(std::shared_ptr<olc::net::connection<MSG_FROM>> client) override;
 	void OnMessage(std::shared_ptr<olc::net::connection<MSG_FROM>> client,
 				   olc::net::message<MSG_FROM> &msg) override;
+	void connectBots(); //TODO! create definition
 
 public:
 	Game_Server(int play_num, int bot_num,

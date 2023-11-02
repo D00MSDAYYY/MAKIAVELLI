@@ -4,7 +4,7 @@
 #include <QWidget>
 
 namespace Ui {
-class Game_Window;
+class player_window;
 }
 
 class Game_Window : public QWidget
@@ -16,7 +16,7 @@ public:
     ~Game_Window();
 
 private:
-    Ui::Game_Window *ui;
+    Ui::player_window *ui;
 };
 
 #endif // GAME_WINDOW_H

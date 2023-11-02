@@ -75,7 +75,7 @@ void Game_Factory::createCardBank(std::unordered_map<uint32_t, Country> &pl)
 		_card_bank = std::shared_ptr<Card_Bank>(new Card_Bank{});
 	for (auto &[ID, country] : pl)
 	{
-		country.cardsHolder()->setDependices(_card_bank); // TODO! card_bank
+		country.cardsHolder()->setDependices(_card_bank); 
 	}
 }
 

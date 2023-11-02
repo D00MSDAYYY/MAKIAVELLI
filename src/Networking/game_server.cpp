@@ -26,7 +26,8 @@ Game_Server::~Game_Server()
 
 void Game_Server::run()
 {
-
+	connectBots();
+	
 	Start();
 	while (m_deqConnections.size() < _players.size())
 		std::this_thread::sleep_for(std::chrono::seconds(3));

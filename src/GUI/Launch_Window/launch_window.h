@@ -14,6 +14,7 @@ class Launch_Window : public QDialog
 
 public:
     explicit Launch_Window(QWidget *parent = nullptr);
+    void closeEvent(QCloseEvent *e);
     ~Launch_Window();
 
 private:

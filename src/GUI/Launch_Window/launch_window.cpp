@@ -8,10 +8,6 @@
 
 #include <iostream>
 
-void printMe()
-{
-    std::cerr << "printMe activated";
-}
 Launch_Window::Launch_Window(QWidget *parent) : QDialog(parent),
                                                 ui(new Ui::Launch_Window)
 {
@@ -19,9 +15,18 @@ Launch_Window::Launch_Window(QWidget *parent) : QDialog(parent),
     ui->tabWidget->addTab(new Server(this), "create");
     ui->tabWidget->addTab(new Client(this), "connect");
 
+
+}
+
+void Launch_Window::closeEvent(QCloseEvent *e)
+{
+    parentWidget()->show();
 }
 
 Launch_Window::~Launch_Window()
 {
     delete ui;
 }
+
+
+
