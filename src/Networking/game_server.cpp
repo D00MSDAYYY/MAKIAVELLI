@@ -6,7 +6,7 @@
 
 #include "game_server.hpp"
 #include "text_message.hpp"
-#include "country.hpp"
+#include "game_factory.hpp"
 
 Game_Server::Game_Server(int play_num, int bot_num,
 						 int rounds, int thinking_time, uint16_t port)

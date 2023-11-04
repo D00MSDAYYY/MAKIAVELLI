@@ -3,7 +3,9 @@
 #include <unordered_map>
 
 #include "game_network.hpp"
-#include "game_factory.hpp"
+#include "server_GUI.hpp"
+
+class Country;
 
 class Game_Server : olc::net::server_interface<MSG_FROM>
 {
@@ -15,6 +17,7 @@ private:
 	int _rounds{};
 	int _thinking_time{};
 	
+// std::shared_ptr<
 
 	bool OnClientConnect(std::shared_ptr<olc::net::connection<MSG_FROM>> client) override;
 	void OnClientValidated(std::shared_ptr<olc::net::connection<MSG_FROM>> client) override;

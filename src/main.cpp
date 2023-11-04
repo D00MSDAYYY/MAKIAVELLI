@@ -1,5 +1,6 @@
 #include <QApplication>
-
-int main(int argc, char *argv[])
+#include <iostream>
+int main(int argc, char **argv)
 {
+	
 }

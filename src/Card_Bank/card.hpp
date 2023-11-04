@@ -63,8 +63,8 @@ namespace CARD
 		const int duration() { return _duration; }
 		const std::string &descriprion() { return _description; }
 
-		void execute();
-		void unexecute();
+		void execute(){};
+		void unexecute(){};
 
 		~Card();
 	};
