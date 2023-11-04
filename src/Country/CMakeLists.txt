@@ -11,12 +11,16 @@ PRIVATE
   activity_points.cpp
   cards_holder.cpp 
   country.cpp 
-  ResLocPoi.cpp 
+  resources.cpp 
+  points.cpp 
+  locations.cpp
 PUBLIC
   ${CMAKE_CURRENT_LIST_DIR}/activity_points.hpp
   ${CMAKE_CURRENT_LIST_DIR}/cards_holder.hpp 
   ${CMAKE_CURRENT_LIST_DIR}/country.hpp 
-  ${CMAKE_CURRENT_LIST_DIR}/ResLocPoi.hpp 
+  ${CMAKE_CURRENT_LIST_DIR}/resources.hpp 
+   ${CMAKE_CURRENT_LIST_DIR}/points.hpp 
+    ${CMAKE_CURRENT_LIST_DIR}/locations.hpp 
 )
 
 

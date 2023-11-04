@@ -126,7 +126,7 @@ void Game_Server::OnMessage(std::shared_ptr<olc::net::connection<MSG_FROM>> clie
 	{
 		if (_players.at(client->GetID()).activityPoints()->currentPoints() == 0)
 			return;
-		Points buy_points;
+		POI::Points buy_points;
 		buy_points << msg;
 
 		bool is_bought{false};

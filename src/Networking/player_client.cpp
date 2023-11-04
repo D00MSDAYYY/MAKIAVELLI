@@ -1,7 +1,5 @@
 #include "player_client.hpp"
 #include "country.hpp"
-#include "ResLocPoi.hpp"
-
 #include "game_server.hpp"
 #include "card.hpp"
 #include "card_bank.hpp"

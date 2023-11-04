@@ -7,7 +7,6 @@
 #include <iostream>
 
 #include "map.hpp"
-#include "ResLocPoi.hpp"
 
 Map::Map(int numplayers)
 {

@@ -1,8 +1,8 @@
 #pragma once
+#include <boost/json.hpp>
 #include <vector>
 #include <memory>
 #include <fstream>
-#include <boost/json.hpp>
 
 #include "card.hpp"
 

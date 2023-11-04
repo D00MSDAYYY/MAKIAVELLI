@@ -14,7 +14,7 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-add_executable(${PROJECT_NAME} main.cpp)
+add_library(${PROJECT_NAME})
 
 target_include_directories(${PROJECT_NAME}
 PUBLIC

@@ -2,22 +2,25 @@
 #include <deque>
 
 #include "card_bank.hpp"
-#include "ResLocPoi.hpp"
+#include "game_network.hpp"
 
 const int MAX_YEARS_DEPTH = 5;
 
 namespace CARD
 {
-	using LOC::Locations;
-	using POI::Points;
-	using RES::Resources;
+	
 	class Cards_Holder
 	{
 	private:
 		std::deque<std::list<std::shared_ptr<Card>>> _cards{MAX_YEARS_DEPTH, {{}}};
 
+		class Counry;
 		std::weak_ptr<Country> _country;
 		std::shared_ptr<Card_Bank> _card_bank;
+
+		class Resources;
+		class Locations;
+		class Points;
 
 		std::shared_ptr<Resources> _resources;
 		std::shared_ptr<Locations> _locations;

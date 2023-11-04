@@ -1,5 +1,6 @@
 #include <cstdint>
 #include <atomic>
+
 #include "game_network.hpp"
 
 namespace AC_POI

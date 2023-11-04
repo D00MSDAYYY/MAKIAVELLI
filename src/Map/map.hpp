@@ -1,13 +1,9 @@
 #pragma once
 
 #include <vector>
+
 #include "map_cell.hpp"
 
-namespace LOC
-{
-	class Locations;
-}
-using LOC::Locations;
 
 class Map
 {

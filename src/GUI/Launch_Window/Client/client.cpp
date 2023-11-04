@@ -17,13 +17,13 @@ Client::Client(QWidget *parent) :
     int wait_index{ui->stackedWidget->addWidget(waiting)};
 
     connect(connector, &Client_Connector::connectButtonClicked,
-            ui->stackedWidget, [=]()
+            ui->stackedWidget, [&,this]()
             { ui->stackedWidget->setCurrentIndex(wait_index); });
     connect(connector, &Client_Connector::connectButtonClicked,
             parent, [=]()
             { parent->parentWidget()->hide(); });
     connect(waiting, &Client_Waiting::shutDownButtonClicked,
-            ui->stackedWidget, [=]()
+            ui->stackedWidget, [&,this]()
             { ui->stackedWidget->setCurrentIndex(connect_index); });
     connect(waiting, &Client_Waiting::shutDownButtonClicked,
             this, [=]()

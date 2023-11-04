@@ -5,6 +5,13 @@
 #include "game_factory.hpp"
 #include "map.hpp"
 
+using AC_POI::Activity_Points;
+using CARD::Card_Bank;
+using CARD::Cards_Holder;
+using LOC::Locations;
+using POI::Points;
+using RES::Resources;
+
 std::unique_ptr<Resources> Game_Factory::createResources(int index)
 {
 	if (res_ar.size() == 0)

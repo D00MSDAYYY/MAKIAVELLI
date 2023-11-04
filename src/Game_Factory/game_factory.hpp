@@ -8,10 +8,6 @@
 #include "game_server.hpp"
 #include "card_bank.hpp"
 
-using LOC::Locations;
-using POI::Points;
-using CARD::Card_Bank;
-using RES::Resources;
 
 static const int DEFAULT_ID{0};
 class Game_Factory
@@ -22,13 +18,13 @@ private:
 
 	int _num_of_players;
 
-	std::unique_ptr<Resources> createResources(int index);
-	std::unique_ptr<Points> createPoints(int index);
-	std::unique_ptr<Locations> createLocations(int index);
-	std::unique_ptr<Cards_Holder> createCardsHolder(int index);
-	std::unique_ptr<Activity_Points> createActivityPoints(int index);
+	std::unique_ptr<RES::Resources> createResources(int index);
+	std::unique_ptr<POI::Points> createPoints(int index);
+	std::unique_ptr<LOC::Locations> createLocations(int index);
+	std::unique_ptr<CARD::Cards_Holder> createCardsHolder(int index);
+	std::unique_ptr<AC_POI::Activity_Points> createActivityPoints(int index);
 
-	std::shared_ptr<Card_Bank> _card_bank{nullptr};
+	std::shared_ptr<CARD::Card_Bank> _card_bank{nullptr};
 	void createCardBank(std::unordered_map<uint32_t, Country> &pl);
 	std::shared_ptr<Map> _map{nullptr};
 	void createMap(std::unordered_map<uint32_t, Country> &pl);

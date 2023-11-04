@@ -1,5 +1,10 @@
 #include "country.hpp"
 
+using AC_POI::Activity_Points;
+using CARD::Cards_Holder;
+using POI::Points;
+using RES::Resources;
+
 bool Country::busy(int flag)
 {
 	if (flag == -1)
