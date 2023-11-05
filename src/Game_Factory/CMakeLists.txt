@@ -21,8 +21,8 @@ target_include_directories(${PROJECT_NAME}
 )
 target_link_libraries(${PROJECT_NAME} 
 PUBLIC 
-  Boost::json
-  Card_Bank
-  Networking
+   Boost::json
+   Card_Bank
+   Networking
 )
 

@@ -16,6 +16,18 @@ set(CMAKE_AUTORCC ON)
 
 add_library(${PROJECT_NAME})
 
+target_sources(${PROJECT_NAME} 
+PRIVATE
+  GUI.cpp
+  player_GUI.cpp
+  server_GUI.cpp
+
+PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/GUI.hpp
+  ${CMAKE_CURRENT_LIST_DIR}/player_GUI.hpp
+  ${CMAKE_CURRENT_LIST_DIR}/server_GUI.hpp
+)
+
 target_include_directories(${PROJECT_NAME}
 PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}

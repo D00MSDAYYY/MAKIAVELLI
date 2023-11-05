@@ -17,7 +17,6 @@ public:
     ~MainWindow();
 
 private slots:
-
     void on_play_button_clicked();
 
 private:

@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.26.4)
 project(Card_Bank)
 
 add_library(${PROJECT_NAME} )
+
 find_package(Boost REQUIRED COMPONENTS json)
 
 target_sources(${PROJECT_NAME} 
@@ -22,6 +23,6 @@ target_include_directories(${PROJECT_NAME}
 
 target_link_libraries(${PROJECT_NAME} 
 PUBLIC 
-   Boost::json
-   Country
+    Boost::json
+    Country
 )
