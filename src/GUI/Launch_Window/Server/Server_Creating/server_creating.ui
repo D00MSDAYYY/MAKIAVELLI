@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Server_Constructor</class>
- <widget class="QWidget" name="Server_Constructor">
+ <class>Server_Creating</class>
+ <widget class="QWidget" name="Server_Creating">
   <property name="geometry">
    <rect>
     <x>0</x>

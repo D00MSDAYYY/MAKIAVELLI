@@ -27,6 +27,6 @@ PUBLIC
 target_link_libraries(${PROJECT_NAME}
 PUBLIC
     Qt6::Widgets
-    Launch_Window
+
 )
 

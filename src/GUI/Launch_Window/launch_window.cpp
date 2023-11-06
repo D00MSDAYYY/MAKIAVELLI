@@ -15,7 +15,6 @@ Launch_Window::Launch_Window(QWidget *parent) : QDialog(parent),
     ui->tabWidget->addTab(new Server(this), "create");
     ui->tabWidget->addTab(new Client(this), "connect");
 
-
 }
 
 void Launch_Window::closeEvent(QCloseEvent *e)

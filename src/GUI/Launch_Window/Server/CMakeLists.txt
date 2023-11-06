@@ -9,7 +9,7 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-add_subdirectory(Server_Constructor)
+add_subdirectory(Server_Creating)
 add_subdirectory(Server_Waiting)
 
 add_library(${PROJECT_NAME} )
@@ -30,6 +30,6 @@ PUBLIC
 target_link_libraries(${PROJECT_NAME}
 PUBLIC
     Qt6::Widgets
-    Server_Constructor
+    Server_Creating
     Server_Waiting
 )
