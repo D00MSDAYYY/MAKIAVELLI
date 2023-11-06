@@ -14,11 +14,11 @@ class Server_Waiting : public QWidget
 public:
     explicit Server_Waiting(QWidget *parent = nullptr);
     ~Server_Waiting();
-
-private slots:
  
 signals:
     void shutDownButtonClicked();
+protected:
+    void showEvent(QShowEvent *event) override;
 
 private:
     Ui::Server_Waiting *ui;

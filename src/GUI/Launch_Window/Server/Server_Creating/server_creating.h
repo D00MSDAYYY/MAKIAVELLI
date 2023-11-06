@@ -2,6 +2,7 @@
 #define SERVER_CONSTRUCTOR_H
 
 #include <QWidget>
+#include "game_server.hpp"
 
 namespace Ui
 {
@@ -14,6 +15,8 @@ class Server_Creating : public QWidget
 
 public:
     explicit Server_Creating(QWidget *parent = nullptr);
+
+
     ~Server_Creating();
 
 private slots:

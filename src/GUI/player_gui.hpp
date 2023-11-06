@@ -1,10 +1,10 @@
-
+#include "player_window.h"
 
 // Base class
 
 class Player_Client;
 
-class Player_GUI  
+class Player_GUI  : public Player_Window
 {
 private:
 	Player_Client *_player_client{};
