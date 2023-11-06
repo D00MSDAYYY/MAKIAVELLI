@@ -27,5 +27,5 @@ PUBLIC
 target_link_libraries(${PROJECT_NAME}
 PUBLIC
     Qt6::Widgets
-    Game_Window
+    # Player_Window
 )

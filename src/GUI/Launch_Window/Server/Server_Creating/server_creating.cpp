@@ -2,7 +2,7 @@
 #include "ui_server_creating.h"
 
 #include <QStackedWidget>
-#include "game_window.h"
+// #include "player_window.h"
 
 
 Server_Creating::Server_Creating(QWidget *parent) : QWidget(parent),

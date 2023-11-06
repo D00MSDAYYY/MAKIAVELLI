@@ -44,7 +44,6 @@
 
 Player_Client::Player_Client() : _player_gui{new Player_GUI{this}}
 {
-	_player_gui->show();
 }
 
 void Player_Client::exchangeRes(SCOPE give_scope, const int give_res, SCOPE receive_scope, const int receive_res)

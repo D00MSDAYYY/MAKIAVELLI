@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.26.4)
 project(GUI)
 
 add_subdirectory(Main_Window)
-add_subdirectory(Game_Window)
+add_subdirectory(Player_Window)
 add_subdirectory(Launch_Window)
 
 
@@ -33,12 +33,10 @@ PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-
-
 target_link_libraries(${PROJECT_NAME}
 PUBLIC
     Qt6::Widgets
     Main_Window
     Launch_Window
-    Game_Window
+    Player_Window
 )
