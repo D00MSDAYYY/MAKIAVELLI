@@ -11,7 +11,7 @@ Server::Server(QWidget *parent) : QWidget(parent),
         ui->setupUi(this);
         
         auto creating{new Server_Creating(ui->stackedWidget)};
-        auto waiting{new Server_Waiting(ui->stackedWidget)};
+        auto waiting{new Server_Waiting(creating, ui->stackedWidget)};
 
         int create_index{ui->stackedWidget->addWidget(creating)};
         int wait_index{ui->stackedWidget->addWidget(waiting)};

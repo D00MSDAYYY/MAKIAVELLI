@@ -2,6 +2,8 @@
 #define SERVER_CONSTRUCTOR_H
 
 #include <QWidget>
+#include <memory>
+
 #include "game_server.hpp"
 
 namespace Ui
@@ -16,6 +18,7 @@ class Server_Creating : public QWidget
 public:
     explicit Server_Creating(QWidget *parent = nullptr);
 
+    std::unique_ptr<Game_Server> createGameServer();
 
     ~Server_Creating();
 

@@ -27,4 +27,5 @@ PUBLIC
 target_link_libraries(${PROJECT_NAME}
 PUBLIC
     Qt6::Widgets
+    Server_Creating
 )

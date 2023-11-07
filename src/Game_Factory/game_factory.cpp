@@ -27,7 +27,7 @@ std::unique_ptr<Resources> Game_Factory::createResources(int index)
 		res_input.close();
 		res_ar = boost::json::parse(res_str_input).as_array();
 	}
-	return std::unique_ptr<Resources>(new Resources(boost::json::value_to<Resources>(res_ar.at(index))));
+	return std::unique_ptr<Resources>{new Resources{boost::json::value_to<Resources>(res_ar.at(index))}};
 }
 
 std::unique_ptr<Points> Game_Factory::createPoints(int index)
