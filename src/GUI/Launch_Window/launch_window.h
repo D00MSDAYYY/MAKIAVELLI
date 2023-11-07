@@ -18,6 +18,9 @@ public:
     ~Launch_Window();
 
     void closeEvent(QCloseEvent *e);
+private slots:
+    void createButtonClicked();
+    void shutdownButtonClicked();
 
 private:
     Ui::Launch_Window *ui;

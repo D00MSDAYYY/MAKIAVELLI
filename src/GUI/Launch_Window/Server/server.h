@@ -3,8 +3,9 @@
 
 #include <QWidget>
 
-namespace Ui {
-class Server;
+namespace Ui
+{
+    class Server;
 }
 
 class Server : public QWidget
@@ -14,6 +15,9 @@ class Server : public QWidget
 public:
     explicit Server(QWidget *parent = nullptr);
     ~Server();
+signals:
+    void createButtonClicked();
+    void shutdownButtonClicked();
 
 private:
     Ui::Server *ui;

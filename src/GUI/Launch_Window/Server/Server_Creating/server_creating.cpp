@@ -2,8 +2,7 @@
 #include "ui_server_creating.h"
 
 #include <QStackedWidget>
-#include "game_window.h"
-
+// #include "player_window.h"
 
 Server_Creating::Server_Creating(QWidget *parent) : QWidget(parent),
                                                     ui(new Ui::Server_Creating)
@@ -15,6 +14,14 @@ Server_Creating::Server_Creating(QWidget *parent) : QWidget(parent),
     ui->thinking_t_num_label->setText(QString::number(ui->thinking_t_slider->value()) + 's');
 
     connect(ui->create_server_button, &QPushButton::clicked, this, &Server_Creating::createButtonClicked);
+}
+
+std::unique_ptr<Game_Server> Server_Creating::createGameServer()
+{
+    return std::unique_ptr<Game_Server>{new Game_Server{ui->players_slider->value(),
+                                                        ui->bots_slider->value(),
+                                                        ui->rounds_slider->value(),
+                                                        ui->thinking_t_slider->value()}};
 }
 
 Server_Creating::~Server_Creating()
@@ -44,5 +51,4 @@ void Server_Creating::on_thinking_t_slider_valueChanged(int value)
 
 void Server_Creating::on_create_server_button_clicked()
 {
-    
 }

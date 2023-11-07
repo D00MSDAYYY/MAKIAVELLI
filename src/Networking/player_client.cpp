@@ -12,10 +12,10 @@
 // 	{
 // 		Country country;
 // 		country << msg;
-// 		_countries[country.index()] = std::move(country); 
+// 		_countries[country.index()] = std::move(country);
 // 		break;
 // 	}
-	
+
 // 	case MSG_FROM::SERVER_REQUEST_EXCHANGE_RES:
 // 	{
 // 		Country data_sender_request_exchange;
@@ -42,8 +42,10 @@
 // 	}
 // }
 
-Player_Client::Player_Client() : _player_gui{new Player_GUI{this}}
+Player_Client::Player_Client(const std::string &host, const uint16_t port)
+	: _player_gui{new Player_GUI{this}}
 {
+	Connect(host, port);
 	_player_gui->show();
 }
 
@@ -53,13 +55,10 @@ void Player_Client::exchangeRes(SCOPE give_scope, const int give_res, SCOPE rece
 
 void Player_Client::buyPoints(SCOPE scope, const int points)
 {
-	
 }
 
 void Player_Client::buyLocations(SCOPE scope, std::vector<std::pair<int, int>> coords)
 {
-
-	
 }
 
 // void Player_Client::run(const std::string &host, const uint16_t port)

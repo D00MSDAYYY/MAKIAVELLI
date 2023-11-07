@@ -1,8 +1,9 @@
 cmake_minimum_required(VERSION 3.26)
 
-project(Game_Window)
+project(Player_Window)
 
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
+# qt_standard_project_setup()
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
@@ -12,12 +13,11 @@ add_library(${PROJECT_NAME} )
 
 target_sources(${PROJECT_NAME}
 PRIVATE
-  game_window.cpp
+  player_window.cpp
 PUBLIC
-  game_window.h
-  game_window.ui
+  ${CMAKE_CURRENT_SOURCE_DIR}/player_window.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/player_window.ui
 )
-
 
 target_include_directories(${PROJECT_NAME}
 PUBLIC
@@ -27,6 +27,5 @@ PUBLIC
 target_link_libraries(${PROJECT_NAME}
 PUBLIC
     Qt6::Widgets
-
 )
 
