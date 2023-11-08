@@ -70,5 +70,23 @@
 		"mineral": 7,
 		"farm": 2,
 		"industry": 2
+	},
+	{
+		"index": 7,
+		"army": 3,
+		"science": 1,
+		"oil": 9,
+		"mineral": 7,
+		"farm": 2,
+		"industry": 2
+	},
+	{
+		"index": 7,
+		"army": 3,
+		"science": 1,
+		"oil": 9,
+		"mineral": 7,
+		"farm": 2,
+		"industry": 2
 	}
 ]

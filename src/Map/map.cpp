@@ -10,6 +10,7 @@
 
 Map::Map(int numplayers)
 {
+	std::cerr << "in map constructor"  << numplayers<< std::endl;
 	switch (numplayers)
 	{
 	case 3:
@@ -56,6 +57,9 @@ Map::Map(int numplayers)
 	}
 
 	default:
+		_map.resize(100);
+		for (auto &column : _map)
+			column.resize(100);
 		break;
 	}
 }

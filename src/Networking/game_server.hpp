@@ -26,7 +26,7 @@ private:
 public:
 	Game_Server(int play_num, int bot_num,
 				int rounds, int thinking_time, uint16_t port = 0);
-	~Game_Server();
+	virtual ~Game_Server();
 
 	void run();
 };

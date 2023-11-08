@@ -1,2 +1,0 @@
-
-#cmakedefine IMAGE_DIR "@IMAGE_DIR@"

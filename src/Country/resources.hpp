@@ -11,7 +11,7 @@ namespace RES
 	class Resources
 	{
 	private:
-		std::weak_ptr<Country> _country;
+		std::shared_ptr<Country> _country;
 
 		int _oil_resources{};
 		int _mineral_resources{};

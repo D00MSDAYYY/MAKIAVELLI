@@ -15,7 +15,7 @@ namespace CARD
 		std::deque<std::list<std::shared_ptr<Card>>> _cards{MAX_YEARS_DEPTH, {{}}};
 
 		class Counry;
-		std::weak_ptr<Country> _country;
+		std::shared_ptr<Country> _country;
 		std::shared_ptr<Card_Bank> _card_bank;
 
 		class Resources;
@@ -30,7 +30,7 @@ namespace CARD
 		Cards_Holder() {}
 
 		void setDependices(std::shared_ptr<Card_Bank> card_bank);
-		void setDependices(std::weak_ptr<Country> country);
+		void setDependices(std::shared_ptr<Country> country);
 
 		void addCard();
 

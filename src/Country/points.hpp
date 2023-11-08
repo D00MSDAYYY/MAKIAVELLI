@@ -18,7 +18,7 @@ namespace POI
 		static const int MAX_FARM_POINTS{10};
 		static const int MAX_INDUSTRY_POINTS{10};
 
-		std::weak_ptr<Country> _country;
+		std::shared_ptr<Country> _country;
 
 		int _army_points{};
 		int _science_points{};

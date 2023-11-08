@@ -18,11 +18,13 @@ Game_Server::Game_Server(int play_num, int bot_num,
 {
 	Game_Factory factory{_play_num + _bot_num};
 	_players = factory.createPlayers();
+	std::cerr << "2222222----";
 	// connectBots();
 }
 
 Game_Server::~Game_Server()
 {
+	std::cerr << "ddddddd-----------";
 }
 
 void Game_Server::run()

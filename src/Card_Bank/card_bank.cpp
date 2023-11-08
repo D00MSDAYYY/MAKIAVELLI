@@ -1,6 +1,7 @@
 #include <random>
 
 #include "card_bank.hpp"
+#include <iostream>
 
 using CARD::Card;
 using CARD::Card_Bank;
@@ -10,7 +11,8 @@ Card_Bank::Card_Bank()
 	std::ifstream cards_input;
 	std::string cards_str_input;
 	boost::json::array cards_ar;
-	cards_input.open("resources.json");
+	std::cerr << "88888888888----";
+	cards_input.open("/Users/matvejzajcev/Desktop/MAKIAVELLI/json_files/resources.json");
 	cards_input.seekg(0, std::ios::end);
 	cards_str_input.resize(cards_input.tellg());
 	cards_input.seekg(0, std::ios::beg);

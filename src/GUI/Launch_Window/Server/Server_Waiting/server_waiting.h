@@ -15,20 +15,13 @@ class Server_Waiting : public QWidget
     Q_OBJECT
 
 public:
-    explicit Server_Waiting(Server_Creating *server_creating,
+    explicit Server_Waiting(std::optional<Game_Server>& game_server,
                             QWidget *parent = nullptr);
+
     ~Server_Waiting();
 
-signals:
-    void shutDownButtonClicked();
-
-protected:
-    void showEvent(QShowEvent *event) override;
-
 private:
-    std::unique_ptr<Game_Server> _game_server;
-    
-    Server_Creating *_server_creating;
+    std::optional<Game_Server> &_game_server;
     Ui::Server_Waiting *ui;
 };
 
