@@ -24,7 +24,7 @@ Game_Server::Game_Server(int play_num, int bot_num,
 
 Game_Server::~Game_Server()
 {
-	std::cerr << "game server destr" << std::endl;
+	std::cerr << "game server destr" << _play_num << " " << _bot_num<< std::endl;
 }
 
 void Game_Server::run()

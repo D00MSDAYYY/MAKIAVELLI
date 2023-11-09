@@ -18,7 +18,7 @@ std::unique_ptr<Resources> Game_Factory::createResources(int index)
 	{
 		std::ifstream res_input{};
 		std::string res_str_input{};
-		res_input.open("/Users/matvejzajcev/Desktop/MAKIAVELLI/json_files/resources.json");
+		res_input.open(":/json_files/resources.json");
 		res_input.seekg(0, std::ios::end);
 		res_str_input.resize(res_input.tellg());
 		res_input.seekg(0, std::ios::beg);

@@ -7,14 +7,6 @@ add_library(${PROJECT_NAME} "")
 find_package(Boost REQUIRED COMPONENTS json)
 find_package(Qt6 REQUIRED COMPONENTS Core)
 
-# set(AUTORCC ON)
-
-qt_add_resources(${PROJECT_NAME} "json_files"
-  PREFIX "/json_files"
-  FILES ${JSON_FILES} 
-  
-)
-
 target_sources(${PROJECT_NAME}
 PRIVATE
   game_factory.cpp
