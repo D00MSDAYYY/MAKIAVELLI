@@ -10,16 +10,17 @@ CARD::Card::Card(int index,
 				 std::string description,
 				 int probability,
 				 int duration,
-				 int num_or_coef) : _index{index},
-									_duration{duration},
-									_probability{probability},
-									_scope{scope},
-									_target{target},
-									_effect{effect},
-									_num_or_coef{num_or_coef},
-									_description{std::move(description)} {}
+				 int num_or_coef)
+	: _index{index},
+	  _duration{duration},
+	  _probability{probability},
+	  _scope{scope},
+	  _target{target},
+	  _effect{effect},
+	  _num_or_coef{num_or_coef},
+	  _description{std::move(description)} {}
 
-CARD::Card::Card(const Card &card, std::weak_ptr<Country> country) : Card{card}
+CARD::Card::Card(const Card &card, Country* country) : Card{card}
 {
 	_country = country;
 	execute();
@@ -27,7 +28,7 @@ CARD::Card::Card(const Card &card, std::weak_ptr<Country> country) : Card{card}
 
 CARD::Card::~Card()
 {
-	if (!_country.expired())
+	if (_country)
 		unexecute();
 }
 

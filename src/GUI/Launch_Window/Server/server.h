@@ -2,6 +2,9 @@
 #define SERVER_H
 
 #include <QWidget>
+#include <optional>
+
+#include "game_server.hpp"
 
 namespace Ui
 {
@@ -15,11 +18,9 @@ class Server : public QWidget
 public:
     explicit Server(QWidget *parent = nullptr);
     ~Server();
-signals:
-    void createButtonClicked();
-    void shutdownButtonClicked();
 
 private:
+    std::shared_ptr<Game_Server> _game_server{nullptr};
     Ui::Server *ui;
 };
 

@@ -12,8 +12,7 @@ namespace LOC
 	{
 	private:
 		
-
-		std::weak_ptr<Country> _country;
+		Country* _country{nullptr};
 		std::shared_ptr<Map> _map;
 
 		std::vector<std::pair<int, int>> _country_map{};
@@ -31,9 +30,10 @@ namespace LOC
 	public:
 		Locations() {}
 		Locations(std::vector<std::pair<int, int>> country_map)
-			: _country_map{country_map} {}
+			: _country_map{country_map}{}
+		~Locations();
 
-		void setDependices(std::shared_ptr<Country> country);
+		void setDependices(Country* country);
 		void setDependices(std::shared_ptr<Map> map);
 
 		const Locations operator+(const Locations &l) const;

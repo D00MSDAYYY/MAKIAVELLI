@@ -1,12 +1,17 @@
 #include "country.hpp"
+#include "resources.hpp"
 
 using RES::Resources;
 
-void Resources::setDependices(std::shared_ptr<Country> country)
+void Resources::setDependices(Country* country)
 {
 	_country = country;
 }
-
+RES::Resources::~Resources() 
+{
+	std::cerr << "resources destr ";
+	std::cerr << std::endl;
+}
 int Resources::oilNum(int const resources)
 {
 	if (resources == 0)
@@ -222,23 +227,23 @@ void Resources::operator>>(olc::net::message<MSG_FROM> msg)
 
 void Resources::update()
 {
-	_oil_resources += OIL_BASE * _oil_coef * _country.lock()->locations()->oilNum();
-	_mineral_resources += MINERAL_BASE * _mineral_coef * _country.lock()->locations()->mineralNum();
-	_farm_resources += FARM_BASE * _farm_coef * _country.lock()->locations()->farmNum();
-	_industry_resources += INDUSTRY_BASE * _industry_coef * _country.lock()->locations()->industryNum();
+	_oil_resources += OIL_BASE * _oil_coef * _country->locations()->oilNum();
+	_mineral_resources += MINERAL_BASE * _mineral_coef * _country->locations()->mineralNum();
+	_farm_resources += FARM_BASE * _farm_coef * _country->locations()->farmNum();
+	_industry_resources += INDUSTRY_BASE * _industry_coef * _country->locations()->industryNum();
 }
 
 Resources RES::tag_invoke(boost::json::value_to_tag<Resources>, boost::json::value const &jv)
 {
 	boost::json::object const &obj = jv.as_object();
-	return Resources{boost::json::value_to<int>(obj.at("oil")),
-					 boost::json::value_to<int>(obj.at("mineral")),
-					 boost::json::value_to<int>(obj.at("farm")),
-					 boost::json::value_to<int>(obj.at("industry"))};
+	return std::move(Resources{boost::json::value_to<int>(obj.at("oil")),
+							   boost::json::value_to<int>(obj.at("mineral")),
+							   boost::json::value_to<int>(obj.at("farm")),
+							   boost::json::value_to<int>(obj.at("industry"))});
 }
 void RES::tag_invoke(boost::json::value_from_tag, boost::json::value &jv, Resources const &res)
 {
-	Resources temp = res; //! dont change this coz res must be const
+	Resources temp{res}; //! dont change this coz res must be const
 	jv = {{"oil", temp.oilNum()},
 		  {"mineral", temp.mineralNum()},
 		  {"farm", temp.farmNum()},

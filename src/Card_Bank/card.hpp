@@ -43,7 +43,7 @@ namespace CARD
 		int _duration{0};
 		int _num_or_coef{0};
 
-		std::weak_ptr<Country> _country{};
+		Country* _country{nullptr};
 
 	public:
 		Card(int index,
@@ -54,7 +54,7 @@ namespace CARD
 			 int probability,
 			 int duration,
 			 int num_or_coef);
-		Card(const Card &c, std::weak_ptr<Country> country);
+		Card(const Card &c, Country* country);
 
 		const SCOPE scope() { return _scope; }
 		const TARGET target() { return _target; }

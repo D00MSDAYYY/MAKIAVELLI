@@ -3,6 +3,8 @@
 
 #include <QWidget>
 
+#include <atomic>
+
 #include "server_creating.h"
 
 namespace Ui
@@ -15,20 +17,14 @@ class Server_Waiting : public QWidget
     Q_OBJECT
 
 public:
-    explicit Server_Waiting(Server_Creating *server_creating,
-                            QWidget *parent = nullptr);
+    explicit Server_Waiting(QWidget *parent = nullptr);
+
+    void startUpdatingInfo(const std::shared_ptr<Game_Server> &game_server);
+    void finishUpdatingInfo();
     ~Server_Waiting();
 
-signals:
-    void shutDownButtonClicked();
-
-protected:
-    void showEvent(QShowEvent *event) override;
-
 private:
-    std::unique_ptr<Game_Server> _game_server;
-    
-    Server_Creating *_server_creating;
+    std::atomic<bool> is_active{false};
     Ui::Server_Waiting *ui;
 };
 

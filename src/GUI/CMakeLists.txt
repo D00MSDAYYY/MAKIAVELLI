@@ -12,7 +12,7 @@ find_package(Qt6 REQUIRED COMPONENTS Widgets)
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
+# set(CMAKE_AUTORCC ON)
 
 add_library(${PROJECT_NAME})
 
@@ -20,7 +20,6 @@ target_sources(${PROJECT_NAME}
 PRIVATE
   GUI.cpp
   player_GUI.cpp
-
 PUBLIC
   ${CMAKE_CURRENT_LIST_DIR}/GUI.hpp
   ${CMAKE_CURRENT_LIST_DIR}/player_GUI.hpp

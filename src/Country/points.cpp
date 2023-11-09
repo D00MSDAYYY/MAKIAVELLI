@@ -1,4 +1,5 @@
 #include "country.hpp"
+#include "points.hpp"
 
 using POI::Points;
 using RES::Resources;
@@ -193,11 +194,17 @@ void Points::setAllCost()
 	setIndustryCost();
 }
 
-void POI::Points::setDependices(std::shared_ptr<Country> country)
+void POI::Points::setDependices(Country* country)
 {
 	_country = country;
 }
-
+POI::Points::~Points()
+{
+	std::cerr << "points destr ";
+	if (_country)
+		std::cerr << _country->index() << " ";
+	std::cerr << std::endl;
+}
 int Points::armyNum(int const points)
 {
 	if (points == 0)
@@ -212,9 +219,9 @@ int Points::armyNum(int const points)
 	}
 	bool isChanged = false;
 	while (_army_points < MAX_ARMY_POINTS &&
-		   _army_points_cost * _army_coef_cost <= *_country.lock()->resources())
+		   _army_points_cost * _army_coef_cost <= *_country->resources())
 	{
-		*_country.lock()->resources() -= _army_points_cost * _army_coef_cost;
+		*_country->resources() -= _army_points_cost * _army_coef_cost;
 		++_army_points;
 		isChanged = true;
 		setArmyCost();
@@ -238,9 +245,9 @@ int Points::scienceNum(int const points)
 	}
 	bool isChanged = false;
 	while (_science_points < MAX_SCIENCE_POINTS &&
-		   _science_points_cost * _science_coef_cost <= *_country.lock()->resources())
+		   _science_points_cost * _science_coef_cost <= *_country->resources())
 	{
-		*_country.lock()->resources() -= _science_points_cost * _science_coef_cost;
+		*_country->resources() -= _science_points_cost * _science_coef_cost;
 		++_science_points;
 		isChanged = true;
 		setScienceCost();
@@ -264,9 +271,9 @@ int Points::oilNum(int const points)
 	}
 	bool isChanged = false;
 	while (_oil_points < MAX_OIL_POINTS &&
-		   _oil_points_cost * _oil_coef_cost <= *_country.lock()->resources())
+		   _oil_points_cost * _oil_coef_cost <= *_country->resources())
 	{
-		*_country.lock()->resources() -= _oil_points_cost * _oil_coef_cost;
+		*_country->resources() -= _oil_points_cost * _oil_coef_cost;
 		++_oil_points;
 		isChanged = true;
 		setOilCost();
@@ -290,9 +297,9 @@ int Points::mineralNum(int const points)
 	}
 	bool isChanged = false;
 	while (_mineral_points < MAX_MINERAL_POINTS &&
-		   _mineral_points_cost * _mineral_coef_cost <= *_country.lock()->resources())
+		   _mineral_points_cost * _mineral_coef_cost <= *_country->resources())
 	{
-		*_country.lock()->resources() -= _mineral_points_cost * _mineral_coef_cost;
+		*_country->resources() -= _mineral_points_cost * _mineral_coef_cost;
 		++_mineral_points;
 		isChanged = true;
 		setMineralCost();
@@ -316,9 +323,9 @@ int Points::farmNum(int const points)
 	}
 	bool isChanged = false;
 	while (_farm_points < MAX_FARM_POINTS &&
-		   _farm_points_cost * _farm_coef_cost <= *_country.lock()->resources())
+		   _farm_points_cost * _farm_coef_cost <= *_country->resources())
 	{
-		*_country.lock()->resources() -= _farm_points_cost * _farm_coef_cost;
+		*_country->resources() -= _farm_points_cost * _farm_coef_cost;
 		++_farm_points;
 		isChanged = true;
 		setFarmCost();
@@ -342,9 +349,9 @@ int Points::industryNum(int const points)
 	}
 	bool isChanged = false;
 	while (_industry_points < MAX_INDUSTRY_POINTS &&
-		   _industry_points_cost * _industry_coef_cost <= *_country.lock()->resources())
+		   _industry_points_cost * _industry_coef_cost <= *_country->resources())
 	{
-		*_country.lock()->resources() -= _industry_points_cost * _industry_coef_cost;
+		*_country->resources() -= _industry_points_cost * _industry_coef_cost;
 		++_industry_points;
 		isChanged = true;
 		setIndustryCost();
@@ -581,6 +588,7 @@ Points POI::tag_invoke(boost::json::value_to_tag<Points>, boost::json::value con
 void POI::tag_invoke(boost::json::value_from_tag, boost::json::value &jv, Points const &p)
 {
 	Points temp = p; //! dont change this coz res must be const
+	std::cerr << "in poi tag_invoke2" << std::endl;
 	jv = {{"army", temp.armyNum()},
 		  {"science", temp.scienceNum()},
 		  {"oil", temp.oilNum()},

@@ -56,8 +56,17 @@ Map::Map(int numplayers)
 	}
 
 	default:
+		_map.resize(100);
+		for (auto &column : _map)
+			column.resize(100);
 		break;
 	}
+	std::cerr << "map constructed" << std::endl;
+}
+
+Map::~Map()
+{
+	std::cerr << "map destr " << std::endl;
 }
 
 bool Map::find(Cell_Type celltype, std::pair<int, int> coord)

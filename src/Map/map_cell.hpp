@@ -29,8 +29,6 @@ private:
 
 public:
 	Map_Cell(){};
-
-	int _color{};
 	Locations *mapCellOwner(Locations *owner = nullptr);
 	Cell_Type mapCellType(Cell_Type type = Cell_Type::OCEAN);
 };

@@ -307,16 +307,6 @@
        </layout>
       </widget>
      </item>
-     <item>
-      <widget class="QPushButton" name="create_server_button">
-       <property name="focusPolicy">
-        <enum>Qt::StrongFocus</enum>
-       </property>
-       <property name="text">
-        <string>Create</string>
-       </property>
-      </widget>
-     </item>
     </layout>
    </item>
   </layout>

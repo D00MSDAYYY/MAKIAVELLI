@@ -3,26 +3,25 @@
 
 #include <QStackedWidget>
 
-#include <utility>
-
-Server_Waiting::Server_Waiting(Server_Creating *server_creating, QWidget *parent)
+Server_Waiting::Server_Waiting(
+    QWidget *parent)
     : QWidget(parent),
-      _server_creating{server_creating},
       ui(new Ui::Server_Waiting)
 {
     ui->setupUi(this);
-    connect(ui->shutdown_button, &QPushButton::clicked, this, &Server_Waiting::shutDownButtonClicked);
+}
+
+void Server_Waiting::startUpdatingInfo(const std::shared_ptr<Game_Server> &game_server)
+{
+
+}
+
+void Server_Waiting::finishUpdatingInfo()
+{
+    is_active = false;
 }
 
 Server_Waiting::~Server_Waiting()
 {
     delete ui;
-}
-
-void Server_Waiting::showEvent(QShowEvent *event)
-{
-    if (_server_creating)
-    {
-        _game_server = std::move(_server_creating->createGameServer());
-    }
 }

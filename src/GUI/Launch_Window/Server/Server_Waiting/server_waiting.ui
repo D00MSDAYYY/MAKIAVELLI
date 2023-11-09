@@ -156,13 +156,6 @@
        </layout>
       </widget>
      </item>
-     <item>
-      <widget class="QPushButton" name="shutdown_button">
-       <property name="text">
-        <string>Shut down</string>
-       </property>
-      </widget>
-     </item>
     </layout>
    </item>
   </layout>

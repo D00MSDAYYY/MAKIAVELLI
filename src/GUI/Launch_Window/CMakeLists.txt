@@ -4,9 +4,9 @@ project(Launch_Window)
 
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
 #qt_standard_project_setup()
+
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
 
 add_subdirectory(Server)
 add_subdirectory(Client)
