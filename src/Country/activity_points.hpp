@@ -13,8 +13,8 @@ namespace AC_POI
 
 	public:
 		Activity_Points(int max_p = 0)
-			: _current_points{max_p}, _max_points{max_p} { std::cerr << "14---"; }
-
+			: _current_points{max_p}, _max_points{max_p} {}
+		~Activity_Points();
 		int currentPoints(int points = 0);
 		int maxPoints(int points = 0);
 

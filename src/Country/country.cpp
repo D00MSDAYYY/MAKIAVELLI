@@ -80,14 +80,9 @@ Country::Country(int index,
 	  _cards_holder{std::move(cards_holder)},
 	  _activity_points{std::move(activity_p)}
 {
-
-	std::cerr << "15---";
-	_locations->setDependices(std::shared_ptr<Country>(this));
-	std::cerr << "155---";
-	_resources->setDependices(std::shared_ptr<Country>(this));
-	std::cerr << "1555---";
-	_points->setDependices(std::shared_ptr<Country>(this));
-	std::cerr << "15555---";
-	_cards_holder->setDependices(std::shared_ptr<Country>(this));
-	std::cerr << "16---";
+	_locations->setDependices(this);
+	_resources->setDependices(this);
+	_points->setDependices(this);
+	_cards_holder->setDependices(this);
 }
+

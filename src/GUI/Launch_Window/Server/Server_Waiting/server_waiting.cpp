@@ -5,10 +5,9 @@
 
 #include <utility>
 
-Server_Waiting::Server_Waiting(std::optional<Game_Server> &game_server,
+Server_Waiting::Server_Waiting(
                                QWidget *parent)
     : QWidget(parent),
-      _game_server{game_server},
       ui(new Ui::Server_Waiting)
 {
     ui->setupUi(this);

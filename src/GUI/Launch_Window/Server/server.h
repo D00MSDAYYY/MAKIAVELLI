@@ -20,7 +20,7 @@ public:
     ~Server();
 
 private:
-    std::optional<Game_Server> _game_server;
+    std::shared_ptr<Game_Server> _game_server{nullptr};
     Ui::Server *ui;
 };
 

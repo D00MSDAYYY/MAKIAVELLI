@@ -9,6 +9,7 @@ class Country;
 class Game_Server : olc::net::server_interface<MSG_FROM>
 {
 private:
+
 	std::unordered_map<uint32_t, Country> _players;
 
 	int _play_num{};

@@ -16,10 +16,9 @@ class Server_Creating : public QWidget
     Q_OBJECT
 
 public:
-    explicit Server_Creating(std::optional<Game_Server> &game_server,
-                             QWidget *parent = nullptr);
+    explicit Server_Creating(QWidget *parent = nullptr);
 
-    void createGameServer();
+    void createGameServer(std::shared_ptr<Game_Server> &game_server );
 
     ~Server_Creating();
 
@@ -30,7 +29,7 @@ private slots:
     void on_thinking_t_slider_valueChanged(int value);
 
 private:
-    std::optional<Game_Server> &_game_server;
+
     Ui::Server_Creating *ui;
 };
 

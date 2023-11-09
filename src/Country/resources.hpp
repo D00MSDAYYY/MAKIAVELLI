@@ -11,7 +11,7 @@ namespace RES
 	class Resources
 	{
 	private:
-		std::shared_ptr<Country> _country;
+		Country *_country{nullptr};
 
 		int _oil_resources{};
 		int _mineral_resources{};
@@ -36,11 +36,9 @@ namespace RES
 			: _oil_resources{oil},
 			  _mineral_resources{mineral},
 			  _farm_resources{farm},
-			  _industry_resources{industry}
-		{
-		}
-
-		void setDependices(std::shared_ptr<Country> country);
+			  _industry_resources{industry} {}
+		~Resources();
+		void setDependices(Country *country);
 
 		int oilNum(int const resources = 0);
 		int mineralNum(int const resources = 0);

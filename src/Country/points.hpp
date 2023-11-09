@@ -18,7 +18,7 @@ namespace POI
 		static const int MAX_FARM_POINTS{10};
 		static const int MAX_INDUSTRY_POINTS{10};
 
-		std::shared_ptr<Country> _country;
+		Country *_country;
 
 		int _army_points{};
 		int _science_points{};
@@ -66,7 +66,8 @@ namespace POI
 		{
 			setAllCost();
 		}
-		void setDependices(std::shared_ptr<Country> country);
+		~Points();
+		void setDependices(Country *country);
 
 		int armyNum(int const points = 0);
 		int scienceNum(int const points = 0);

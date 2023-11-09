@@ -6,6 +6,8 @@
 
 #include "card.hpp"
 
+class Country;
+
 namespace CARD
 {
 	class Card_Bank
@@ -18,6 +20,6 @@ namespace CARD
 		Card_Bank();
 		~Card_Bank(){}
 
-		std::shared_ptr<Card> card(std::weak_ptr<Country> country);
+		std::shared_ptr<Card> card(Country* country);
 	};
 }

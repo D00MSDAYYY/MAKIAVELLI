@@ -10,7 +10,6 @@
 
 Map::Map(int numplayers)
 {
-	std::cerr << "in map constructor"  << numplayers<< std::endl;
 	switch (numplayers)
 	{
 	case 3:
@@ -62,6 +61,12 @@ Map::Map(int numplayers)
 			column.resize(100);
 		break;
 	}
+	std::cerr << "map constructed" << std::endl;
+}
+
+Map::~Map()
+{
+	std::cerr << "map destr " << std::endl;
 }
 
 bool Map::find(Cell_Type celltype, std::pair<int, int> coord)

@@ -1,4 +1,5 @@
 #include "country.hpp"
+#include "points.hpp"
 
 using POI::Points;
 using RES::Resources;
@@ -193,11 +194,17 @@ void Points::setAllCost()
 	setIndustryCost();
 }
 
-void POI::Points::setDependices(std::shared_ptr<Country> country)
+void POI::Points::setDependices(Country* country)
 {
 	_country = country;
 }
-
+POI::Points::~Points()
+{
+	std::cerr << "points destr ";
+	if (_country)
+		std::cerr << _country->index() << " ";
+	std::cerr << std::endl;
+}
 int Points::armyNum(int const points)
 {
 	if (points == 0)
@@ -581,6 +588,7 @@ Points POI::tag_invoke(boost::json::value_to_tag<Points>, boost::json::value con
 void POI::tag_invoke(boost::json::value_from_tag, boost::json::value &jv, Points const &p)
 {
 	Points temp = p; //! dont change this coz res must be const
+	std::cerr << "in poi tag_invoke2" << std::endl;
 	jv = {{"army", temp.armyNum()},
 		  {"science", temp.scienceNum()},
 		  {"oil", temp.oilNum()},

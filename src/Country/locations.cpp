@@ -1,19 +1,22 @@
 #include "country.hpp"
+#include "locations.hpp"
 
 using LOC::Locations;
 
-void Locations::setDependices(std::shared_ptr<Country> country)
+void Locations::setDependices(Country *country)
 {
-	std::cerr << "20---";
 	_country = country;
-	std::cerr << "21---";
 }
-
+LOC::Locations::~Locations()
+{
+	std::cerr << "locations destr ";
+	if (_country)
+		std::cerr << _country->index();
+	std::cerr << std::endl;
+}
 void Locations::setDependices(std::shared_ptr<Map> map)
 {
-	std::cerr << "158---";
 	_map = map;
-	std::cerr << "159---";
 }
 
 const Locations Locations::operator+(const Locations &l) const
