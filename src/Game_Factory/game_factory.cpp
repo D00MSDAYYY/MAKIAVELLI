@@ -2,6 +2,8 @@
 #include <chrono>
 #include <cstdlib>
 
+#include <QResource>
+
 #include "game_factory.hpp"
 #include "map.hpp"
 
@@ -12,16 +14,21 @@ using LOC::Locations;
 using POI::Points;
 using RES::Resources;
 
+
 std::unique_ptr<Resources> Game_Factory::createResources(int index)
 {
+	std::cerr << "----";
 	if (res_ar.size() == 0)
 	{
 		std::ifstream res_input{};
 		std::string res_str_input{};
+		std::cerr << "111";
 		res_input.open(":/json_files/resources.json");
+		std::cerr << "222" << res_input.is_open();
 		res_input.seekg(0, std::ios::end);
 		res_str_input.resize(res_input.tellg());
 		res_input.seekg(0, std::ios::beg);
+		
 		res_input.read(&res_str_input[0], res_str_input.size());
 		res_input.close();
 		res_ar = boost::json::parse(res_str_input).as_array();
@@ -32,11 +39,12 @@ std::unique_ptr<Resources> Game_Factory::createResources(int index)
 
 std::unique_ptr<Points> Game_Factory::createPoints(int index)
 {
+	std::cerr << "----2";
 	if (points_ar.size() == 0)
 	{
 		std::ifstream points_input{};
 		std::string points_str_input{};
-		points_input.open("/Users/matvejzajcev/Desktop/MAKIAVELLI/json_files/points.json");
+		points_input.open(":/json_files/points.json");
 		points_input.seekg(0, std::ios::end);
 		points_str_input.resize(points_input.tellg());
 		points_input.seekg(0, std::ios::beg);
@@ -50,11 +58,12 @@ std::unique_ptr<Points> Game_Factory::createPoints(int index)
 
 std::unique_ptr<Locations> Game_Factory::createLocations(int index)
 {
+	std::cerr << "----3";
 	if(loc_ar.size() == 0)
 	{
 		std::ifstream loc_input{};
 		std::string loc_str_input{};
-		loc_input.open("/Users/matvejzajcev/Desktop/MAKIAVELLI/json_files/locations.json");
+		loc_input.open(":/json_files/locations.json");
 		loc_input.seekg(0, std::ios::end);
 		loc_str_input.resize(loc_input.tellg());
 		loc_input.seekg(0, std::ios::beg);

@@ -1,4 +1,4 @@
-project(json_files)
+# project(json_files)
 
 # set(JSON_FILES 
 # 	${CMAKE_CURRENT_SOURCE_DIR}/cards.json
@@ -8,5 +8,5 @@ project(json_files)
 # 	${CMAKE_CURRENT_SOURCE_DIR}/resources.json
 # CACHE PATH "json files")
 
-# set(JSON_DIR ${CMAKE_CURRENT_SOURCE_DIR} CACHE PATH "path to json dir")
-set(JSON_FILES_QRC ${CMAKE_CURRENT_SOURCE_DIR}/json_files.qrc CACHE PATH "path to json dir")
+# # set(JSON_DIR ${CMAKE_CURRENT_SOURCE_DIR} CACHE PATH "path to json dir")
+# set(JSON_FILES_QRC ${CMAKE_CURRENT_SOURCE_DIR}/json_files.qrc CACHE PATH "path to json dir")
