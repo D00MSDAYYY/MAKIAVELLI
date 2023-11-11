@@ -5,6 +5,9 @@ project(MAKIAVELLI)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+find_package(Qt6 REQUIRED COMPONENTS Core)
+set(AUTORCC ON)
+
 include_directories ( ${NESTED_DIRS} )
 
 add_subdirectory(Country)
@@ -14,7 +17,10 @@ add_subdirectory(Card_Bank)
 add_subdirectory(Networking)
 add_subdirectory(GUI)
 
-add_executable(${PROJECT_NAME} main.cpp)
+qt_add_resources(RCC ${JSON_FILES_QRC})
+
+add_executable(${PROJECT_NAME} main.cpp 
+${RCC})
 
 target_link_libraries(${PROJECT_NAME}
   PRIVATE

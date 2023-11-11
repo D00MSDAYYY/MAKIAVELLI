@@ -12,7 +12,7 @@ set(CMAKE_AUTOMOC ON)
 add_subdirectory(Client_Connector)
 add_subdirectory(Client_Waiting)
 
-add_library(${PROJECT_NAME} )
+add_library(${PROJECT_NAME} "")
 
 target_sources(${PROJECT_NAME}
 PRIVATE

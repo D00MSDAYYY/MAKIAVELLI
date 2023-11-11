@@ -4,11 +4,9 @@ project(Game_Factory)
 
 find_package(Boost REQUIRED COMPONENTS json)
 
-find_package(Qt6 REQUIRED COMPONENTS Core)
-set(AUTORCC ON)
+# find_package(Qt6 REQUIRED COMPONENTS Core)
+# set(AUTORCC ON)
 
-# qt_add_resources(RCC ${JSON_FILES})
-# qt_add_resources(RCC ${JSON_FILES_QRC})
 qt_add_resources(RCC json_files.qrc)
 
 add_library(${PROJECT_NAME} "")
@@ -29,7 +27,7 @@ target_include_directories(${PROJECT_NAME}
 target_link_libraries(${PROJECT_NAME} 
 PUBLIC  
    Boost::json
-   Qt6::Core
+   Qt::Core
    Card_Bank
    Networking
 )

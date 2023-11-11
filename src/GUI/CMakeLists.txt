@@ -14,7 +14,7 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 # set(CMAKE_AUTORCC ON)
 
-add_library(${PROJECT_NAME})
+add_library(${PROJECT_NAME} "")
 
 target_sources(${PROJECT_NAME} 
 PRIVATE

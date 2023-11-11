@@ -1,8 +1,11 @@
 #include <random>
 #include <chrono>
-#include <cstdlib>
 
 #include <QResource>
+#include <QFile>
+#include <QDebug>
+#include <QString>
+#include <QByteArray>
 
 #include "game_factory.hpp"
 #include "map.hpp"
@@ -14,28 +17,27 @@ using LOC::Locations;
 using POI::Points;
 using RES::Resources;
 
-static void static_init_qrc()
+inline void init()
 {
-	std::cerr << "=========== " << "inited" << " =============\n";
 	Q_INIT_RESOURCE(json_files);
+}
+
+inline void cleanUp()
+{
+	Q_CLEANUP_RESOURCE(json_files);
 }
 
 std::unique_ptr<Resources> Game_Factory::createResources(int index)
 {
 	if (res_ar.size() == 0)
 	{
-		std::ifstream res_input{};
-		std::string res_str_input{};
-		init_qrc();
-		res_input.open(":/json_files/resources.json");
-		std::cerr << "=========== " << std::boolalpha << res_input.is_open() << " =============\n";
-		res_input.seekg(0, std::ios::end);
-		res_str_input.resize(res_input.tellg());
-		res_input.seekg(0, std::ios::beg);
-
-		res_input.read(&res_str_input[0], res_str_input.size());
-		res_input.close();
+		std::cerr << "---1";
+		QFile res_file(":/json_files/resources.json");
+		res_file.open(QIODevice::ReadOnly);
+		//! if using GCC 13.2.0 QString::toStdString() cause compile error, with clang 16.0.6 OK
+		std::string res_str_input{res_file.readAll().data()};
 		res_ar = boost::json::parse(res_str_input).as_array();
+		res_file.close();
 	}
 	std::cerr << "resources created " << std::endl;
 	return std::move(std::unique_ptr<Resources>{new Resources{boost::json::value_to<Resources>(res_ar.at(index))}});
@@ -43,18 +45,14 @@ std::unique_ptr<Resources> Game_Factory::createResources(int index)
 
 std::unique_ptr<Points> Game_Factory::createPoints(int index)
 {
-	std::cerr << "----2";
 	if (points_ar.size() == 0)
 	{
-		std::ifstream points_input{};
-		std::string points_str_input{};
-		points_input.open(":/json_files/points.json");
-		points_input.seekg(0, std::ios::end);
-		points_str_input.resize(points_input.tellg());
-		points_input.seekg(0, std::ios::beg);
-		points_input.read(&points_str_input[0], points_str_input.size());
-		points_input.close();
+		std::cerr << "---2";
+		QFile points_file(":/json_files/points.json");
+		points_file.open(QIODevice::ReadOnly);
+		std::string points_str_input{points_file.readAll().data()};
 		points_ar = boost::json::parse(points_str_input).as_array();
+		points_file.close();
 	}
 	std::cerr << "points created " << std::endl;
 	return std::unique_ptr<Points>(new Points(boost::json::value_to<Points>(points_ar.at(index))));
@@ -62,18 +60,14 @@ std::unique_ptr<Points> Game_Factory::createPoints(int index)
 
 std::unique_ptr<Locations> Game_Factory::createLocations(int index)
 {
-	std::cerr << "----3";
 	if (loc_ar.size() == 0)
 	{
-		std::ifstream loc_input{};
-		std::string loc_str_input{};
-		loc_input.open(":/json_files/locations.json");
-		loc_input.seekg(0, std::ios::end);
-		loc_str_input.resize(loc_input.tellg());
-		loc_input.seekg(0, std::ios::beg);
-		loc_input.read(&loc_str_input[0], loc_str_input.size());
-		loc_input.close();
+		std::cerr << "---3";
+		QFile loc_file (":/json_files/locations.json");
+		loc_file .open(QIODevice::ReadOnly);
+		std::string loc_str_input{loc_file .readAll().data()};
 		loc_ar = boost::json::parse(loc_str_input).as_array();
+		loc_file.close();
 	}
 	std::cerr << "locations created" << std::endl;
 	return std::move(std::unique_ptr<Locations>(new Locations(boost::json::value_to<Locations>(loc_ar.at(index)))));
@@ -189,12 +183,12 @@ void Game_Factory::createMap(std::unordered_map<uint32_t, Country> &p)
 
 Game_Factory::Game_Factory(int numplay) : _num_of_players{numplay}
 {
-	init_qrc();
+	init();
 }
 
-void Game_Factory::init_qrc()
+Game_Factory::~Game_Factory()
 {
-	static_init_qrc();
+	cleanUp();
 }
 
 std::unordered_map<uint32_t, Country> Game_Factory::createPlayers()

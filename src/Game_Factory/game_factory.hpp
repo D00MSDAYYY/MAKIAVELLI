@@ -1,8 +1,6 @@
 #pragma once
 #include <boost/json.hpp>
 #include <memory>
-#include <string>
-#include <fstream>
 
 #include "country.hpp"
 #include "game_server.hpp"
@@ -34,7 +32,7 @@ private:
 
 public:
 	Game_Factory(int numplay);
-	static void init_qrc();
+	~Game_Factory();
 
 	std::unordered_map<uint32_t, Country> createPlayers();
 };
