@@ -8,7 +8,6 @@
 #include "game_server.hpp"
 #include "card_bank.hpp"
 
-
 static const int DEFAULT_ID{0};
 class Game_Factory
 {
@@ -34,7 +33,8 @@ private:
 	boost::json::array loc_ar{};
 
 public:
-	Game_Factory(int numplay) : _num_of_players{numplay} {}
+	Game_Factory(int numplay);
+	static void init_qrc();
 
 	std::unordered_map<uint32_t, Country> createPlayers();
 };

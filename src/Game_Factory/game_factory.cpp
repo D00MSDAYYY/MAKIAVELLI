@@ -14,21 +14,25 @@ using LOC::Locations;
 using POI::Points;
 using RES::Resources;
 
+static void static_init_qrc()
+{
+	std::cerr << "=========== " << "inited" << " =============\n";
+	Q_INIT_RESOURCE(json_files);
+}
 
 std::unique_ptr<Resources> Game_Factory::createResources(int index)
 {
-	std::cerr << "----";
 	if (res_ar.size() == 0)
 	{
 		std::ifstream res_input{};
 		std::string res_str_input{};
-		std::cerr << "111";
+		init_qrc();
 		res_input.open(":/json_files/resources.json");
-		std::cerr << "222" << res_input.is_open();
+		std::cerr << "=========== " << std::boolalpha << res_input.is_open() << " =============\n";
 		res_input.seekg(0, std::ios::end);
 		res_str_input.resize(res_input.tellg());
 		res_input.seekg(0, std::ios::beg);
-		
+
 		res_input.read(&res_str_input[0], res_str_input.size());
 		res_input.close();
 		res_ar = boost::json::parse(res_str_input).as_array();
@@ -52,14 +56,14 @@ std::unique_ptr<Points> Game_Factory::createPoints(int index)
 		points_input.close();
 		points_ar = boost::json::parse(points_str_input).as_array();
 	}
-	std::cerr << "points created "<< std::endl;
+	std::cerr << "points created " << std::endl;
 	return std::unique_ptr<Points>(new Points(boost::json::value_to<Points>(points_ar.at(index))));
 }
 
 std::unique_ptr<Locations> Game_Factory::createLocations(int index)
 {
 	std::cerr << "----3";
-	if(loc_ar.size() == 0)
+	if (loc_ar.size() == 0)
 	{
 		std::ifstream loc_input{};
 		std::string loc_str_input{};
@@ -96,7 +100,7 @@ void Game_Factory::createCardBank(std::unordered_map<uint32_t, Country> &pl)
 
 	for (auto &[ID, country] : pl)
 	{
-		country.cardsHolder()->setDependices(_card_bank); 
+		country.cardsHolder()->setDependices(_card_bank);
 	}
 	std::cerr << "card bank created " << std::endl;
 }
@@ -110,8 +114,8 @@ void Game_Factory::createMap(std::unordered_map<uint32_t, Country> &p)
 	}
 
 	std::default_random_engine dre{uint32_t(std::chrono::system_clock::now().time_since_epoch().count())};
-	std::uniform_int_distribution di_x(0,(_map->xSize()) / 2);
-	std::uniform_int_distribution di_y(0,(_map->ySize()) / 2);
+	std::uniform_int_distribution di_x(0, (_map->xSize()) / 2);
+	std::uniform_int_distribution di_y(0, (_map->ySize()) / 2);
 	for (auto &[ID, country] : p)
 	{
 		int x{di_x(dre)};
@@ -181,6 +185,16 @@ void Game_Factory::createMap(std::unordered_map<uint32_t, Country> &p)
 		country.locations()->setDependices(_map);
 		std::cerr << "end map creation" << std::endl;
 	}
+}
+
+Game_Factory::Game_Factory(int numplay) : _num_of_players{numplay}
+{
+	init_qrc();
+}
+
+void Game_Factory::init_qrc()
+{
+	static_init_qrc();
 }
 
 std::unordered_map<uint32_t, Country> Game_Factory::createPlayers()
