@@ -14,9 +14,9 @@ Map::Map(int numplayers)
 	{
 	case 3:
 	{
-		_map.resize(25);
+		_map.resize(50);
 		for (auto &column : _map)
-			column.resize(25);
+			column.resize(50);
 		break;
 	}
 	case 4:

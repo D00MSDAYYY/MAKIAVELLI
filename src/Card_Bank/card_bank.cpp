@@ -6,22 +6,10 @@
 using CARD::Card;
 using CARD::Card_Bank;
 
-Card_Bank::Card_Bank()
-{
-	std::ifstream cards_input;
-	std::string cards_str_input;
-	boost::json::array cards_ar;
-	cards_input.open("/Users/matvejzajcev/Desktop/MAKIAVELLI/json_files/resources.json");
-	cards_input.seekg(0, std::ios::end);
-	cards_str_input.resize(cards_input.tellg());
-	cards_input.seekg(0, std::ios::beg);
-	cards_input.read(&cards_str_input[0], cards_str_input.size());
-	cards_input.close();
-	cards_ar = boost::json::parse(cards_str_input).as_array();
-	//TODO! insert code to fill the buffer of cards
-}
+CARD::Card_Bank::Card_Bank(std::vector<std::shared_ptr<Card>> card_buffer)
+	: _main_card_buffer{std::move(card_buffer)} {}
 
-std::shared_ptr<Card> Card_Bank::card(Country* country)
+std::shared_ptr<Card> Card_Bank::card(Country *country)
 {
 	auto returning_lambda{[this, country]() -> auto
 						  {
@@ -46,5 +34,3 @@ std::shared_ptr<Card> Card_Bank::card(Country* country)
 		return returning_lambda();
 	}
 }
-
-

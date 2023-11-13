@@ -4,10 +4,6 @@ using namespace CARD;
 
 CARD::Cards_Holder::~Cards_Holder() 
 {
-	std::cerr << "cards holder destr ";
-	if (_country)
-		std::cerr << _country->index();
-	std::cerr << std::endl;
 }
 
 void Cards_Holder::setDependices(std::shared_ptr<Card_Bank> card_bank)

@@ -29,6 +29,7 @@ private:
 	boost::json::array res_ar{};
 	boost::json::array points_ar{};
 	boost::json::array loc_ar{};
+	boost::json::array cards_ar{};
 
 public:
 	Game_Factory(int numplay);

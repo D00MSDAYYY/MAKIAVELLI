@@ -4,7 +4,7 @@ using AC_POI::Activity_Points;
 
 AC_POI::Activity_Points::~Activity_Points()
 {
-	std::cerr << "acpoi destr\n";
+
 }
 
 int Activity_Points::currentPoints(int points)

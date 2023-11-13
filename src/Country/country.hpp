@@ -22,16 +22,6 @@ enum class COUNTRY_COLOR : uint32_t
 	// ...
 };
 
-class DUMMY_MSG
-{
-	private:
-		inline static int i;
-
-	public:
-		DUMMY_MSG() { ++i; };
-		~DUMMY_MSG() { std::cerr << "----------------------------- " << --i << std::endl; }
-};
-
 class Country
 {
 private:
@@ -40,18 +30,12 @@ private:
 	int _index{0}; // TODO! maybe in future delete this and only COUNTRY_COLOR and use it like index
 
 	COUNTRY_COLOR _color{COUNTRY_COLOR::PINK};
-
-	DUMMY_MSG msg1{};
+	
 	std::unique_ptr<AC_POI::Activity_Points> _activity_points;
-	DUMMY_MSG msg2{};
 	std::unique_ptr<CARD::Cards_Holder> _cards_holder;
-	DUMMY_MSG msg3{};
 	std::unique_ptr<LOC::Locations> _locations;
-	DUMMY_MSG msg4{};
 	std::unique_ptr<POI::Points> _points;
-	DUMMY_MSG msg5{};
 	std::unique_ptr<RES::Resources> _resources;
-	DUMMY_MSG msg6{};
 
 public:
 	Country() {}

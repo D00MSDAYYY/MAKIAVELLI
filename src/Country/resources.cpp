@@ -5,12 +5,11 @@ using RES::Resources;
 
 void Resources::setDependices(Country* country)
 {
+	
 	_country = country;
 }
 RES::Resources::~Resources() 
 {
-	std::cerr << "resources destr ";
-	std::cerr << std::endl;
 }
 int Resources::oilNum(int const resources)
 {

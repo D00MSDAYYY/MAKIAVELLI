@@ -197,13 +197,11 @@ void Points::setAllCost()
 void POI::Points::setDependices(Country* country)
 {
 	_country = country;
+
 }
 POI::Points::~Points()
 {
-	std::cerr << "points destr ";
-	if (_country)
-		std::cerr << _country->index() << " ";
-	std::cerr << std::endl;
+
 }
 int Points::armyNum(int const points)
 {
