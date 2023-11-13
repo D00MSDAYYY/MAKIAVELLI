@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Player_Window</class>
- <widget class="QWidget" name="Player_Window">
+ <class>Server_Launch</class>
+ <widget class="QWidget" name="Server_Launch">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -15,7 +15,14 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
-    <widget class="QGraphicsView" name="graphicsView"/>
+    <widget class="QStackedWidget" name="stackedWidget"/>
+   </item>
+   <item row="1" column="0">
+    <widget class="QPushButton" name="create_shutdown_button">
+     <property name="text">
+      <string>Create</string>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

@@ -3,9 +3,7 @@ cmake_minimum_required(VERSION 3.26.4)
 project(GUI)
 
 add_subdirectory(Main_Window)
-add_subdirectory(Player_Window)
 add_subdirectory(Launch_Window)
-
 
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
 #qt_standard_project_setup()
@@ -33,5 +31,4 @@ PUBLIC
     Qt6::Widgets
     Main_Window
     Launch_Window
-    Player_Window
 )
