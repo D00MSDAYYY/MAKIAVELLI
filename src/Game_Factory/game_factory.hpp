@@ -1,13 +1,10 @@
 #pragma once
 #include <boost/json.hpp>
 #include <memory>
-#include <string>
-#include <fstream>
 
 #include "country.hpp"
 #include "game_server.hpp"
 #include "card_bank.hpp"
-
 
 static const int DEFAULT_ID{0};
 class Game_Factory
@@ -32,9 +29,11 @@ private:
 	boost::json::array res_ar{};
 	boost::json::array points_ar{};
 	boost::json::array loc_ar{};
+	boost::json::array cards_ar{};
 
 public:
-	Game_Factory(int numplay) : _num_of_players{numplay} {}
+	Game_Factory(int numplay);
+	~Game_Factory();
 
 	std::unordered_map<uint32_t, Country> createPlayers();
 };

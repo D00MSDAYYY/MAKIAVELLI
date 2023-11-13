@@ -42,16 +42,7 @@
 // 	}
 // }
 
-Player_Client::Player_Client(const std::string &host, const uint16_t port)
-	: _player_gui{new Player_GUI{this}}
-{
-	Connect(host, port);
-	_player_gui->show();
-}
 
-void Player_Client::exchangeRes(SCOPE give_scope, const int give_res, SCOPE receive_scope, const int receive_res)
-{
-}
 
 void Player_Client::buyPoints(SCOPE scope, const int points)
 {

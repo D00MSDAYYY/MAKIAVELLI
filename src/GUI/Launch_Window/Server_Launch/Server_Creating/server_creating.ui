@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>492</width>
-    <height>356</height>
+    <width>400</width>
+    <height>300</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -253,26 +253,20 @@
             <height>25</height>
            </size>
           </property>
-          <property name="maximumSize">
-           <size>
-            <width>241</width>
-            <height>25</height>
-           </size>
-          </property>
           <property name="minimum">
-           <number>30</number>
+           <number>20</number>
           </property>
           <property name="maximum">
-           <number>180</number>
+           <number>120</number>
           </property>
           <property name="singleStep">
-           <number>30</number>
+           <number>10</number>
           </property>
           <property name="pageStep">
-           <number>30</number>
+           <number>10</number>
           </property>
           <property name="sliderPosition">
-           <number>30</number>
+           <number>20</number>
           </property>
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
@@ -281,7 +275,7 @@
            <enum>QSlider::NoTicks</enum>
           </property>
           <property name="tickInterval">
-           <number>30</number>
+           <number>10</number>
           </property>
          </widget>
         </item>

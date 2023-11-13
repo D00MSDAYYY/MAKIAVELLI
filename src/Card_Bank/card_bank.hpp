@@ -17,7 +17,7 @@ namespace CARD
 		std::vector<std::shared_ptr<Card>> _secondary_card_buffer{};
 
 	public:
-		Card_Bank();
+		Card_Bank(std::vector<std::shared_ptr<Card>> card_buffer);
 		~Card_Bank(){}
 
 		std::shared_ptr<Card> card(Country* country);

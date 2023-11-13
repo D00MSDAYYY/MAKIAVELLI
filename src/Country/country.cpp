@@ -85,4 +85,3 @@ Country::Country(int index,
 	_points->setDependices(this);
 	_cards_holder->setDependices(this);
 }
-

@@ -28,5 +28,4 @@ PUBLIC
   Country
   Game_Factory
   3rdParty
-  GUI
 )

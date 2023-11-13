@@ -5,29 +5,28 @@ using LOC::Locations;
 
 void Locations::setDependices(Country *country)
 {
+
 	_country = country;
+	std::cerr << "set loc dep " << _country->index() << " " << _country << std::endl;
 }
 LOC::Locations::~Locations()
 {
-	std::cerr << "locations destr ";
-	if (_country)
-		std::cerr << _country->index();
-	std::cerr << std::endl;
+	std::cerr << "locations destr " << _country->index() << " " << _country << std::endl;
 }
 void Locations::setDependices(std::shared_ptr<Map> map)
 {
 	_map = map;
 }
 
-const Locations Locations::operator+(const Locations &l) const
+const Locations Locations::operator+(const std::vector<std::pair<int, int>> country_map) const
 {
 	Locations result(*this);
-	return std::move(Locations{std::move(result += l)}); //! std::move
+	return std::move(Locations{std::move(result += country_map)}); //! std::move
 }
 
-const Locations &Locations::operator+=(const Locations &l)
+const Locations &Locations::operator+=(const std::vector<std::pair<int, int>> country_map)
 {
-	for (auto &country_coord : l._country_map)
+	for (auto &country_coord : _country_map)
 	{
 		if (std::find(_country_map.begin(), _country_map.end(), country_coord) == _country_map.end())
 			_country_map.push_back(country_coord);
@@ -35,15 +34,15 @@ const Locations &Locations::operator+=(const Locations &l)
 	return *this;
 }
 
-const Locations Locations::operator-(const Locations &l) const
+const Locations Locations::operator-(const std::vector<std::pair<int, int>> country_map) const
 {
 	Locations result(*this);
-	return std::move(Locations{std::move(result -= l)}); //! std::move
+	return std::move(Locations{std::move(result -= country_map)}); //! std::move
 }
 
-const Locations &Locations::operator-=(const Locations &l)
+const Locations &Locations::operator-=(const std::vector<std::pair<int, int>> country_map)
 {
-	for (auto &country_coord : l._country_map)
+	for (auto &country_coord : _country_map)
 	{
 		_country_map.erase(std::remove(_country_map.begin(),
 									   _country_map.end(),
@@ -280,7 +279,6 @@ Locations LOC::tag_invoke(boost::json::value_to_tag<Locations>, boost::json::val
 
 	std::vector<std::pair<int, int>> country_map;
 	country_map.resize(boost::json::value_to<int>(obj.at("country map")));
-	std::cerr << "8----";
 	return Locations{country_map};
 }
 void LOC::tag_invoke(boost::json::value_from_tag, boost::json::value &jv, Locations const &p)

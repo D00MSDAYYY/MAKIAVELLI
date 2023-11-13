@@ -2,11 +2,9 @@
 #define LAUNCH_WINDOW_H
 
 #include <QDialog>
-#include <QStackedWidget>
 
-namespace Ui
-{
-    class Launch_Window;
+namespace Ui {
+class Launch_Window;
 }
 
 class Launch_Window : public QDialog
@@ -16,11 +14,6 @@ class Launch_Window : public QDialog
 public:
     explicit Launch_Window(QWidget *parent = nullptr);
     ~Launch_Window();
-
-    void closeEvent(QCloseEvent *e);
-private slots:
-    void createButtonClicked();
-    void shutdownButtonClicked();
 
 private:
     Ui::Launch_Window *ui;

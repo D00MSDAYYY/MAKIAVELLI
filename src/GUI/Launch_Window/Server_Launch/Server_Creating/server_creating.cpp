@@ -1,28 +1,14 @@
 #include "server_creating.h"
 #include "ui_server_creating.h"
 
-#include <QStackedWidget>
-
-Server_Creating::Server_Creating(QWidget *parent)
-    : QWidget(parent),
-      ui(new Ui::Server_Creating)
+Server_Creating::Server_Creating(QWidget *parent) : QWidget(parent),
+                                                    ui(new Ui::Server_Creating)
 {
     ui->setupUi(this);
     ui->players_num_label->setText(QString::number(ui->players_slider->value()));
     ui->bots_num_label->setText(QString::number(ui->bots_slider->value()));
     ui->rounds_num_label->setText(QString::number(ui->rounds_slider->value()));
     ui->thinking_t_num_label->setText(QString::number(ui->thinking_t_slider->value()) + 's');
-}
-
-std::shared_ptr<Game_Server> Server_Creating::createGameServer()
-{
-    std::cerr << "created game server" << std::endl;
-    return std::shared_ptr<Game_Server>{
-        new Game_Server(ui->players_slider->value(),
-                        ui->bots_slider->value(),
-                        ui->rounds_slider->value(),
-                        ui->thinking_t_slider->value())};
-
 }
 
 Server_Creating::~Server_Creating()
@@ -48,4 +34,19 @@ void Server_Creating::on_rounds_slider_valueChanged(int value)
 void Server_Creating::on_thinking_t_slider_valueChanged(int value)
 {
     ui->thinking_t_num_label->setText(QString::number(value) + "s");
+}
+
+Server *Server_Creating::createServer(QWidget *parent)
+{
+    std::cerr << "in createServer function " << std::endl;
+    // return new Server{parent,
+    //                   ui->players_slider->value(),
+    //                   ui->bots_slider->value(),
+    //                   ui->rounds_slider->value(),
+    //                   ui->thinking_t_slider->value()};
+    return new Server{parent,
+                      1,
+                      1,
+                      1,
+                      1};
 }

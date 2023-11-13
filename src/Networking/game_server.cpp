@@ -19,18 +19,16 @@ Game_Server::Game_Server(int play_num, int bot_num,
 	Game_Factory factory{_play_num + _bot_num};
 	_players = factory.createPlayers();
 	std::cerr << "game server constr finish" << std::endl;
-	// connectBots();
 }
 
 Game_Server::~Game_Server()
 {
-	std::cerr << "game server destr" << _play_num << " " << _bot_num<< std::endl;
 }
 
 void Game_Server::run()
 {
 	// connectBots();
-	
+
 	Start();
 	while (m_deqConnections.size() < _players.size())
 		std::this_thread::sleep_for(std::chrono::seconds(3));
@@ -325,7 +323,7 @@ void Game_Server::OnMessage(std::shared_ptr<olc::net::connection<MSG_FROM>> clie
 				{
 					return _players.at(client->GetID()).index() == txt_mes._index;
 				})};
-				
+
 		if (receiver_txt_mes != m_deqConnections.end())
 		{
 			olc::net::message<MSG_FROM> msg_txt_mes{};

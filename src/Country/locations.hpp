@@ -36,10 +36,10 @@ namespace LOC
 		void setDependices(Country* country);
 		void setDependices(std::shared_ptr<Map> map);
 
-		const Locations operator+(const Locations &l) const;
-		const Locations &operator+=(const Locations &l);
-		const Locations operator-(const Locations &l) const;
-		const Locations &operator-=(const Locations &l);
+		const Locations operator+(const std::vector<std::pair<int, int>> country_map ) const;
+		const Locations &operator+=(const std::vector<std::pair<int, int>> country_map );
+		const Locations operator-(const std::vector<std::pair<int, int>> country_map ) const;
+		const Locations &operator-=(const std::vector<std::pair<int, int>> country_map );
 
 		std::shared_ptr<Map> map();
 

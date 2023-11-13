@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.26.4)
 
 project(Country)
 
-add_library(${PROJECT_NAME}  "")
+add_library(${PROJECT_NAME} "")
 
 find_package(Boost REQUIRED COMPONENTS json)
 
