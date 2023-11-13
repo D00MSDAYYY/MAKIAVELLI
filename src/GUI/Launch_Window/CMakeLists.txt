@@ -8,8 +8,8 @@ find_package(Qt6 REQUIRED COMPONENTS Widgets)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 
-add_subdirectory(Server)
-add_subdirectory(Client)
+add_subdirectory(Server_Launch)
+add_subdirectory(Client_Launch)
 
 add_library(${PROJECT_NAME} "")
 
@@ -29,7 +29,8 @@ PUBLIC
 target_link_libraries(${PROJECT_NAME}
 PUBLIC
     Qt6::Widgets
-    Server
-    Client
+    Server_Launch
+    Client_Launch
+    Networking
 )
 

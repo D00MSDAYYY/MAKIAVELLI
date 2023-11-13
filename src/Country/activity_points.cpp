@@ -4,7 +4,6 @@ using AC_POI::Activity_Points;
 
 AC_POI::Activity_Points::~Activity_Points()
 {
-
 }
 
 int Activity_Points::currentPoints(int points)

@@ -75,5 +75,12 @@
 		"mineral": 8800,
 		"farm": 6700,
 		"industry": 4200
+	},
+	{
+		"index": 11,
+		"oil": 3200,
+		"mineral": 8800,
+		"farm": 6700,
+		"industry": 4200
 	}
 ]

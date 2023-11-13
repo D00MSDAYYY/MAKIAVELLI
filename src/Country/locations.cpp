@@ -7,10 +7,11 @@ void Locations::setDependices(Country *country)
 {
 
 	_country = country;
+	std::cerr << "set loc dep " << _country->index() << " " << _country << std::endl;
 }
 LOC::Locations::~Locations()
 {
-
+	std::cerr << "locations destr " << _country->index() << " " << _country << std::endl;
 }
 void Locations::setDependices(std::shared_ptr<Map> map)
 {
