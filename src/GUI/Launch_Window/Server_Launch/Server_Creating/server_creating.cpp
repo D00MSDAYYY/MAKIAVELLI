@@ -38,15 +38,14 @@ void Server_Creating::on_thinking_t_slider_valueChanged(int value)
 
 Server *Server_Creating::createServer(QWidget *parent)
 {
-    std::cerr << "in createServer function " << std::endl;
-    // return new Server{parent,
-    //                   ui->players_slider->value(),
-    //                   ui->bots_slider->value(),
-    //                   ui->rounds_slider->value(),
-    //                   ui->thinking_t_slider->value()};
     return new Server{parent,
-                      1,
-                      1,
-                      1,
-                      1};
+                      ui->players_slider->value(),
+                      ui->bots_slider->value(),
+                      ui->rounds_slider->value(),
+                      ui->thinking_t_slider->value()};
+    // return new Server{parent,
+    //                   1,
+    //                   1,
+    //                   1,
+    //                   1};
 }

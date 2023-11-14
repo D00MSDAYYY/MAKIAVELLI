@@ -28,7 +28,7 @@ private slots:
     void on_thinking_t_slider_valueChanged(int value);
 
 private:
-int 
+
     Ui::Server_Creating *ui;
 };
 

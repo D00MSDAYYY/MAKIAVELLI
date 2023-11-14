@@ -16,10 +16,10 @@ private:
 	int _rounds{};
 	int _thinking_time{};
 	
-	bool OnClientConnect(std::shared_ptr<olc::net::connection<MSG_FROM>> client) override;
-	void OnClientValidated(std::shared_ptr<olc::net::connection<MSG_FROM>> client) override;
-	void OnClientDisconnect(std::shared_ptr<olc::net::connection<MSG_FROM>> client) override;
-	void OnMessage(std::shared_ptr<olc::net::connection<MSG_FROM>> client,
+	virtual bool OnClientConnect(std::shared_ptr<olc::net::connection<MSG_FROM>> client) override;
+	virtual void OnClientValidated(std::shared_ptr<olc::net::connection<MSG_FROM>> client) override;
+	virtual void OnClientDisconnect(std::shared_ptr<olc::net::connection<MSG_FROM>> client) override;
+	virtual void OnMessage(std::shared_ptr<olc::net::connection<MSG_FROM>> client,
 				   olc::net::message<MSG_FROM> &msg) override;
 	// void connectBots(); //TODO! create definition
 

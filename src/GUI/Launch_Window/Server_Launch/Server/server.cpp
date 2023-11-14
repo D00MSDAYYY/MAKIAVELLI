@@ -11,6 +11,7 @@ Server::Server(QWidget *parent,
                   rounds, thinking_time, port}
 {
     ui->setupUi(this);
+   
 }
 
 Server::~Server()

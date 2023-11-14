@@ -14,19 +14,21 @@ Server_Launch::Server_Launch(QWidget *parent) : QWidget(parent),
     server_creating_index = ui->stackedWidget->addWidget(server_creating);
 
     connect(ui->create_shutdown_button, &QPushButton::clicked,
-            [&, this]()
+            [this, server_creating]()
             {
+                std::cerr << "cur ind = " << ui->stackedWidget->currentIndex() << " ser creat ind" << server_creating_index;
                 if (ui->stackedWidget->currentIndex() == server_creating_index)
                 {
                     ui->create_shutdown_button->setText("Shutdown");
-                    std::cerr << "create button pressed " << std::endl;
                     server_index = ui->stackedWidget->addWidget(server_creating->createServer(this));
+                    ui->stackedWidget->setCurrentIndex(server_index);
                 }
-                if (ui->stackedWidget->currentIndex() == server_index)
+                else if (ui->stackedWidget->currentIndex() == server_index)
                 {
                     ui->create_shutdown_button->setText("Create");
+                    ui->stackedWidget->widget(1)->setAttribute(Qt::WA_DeleteOnClose);
+                    ui->stackedWidget->widget(1)->close();
                 }
-
             });
 }
 
