@@ -20,7 +20,7 @@ CARD::Card::Card(int index,
 	  _num_or_coef{num_or_coef},
 	  _description{std::move(description)} {}
 
-CARD::Card::Card(const Card &card, Country* country) : Card{card}
+Card::Card(const Card &card, Country* country) : Card{card}
 {
 	_country = country;
 	execute();

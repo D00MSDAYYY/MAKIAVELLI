@@ -13,10 +13,10 @@ add_library(${PROJECT_NAME} "")
 
 target_sources(${PROJECT_NAME}
 PRIVATE
-  server.cpp
+  server_GUI.cpp
 PUBLIC
-  ${CMAKE_CURRENT_SOURCE_DIR}/server.h
-  ${CMAKE_CURRENT_SOURCE_DIR}/server.ui
+  ${CMAKE_CURRENT_SOURCE_DIR}/server_GUI.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/server_GUI.ui
 )
 
 target_include_directories(${PROJECT_NAME}

@@ -94,7 +94,6 @@ namespace olc
 					// want it primed ready to handle clients trying to
 					// connect.
 					WaitForClientConnection();
-
 					// Launch the asio context in its own thread
 					m_threadContext = std::thread([this]()
 												  { m_asioContext.run(); });
@@ -174,6 +173,7 @@ namespace olc
 						// another connection...
 						WaitForClientConnection();
 					});
+					
 			}
 
 			// Send a message to a specific client

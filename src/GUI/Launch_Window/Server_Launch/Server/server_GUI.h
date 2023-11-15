@@ -2,27 +2,29 @@
 #define SERVER_H
 
 #include <QWidget>
+#include <thread>
 
 #include "game_server.hpp"
 
 namespace Ui
 {
-    class Server;
+    class Server_GUI;
 }
 
-class Server : public QWidget, public Game_Server
+class Server_GUI : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit Server(QWidget *parent ,
+    explicit Server_GUI(QWidget *parent ,
                     int play_num, int bot_num,
                     int rounds, int thinking_time,
                     uint16_t port = 0);
-    ~Server();
+    ~Server_GUI();
 
 private:
-    Ui::Server *ui;
+    std::shared_ptr<Game_Server> _game_server{};
+    Ui::Server_GUI *ui;
 };
 
 #endif // SERVER_H

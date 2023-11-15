@@ -68,6 +68,7 @@ void Player_Client::buyLocations(SCOPE scope, std::vector<std::pair<int, int>> c
 // 								 cv_Redraw_Update.notify_one();
 // 							 }
 // 						 }};
+// TODO ! move lambda directly in jthread initialization
 // 	std::jthread thread_updating{lambda_updating};
 
 // 	auto lambda_redrawing{[this, &cv_Redraw_Update, &mtx_Redraw_Update](std::stop_token stop_token)

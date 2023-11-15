@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Server_Creating</class>
- <widget class="QWidget" name="Server_Creating">
+ <class>Server_GUI</class>
+ <widget class="QWidget" name="Server_GUI">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>457</width>
-    <height>374</height>
+    <width>400</width>
+    <height>300</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -29,37 +29,6 @@
           </property>
           <property name="text">
            <string>Players</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSlider" name="players_slider">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-            <horstretch>4</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>60</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="minimum">
-           <number>1</number>
-          </property>
-          <property name="maximum">
-           <number>10</number>
-          </property>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="tickPosition">
-           <enum>QSlider::NoTicks</enum>
-          </property>
-          <property name="tickInterval">
-           <number>1</number>
           </property>
          </widget>
         </item>
@@ -95,40 +64,6 @@
           </property>
          </widget>
         </item>
-        <item>
-         <widget class="QSlider" name="bots_slider">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-            <horstretch>4</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>60</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="minimum">
-           <number>0</number>
-          </property>
-          <property name="maximum">
-           <number>4</number>
-          </property>
-          <property name="sliderPosition">
-           <number>0</number>
-          </property>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="tickPosition">
-           <enum>QSlider::NoTicks</enum>
-          </property>
-          <property name="tickInterval">
-           <number>1</number>
-          </property>
-         </widget>
-        </item>
         <item alignment="Qt::AlignRight">
          <widget class="QLabel" name="bots_num_label">
           <property name="sizePolicy">
@@ -158,46 +93,6 @@
           </property>
           <property name="text">
            <string>Rounds</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSlider" name="rounds_slider">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-            <horstretch>4</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>100</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="minimum">
-           <number>20</number>
-          </property>
-          <property name="maximum">
-           <number>120</number>
-          </property>
-          <property name="singleStep">
-           <number>10</number>
-          </property>
-          <property name="pageStep">
-           <number>10</number>
-          </property>
-          <property name="sliderPosition">
-           <number>20</number>
-          </property>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="tickPosition">
-           <enum>QSlider::NoTicks</enum>
-          </property>
-          <property name="tickInterval">
-           <number>10</number>
           </property>
          </widget>
         </item>
@@ -236,46 +131,6 @@
           </property>
           <property name="text">
            <string>Thinking time</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSlider" name="thinking_t_slider">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-            <horstretch>4</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>100</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="minimum">
-           <number>20</number>
-          </property>
-          <property name="maximum">
-           <number>120</number>
-          </property>
-          <property name="singleStep">
-           <number>10</number>
-          </property>
-          <property name="pageStep">
-           <number>10</number>
-          </property>
-          <property name="sliderPosition">
-           <number>20</number>
-          </property>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="tickPosition">
-           <enum>QSlider::NoTicks</enum>
-          </property>
-          <property name="tickInterval">
-           <number>10</number>
           </property>
          </widget>
         </item>

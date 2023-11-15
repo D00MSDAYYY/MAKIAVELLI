@@ -17,7 +17,8 @@ public:
 
 private:
     int server_creating_index;
-    int server_index;
+    int server_gui_index;
+    QWidget *object_is_deleted{nullptr};
     Ui::Server_Launch *ui;
 };
 

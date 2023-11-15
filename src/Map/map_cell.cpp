@@ -1,6 +1,6 @@
 #include "map_cell.hpp"
 
-Locations* Map_Cell::mapCellOwner(Locations* owner)
+Locations *Map_Cell::mapCellOwner(Locations * const owner)
 {
 	if (owner == nullptr)
 		return _cell_owner;

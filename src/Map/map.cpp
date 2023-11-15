@@ -61,7 +61,6 @@ Map::Map(int numplayers)
 			column.resize(100);
 		break;
 	}
-	std::cerr << "map constructed" << std::endl;
 }
 
 Map::~Map()

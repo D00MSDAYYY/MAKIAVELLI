@@ -144,16 +144,15 @@ namespace olc
 			void wait()
 			{
 				std::atomic<bool> anti_deadlock_flag{false};
-				auto anti_deadlock_lambda{[this,&anti_deadlock_flag]()
-										  {
-											  std::this_thread::sleep_for(std::chrono::seconds(15));
-											  if (empty())
-											  {
-												  anti_deadlock_flag = true;
-												  cvBlocking.notify_all();
-											  }
-										  }};
-				anti_deadlock_thread = std::jthread{anti_deadlock_lambda};
+				anti_deadlock_thread = std::jthread{[this, &anti_deadlock_flag]()
+													{
+														std::this_thread::sleep_for(std::chrono::seconds(15));
+														if (empty())
+														{
+															anti_deadlock_flag = true;
+															cvBlocking.notify_all();
+														}
+													}};
 				while (empty() && !anti_deadlock_flag)
 				{
 					std::unique_lock<std::mutex> ul(muxQueue);

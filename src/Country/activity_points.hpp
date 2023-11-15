@@ -12,8 +12,10 @@ namespace AC_POI
 		int _max_points{0};
 
 	public:
+		Activity_Points(const Activity_Points &acpoi);
 		Activity_Points(int max_p = 0)
-			: _current_points{max_p}, _max_points{max_p} {}
+			: _current_points{max_p},
+			  _max_points{max_p} {}
 		~Activity_Points();
 		int currentPoints(int points = 0);
 		int maxPoints(int points = 0);
