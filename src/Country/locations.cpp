@@ -5,13 +5,11 @@ using LOC::Locations;
 
 void Locations::setDependices(Country *country)
 {
-
 	_country = country;
-	std::cerr << "set loc dep " << _country->index() << " " << _country << std::endl;
 }
+
 LOC::Locations::~Locations()
 {
-	std::cerr << "locations destr " << _country->index() << " " << _country << std::endl;
 }
 void Locations::setDependices(std::shared_ptr<Map> map)
 {
@@ -79,12 +77,12 @@ int Locations::oilNum(std::vector<std::pair<int, int>> coords)
 		bool isChanged{false};
 		for (auto &coord : coords)
 		{
-			if (_oil_loc_cost * _oil_coef_cost <= *_country->resources())
+			if (_oil_loc_cost * _oil_coef_cost <= _country->resources())
 			{
 				if (_map->cell(coord).mapCellOwner() == this &&
 					_map->find(Cell_Type::COUNTRY_AREA, coord))
 				{
-					*_country->resources() -= _oil_loc_cost * _oil_coef_cost;
+					_country->resources() -= _oil_loc_cost * _oil_coef_cost;
 					_map->cell(coord).mapCellOwner(this);
 					_map->cell(coord).mapCellType(Cell_Type::OIL);
 					isChanged = true;
@@ -116,12 +114,12 @@ int Locations::mineralNum(std::vector<std::pair<int, int>> coords)
 		bool isChanged{false};
 		for (auto &coord : coords)
 		{
-			if (_mineral_loc_cost * _mineral_coef_cost <= *_country->resources())
+			if (_mineral_loc_cost * _mineral_coef_cost <= _country->resources())
 			{
 				if (_map->cell(coord).mapCellOwner() == this &&
 					_map->find(Cell_Type::COUNTRY_AREA, coord))
 				{
-					*_country->resources() -= _mineral_loc_cost * _mineral_coef_cost;
+					_country->resources() -= _mineral_loc_cost * _mineral_coef_cost;
 					_map->cell(coord).mapCellOwner(this);
 					_map->cell(coord).mapCellType(Cell_Type::MINERAL);
 					isChanged = true;
@@ -153,12 +151,12 @@ int Locations::farmNum(std::vector<std::pair<int, int>> coords)
 		bool isChanged{false};
 		for (auto &coord : coords)
 		{
-			if (_farm_loc_cost * _farm_coef_cost <= *_country->resources())
+			if (_farm_loc_cost * _farm_coef_cost <= _country->resources())
 			{
 				if (_map->cell(coord).mapCellOwner() == this &&
 					_map->find(Cell_Type::COUNTRY_AREA, coord))
 				{
-					*_country->resources() -= _farm_loc_cost * _farm_coef_cost;
+					_country->resources() -= _farm_loc_cost * _farm_coef_cost;
 					_map->cell(coord).mapCellOwner(this);
 					_map->cell(coord).mapCellType(Cell_Type::FARM);
 					isChanged = true;
@@ -191,12 +189,12 @@ int Locations::industryNum(std::vector<std::pair<int, int>> coords)
 		bool isChanged{false};
 		for (auto &coord : coords)
 		{
-			if (_industry_loc_cost * _industry_coef_cost <= *_country->resources())
+			if (_industry_loc_cost * _industry_coef_cost <= _country->resources())
 			{
 				if (_map->cell(coord).mapCellOwner() == this &&
 					_map->find(Cell_Type::COUNTRY_AREA, coord))
 				{
-					*_country->resources() -= _industry_loc_cost * _industry_coef_cost;
+					_country->resources() -= _industry_loc_cost * _industry_coef_cost;
 					_map->cell(coord).mapCellOwner(this);
 					_map->cell(coord).mapCellType(Cell_Type::INDUSTRY);
 					isChanged = true;

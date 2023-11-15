@@ -16,18 +16,19 @@ Server_Launch::Server_Launch(QWidget *parent) : QWidget(parent),
     connect(ui->create_shutdown_button, &QPushButton::clicked,
             [this, server_creating]()
             {
-                std::cerr << "cur ind = " << ui->stackedWidget->currentIndex() << " ser creat ind" << server_creating_index;
                 if (ui->stackedWidget->currentIndex() == server_creating_index)
                 {
+                    std::cerr << "-count of widgets " << ui->stackedWidget->count() << std::endl;
                     ui->create_shutdown_button->setText("Shutdown");
-                    server_index = ui->stackedWidget->addWidget(server_creating->createServer(this));
-                    ui->stackedWidget->setCurrentIndex(server_index);
+                    server_gui_index = ui->stackedWidget->addWidget(server_creating->createServer(this));
+                    ui->stackedWidget->setCurrentIndex(server_gui_index);
                 }
-                else if (ui->stackedWidget->currentIndex() == server_index)
+                else if (ui->stackedWidget->currentIndex() == server_gui_index)
                 {
                     ui->create_shutdown_button->setText("Create");
-                    ui->stackedWidget->widget(1)->setAttribute(Qt::WA_DeleteOnClose);
-                    ui->stackedWidget->widget(1)->close();
+                    ui->stackedWidget->widget(server_gui_index)->setAttribute(Qt::WA_DeleteOnClose);
+                    // ui->stackedWidget->setCurrentIndex(server_creating_index);
+                    // ui->stackedWidget->widget(server_gui_index)->deleteLater();
                 }
             });
 }

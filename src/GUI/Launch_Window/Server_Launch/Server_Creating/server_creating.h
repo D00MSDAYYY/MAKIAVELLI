@@ -3,7 +3,7 @@
 
 #include <QWidget>
 
-#include "server.h"
+#include "server_GUI.h"
 
 namespace Ui {
 class Server_Creating;
@@ -16,7 +16,7 @@ class Server_Creating : public QWidget
 public:
     explicit Server_Creating(QWidget *parent = nullptr);
 
-    Server *createServer(QWidget *parent = nullptr);
+    Server_GUI *createServer(QWidget *parent = nullptr);
 
     ~Server_Creating();
 

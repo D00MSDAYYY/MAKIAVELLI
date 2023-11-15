@@ -29,9 +29,8 @@ inline void cleanUp()
 	Q_CLEANUP_RESOURCE(json_files);
 }
 
-std::unique_ptr<Resources> Game_Factory::createResources(int index)
+Resources Game_Factory::createResources(int index)
 {
-	std::cerr << "create resources" << std::endl;
 	if (res_ar.size() == 0)
 	{
 		QFile res_file(":/json_files/resources.json");
@@ -41,12 +40,11 @@ std::unique_ptr<Resources> Game_Factory::createResources(int index)
 		res_ar = boost::json::parse(res_str_input).as_array();
 		res_file.close();
 	}
-	return std::move(std::unique_ptr<Resources>{new Resources{boost::json::value_to<Resources>(res_ar.at(index))}});
+	return Resources{boost::json::value_to<Resources>(res_ar.at(index))};
 }
 
-std::unique_ptr<Points> Game_Factory::createPoints(int index)
+Points Game_Factory::createPoints(int index)
 {
-	std::cerr << "create points " << std::endl;
 	if (points_ar.size() == 0)
 	{
 		QFile points_file(":/json_files/points.json");
@@ -55,12 +53,11 @@ std::unique_ptr<Points> Game_Factory::createPoints(int index)
 		points_ar = boost::json::parse(points_str_input).as_array();
 		points_file.close();
 	}
-	return std::unique_ptr<Points>(new Points(boost::json::value_to<Points>(points_ar.at(index))));
+	return Points(boost::json::value_to<Points>(points_ar.at(index)));
 }
 
-std::unique_ptr<Locations> Game_Factory::createLocations(int index)
+Locations Game_Factory::createLocations(int index)
 {
-	std::cerr << "create locations" << std::endl;
 	if (loc_ar.size() == 0)
 	{
 		QFile loc_file(":/json_files/locations.json");
@@ -69,19 +66,17 @@ std::unique_ptr<Locations> Game_Factory::createLocations(int index)
 		loc_ar = boost::json::parse(loc_str_input).as_array();
 		loc_file.close();
 	}
-	return std::move(std::unique_ptr<Locations>(new Locations(boost::json::value_to<Locations>(loc_ar.at(index)))));
+	return Locations(boost::json::value_to<Locations>(loc_ar.at(index)));
 }
 
-std::unique_ptr<Cards_Holder> Game_Factory::createCardsHolder(int index)
+Cards_Holder Game_Factory::createCardsHolder(int index)
 {
-	std::cerr << "create card holder " << std::endl;
-	return std::unique_ptr<Cards_Holder>(new Cards_Holder());
+	return Cards_Holder();
 }
 
-std::unique_ptr<Activity_Points> Game_Factory::createActivityPoints(int index)
+Activity_Points Game_Factory::createActivityPoints(int index)
 {
-	std::cerr << "create ac points " << std::endl;
-	return std::unique_ptr<Activity_Points>(new Activity_Points{3});
+	return Activity_Points{3};
 }
 
 void Game_Factory::createCardBank(std::unordered_map<uint32_t, Country> &pl)
@@ -94,19 +89,18 @@ void Game_Factory::createCardBank(std::unordered_map<uint32_t, Country> &pl)
 		cards_ar = boost::json::parse(cards_str_input).as_array();
 		cards_file.close();
 	}
-	std::vector<std::shared_ptr<Card>> cards{};
+	std::vector<Card> cards{};
 	for (auto &card : cards_ar)
 	{
-		cards.push_back(std::shared_ptr<Card>{new Card(boost::json::value_to<Card>(card))});
+		cards.push_back(Card{boost::json::value_to<Card>(card)});
 	}
 	if (!_card_bank)
 		_card_bank = std::shared_ptr<Card_Bank>(new Card_Bank{std::move(cards)});
 
 	for (auto &[ID, country] : pl)
 	{
-		country.cardsHolder()->setDependices(_card_bank);
+		country.cardsHolder().setDependices(_card_bank);
 	}
-	std::cerr << "cards bank created " << std::endl;
 }
 
 void Game_Factory::createMap(std::unordered_map<uint32_t, Country> &p)
@@ -141,7 +135,7 @@ void Game_Factory::createMap(std::unordered_map<uint32_t, Country> &p)
 				in_x_row_count = 0;
 			}
 		}
-		_map->cell({x, y}).mapCellOwner(country.locations().get());
+		_map->cell({x, y}).mapCellOwner(&(country.locations()));
 		_map->cell({x, y}).mapCellType(Cell_Type::CAPITAL);
 
 		const int MIN_COUNTRY_SIZE{50};
@@ -186,13 +180,12 @@ void Game_Factory::createMap(std::unordered_map<uint32_t, Country> &p)
 				y_step = std::round((tmp_x + y_step) * std::sqrt(2) / 2);
 			}
 			std::pair<int, int> new_border_cell_coord{border_cell_coord.first + x_step, border_cell_coord.second + y_step};
-			_map->cell({new_border_cell_coord.first, new_border_cell_coord.second}).mapCellOwner(country.locations().get());
+			_map->cell({new_border_cell_coord.first, new_border_cell_coord.second}).mapCellOwner(&(country.locations()));
 			_map->cell({new_border_cell_coord.first, new_border_cell_coord.second}).mapCellType(Cell_Type::COUNTRY_AREA);
-			*(country.locations()) += {new_border_cell_coord};
+			country.locations() += {new_border_cell_coord};
 			border_line.push_back(new_border_cell_coord);
 		}
-		country.locations()->setDependices(_map);
-		std::cerr << "map created" << std::endl;
+		country.locations().setDependices(_map);
 	}
 }
 
@@ -208,7 +201,6 @@ Game_Factory::~Game_Factory()
 
 std::unordered_map<uint32_t, Country> Game_Factory::createPlayers()
 {
-	std::cerr << "create players " << std::endl;
 	std::default_random_engine dre{
 		uint32_t(std::chrono::system_clock::now().time_since_epoch().count())};
 
@@ -237,5 +229,9 @@ std::unordered_map<uint32_t, Country> Game_Factory::createPlayers()
 	}
 	createMap(players);
 	createCardBank(players); // TODO! change this logic and use this methods inside createLocations() and createCards()
+
+	std::cerr << "in createPlayers() : " << std::endl;
+	for(auto& [id,country] : players)
+		country.CHECK();
 	return std::move(players);
 }

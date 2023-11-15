@@ -29,6 +29,7 @@ namespace RES
 		static const int INDUSTRY_BASE{};
 
 	public:
+		Resources() {}
 		Resources(int oil,
 				  int mineral,
 				  int farm,

@@ -30,32 +30,34 @@ private:
 	int _index{0}; // TODO! maybe in future delete this and only COUNTRY_COLOR and use it like index
 
 	COUNTRY_COLOR _color{COUNTRY_COLOR::PINK};
-	
-	std::unique_ptr<AC_POI::Activity_Points> _activity_points;
-	std::unique_ptr<CARD::Cards_Holder> _cards_holder;
-	std::unique_ptr<LOC::Locations> _locations;
-	std::unique_ptr<POI::Points> _points;
-	std::unique_ptr<RES::Resources> _resources;
+
+	AC_POI::Activity_Points _activity_points;
+	CARD::Cards_Holder _cards_holder;
+	LOC::Locations _locations;
+	POI::Points _points;
+	RES::Resources _resources;
 
 public:
 	Country() {}
 	Country(int index,
-			std::unique_ptr<RES::Resources> r,
-			std::unique_ptr<POI::Points> p,
-			std::unique_ptr<LOC::Locations> l,
-			std::unique_ptr<CARD::Cards_Holder> cards_holder,
-			std::unique_ptr<AC_POI::Activity_Points> activity_p);
+			RES::Resources r,
+			POI::Points p,
+			LOC::Locations l,
+			CARD::Cards_Holder cards_holder,
+			AC_POI::Activity_Points activity_p);
 	bool busy(int flag = -1);
 	const int index() const { return _index; }
 
-	const std::unique_ptr<RES::Resources> &resources();
-	const std::unique_ptr<POI::Points> &points();
-	const std::unique_ptr<LOC::Locations> &locations();
-	const std::unique_ptr<CARD::Cards_Holder> &cardsHolder();
-	const std::unique_ptr<AC_POI::Activity_Points> &activityPoints();
+	RES::Resources &resources();
+	POI::Points &points();
+	LOC::Locations &locations();
+	CARD::Cards_Holder &cardsHolder();
+	AC_POI::Activity_Points &activityPoints();
 
 	void operator<<(olc::net::message<MSG_FROM> msg);
 	void operator>>(olc::net::message<MSG_FROM> msg);
 
 	void update();
+
+	void CHECK();
 };

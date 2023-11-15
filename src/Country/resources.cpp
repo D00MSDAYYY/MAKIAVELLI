@@ -5,16 +5,10 @@ using RES::Resources;
 
 void Resources::setDependices(Country* country)
 {
-	
 	_country = country;
-	std::cerr << "set res dep " << _country->index() << " " << _country << std::endl;
 }
 RES::Resources::~Resources() 
 {
-	std::cerr << "resources destr ";
-	if(_country)
-		std::cerr << _country->index() << std::endl;
-	std::cerr  << " " << _country<<  std::endl;
 }
 int Resources::oilNum(int const resources)
 {
@@ -231,10 +225,12 @@ void Resources::operator>>(olc::net::message<MSG_FROM> msg)
 
 void Resources::update()
 {
-	_oil_resources += OIL_BASE * _oil_coef * _country->locations()->oilNum();
-	_mineral_resources += MINERAL_BASE * _mineral_coef * _country->locations()->mineralNum();
-	_farm_resources += FARM_BASE * _farm_coef * _country->locations()->farmNum();
-	_industry_resources += INDUSTRY_BASE * _industry_coef * _country->locations()->industryNum();
+	std::cerr << "in res update " << std::endl;
+	_country->CHECK();
+	// _oil_resources += OIL_BASE * _oil_coef * _country->locations()->oilNum();
+	// _mineral_resources += MINERAL_BASE * _mineral_coef * _country->locations()->mineralNum();
+	// _farm_resources += FARM_BASE * _farm_coef * _country->locations()->farmNum();
+	// _industry_resources += INDUSTRY_BASE * _industry_coef * _country->locations()->industryNum();
 }
 
 Resources RES::tag_invoke(boost::json::value_to_tag<Resources>, boost::json::value const &jv)

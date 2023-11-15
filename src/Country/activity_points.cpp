@@ -2,6 +2,12 @@
 
 using AC_POI::Activity_Points;
 
+AC_POI::Activity_Points::Activity_Points(const Activity_Points &acpoi)
+: _max_points{acpoi._max_points}
+{
+	_current_points.store(acpoi._current_points);
+}
+
 AC_POI::Activity_Points::~Activity_Points()
 {
 }

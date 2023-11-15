@@ -36,9 +36,9 @@ void Server_Creating::on_thinking_t_slider_valueChanged(int value)
     ui->thinking_t_num_label->setText(QString::number(value) + "s");
 }
 
-Server *Server_Creating::createServer(QWidget *parent)
+Server_GUI *Server_Creating::createServer(QWidget *parent)
 {
-    return new Server{parent,
+    return new Server_GUI{parent,
                       ui->players_slider->value(),
                       ui->bots_slider->value(),
                       ui->rounds_slider->value(),

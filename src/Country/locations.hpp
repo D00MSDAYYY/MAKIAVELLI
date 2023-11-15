@@ -28,9 +28,9 @@ namespace LOC
 		RES::Resources _industry_loc_cost{0, 0, 0, 0};
 
 	public:
-		Locations() {}
+		Locations(){};
 		Locations(std::vector<std::pair<int, int>> country_map)
-			: _country_map{country_map}{}
+			: _country_map{country_map} {}
 		~Locations();
 
 		void setDependices(Country* country);
