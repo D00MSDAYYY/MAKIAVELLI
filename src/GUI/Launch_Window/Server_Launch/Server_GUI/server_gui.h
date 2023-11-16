@@ -18,11 +18,15 @@ class Server_GUI : public QWidget
 
 public:
     explicit Server_GUI(QWidget *parent);
-    std::shared_ptr<Game_Server> &gameServer(std::optional<std::shared_ptr<Game_Server>> game_server = std::nullopt);
     ~Server_GUI();
 
+    std::shared_ptr<Game_Server> &gameServer(
+        std::optional<std::shared_ptr<Game_Server>> game_server = std::nullopt);
+
+    void drawInfo();
+
 private:
-    std::shared_ptr<Game_Server> _game_server{};
+    std::shared_ptr<Game_Server> _game_server{nullptr};
     Ui::Server_GUI *ui;
 };
 

@@ -173,7 +173,6 @@ namespace olc
 						// another connection...
 						WaitForClientConnection();
 					});
-					
 			}
 
 			// Send a message to a specific client
@@ -292,7 +291,6 @@ namespace olc
 			// Order of declaration is important - it is also the order of initialisation
 			asio::io_context m_asioContext;
 			std::thread m_threadContext;
-
 			// These things need an asio context
 			asio::ip::tcp::acceptor m_asioAcceptor; // Handles new incoming connection attempts...
 

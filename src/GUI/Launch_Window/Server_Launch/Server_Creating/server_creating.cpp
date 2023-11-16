@@ -39,11 +39,12 @@ void Server_Creating::on_thinking_t_slider_valueChanged(int value)
     ui->thinking_t_num_label->setText(QString::number(value) + "s");
 }
 
-std::shared_ptr<Game_Server> Server_Creating::createServer()
+std::shared_ptr<Game_Server> Server_Creating::createServer(Server_GUI* server_gui)
 {
     return std::shared_ptr<Game_Server>{new Game_Server{
         ui->players_slider->value(),
         ui->bots_slider->value(),
         ui->rounds_slider->value(),
-        ui->thinking_t_slider->value()}};
+        ui->thinking_t_slider->value(),
+        server_gui}};
 }

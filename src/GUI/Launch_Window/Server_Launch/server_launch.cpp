@@ -22,7 +22,7 @@ Server_Launch::Server_Launch(QWidget *parent) : QWidget(parent),
                 if (ui->stackedWidget->currentIndex() == server_creating_index)
                 {
                     ui->create_shutdown_button->setText("Shutdown");
-                    server_gui->gameServer(server_creating->createServer());
+                    server_gui->gameServer(server_creating->createServer(server_gui));
                     ui->stackedWidget->setCurrentIndex(server_gui_index);
                 }
                 else if (ui->stackedWidget->currentIndex() == server_gui_index)
@@ -35,6 +35,7 @@ Server_Launch::Server_Launch(QWidget *parent) : QWidget(parent),
                             std::shared_ptr<Game_Server> deleted_server{
                                 std::move(server_gui->gameServer())};
                         }};
+                    thread_server_deleting.detach();
                 }
             });
 }

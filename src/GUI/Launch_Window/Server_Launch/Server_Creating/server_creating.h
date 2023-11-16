@@ -16,7 +16,7 @@ class Server_Creating : public QWidget
 public:
     explicit Server_Creating(QWidget *parent = nullptr);
 
-    std::shared_ptr<Game_Server> createServer();
+    std::shared_ptr<Game_Server> createServer(Server_GUI* server_gui);
 
     ~Server_Creating();
 
