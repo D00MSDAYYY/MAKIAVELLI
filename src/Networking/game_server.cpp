@@ -7,14 +7,18 @@
 #include "game_server.hpp"
 #include "text_message.hpp"
 #include "game_factory.hpp"
+#include "Server_GUI/server_gui.h"
 
 Game_Server::Game_Server(int play_num, int bot_num,
-						 int rounds, int thinking_time, uint16_t port)
+						 int rounds, int thinking_time,
+						 Server_GUI *server_gui,
+						 uint16_t port)
 	: olc::net::server_interface<MSG_FROM>(port),
 	  _play_num{play_num},
 	  _bot_num{bot_num},
-	  _rounds{rounds},
-	  _thinking_time{thinking_time}
+	  _rounds_num{rounds},
+	  _thinking_t_num{thinking_time},
+	  _server_gui{server_gui}
 {
 	Game_Factory factory{_play_num + _bot_num};
 	_players = factory.createPlayers();
@@ -23,60 +27,92 @@ Game_Server::Game_Server(int play_num, int bot_num,
 	for (auto &[id, country] : _players)
 		country.CHECK();
 
-	thread_server_running = std::jthread(&Game_Server::run, this);
+	thread_server_running = std::jthread{
+		[this](std::stop_token quit_token)
+		{
+			Start();
+			std::jthread thread_updating{[this](std::stop_token stop_token)
+										 {
+											 while (!stop_token.stop_requested())
+											 {
+												 Update(-1, true);
+											 }
+										 }};
+
+			// while (m_deqConnections.size() < _players.size())
+			// {
+			// 	std::this_thread::sleep_for(std::chrono::seconds(3));
+			// }
+			//! decide to simply wait nearly 5 seconds
+			std::this_thread::sleep_for(std::chrono::seconds(2));
+
+			for (_curr_round = 0; _curr_round < _rounds_num; ++_curr_round)
+			{
+				for (auto &[ID, country] : _players) //! this is very silly way to iterate over the players, because then we extract the node with country on disconnection of the client and after connect again and set the node  new (bigger) index we violate the order of players in queue
+				{
+					if (_server_gui)
+						_server_gui->drawInfo();
+					country.activityPoints().currentPoints(country.activityPoints().maxPoints());
+					country.update();
+					olc::net::message<MSG_FROM> msg_active_country{};
+					msg_active_country.header.id = MSG_FROM::SERVER_DATA_COUNTRY;
+					country >> msg_active_country;
+					MessageAllClients(msg_active_country);
+					if (quit_token.stop_requested())
+						return;
+					std::this_thread::sleep_for(std::chrono::seconds(_thinking_t_num));
+					country.activityPoints().currentPoints(-country.activityPoints().maxPoints());
+					olc::net::message<MSG_FROM> msg_inactive_country{};
+					msg_inactive_country.header.id = MSG_FROM::SERVER_DATA_COUNTRY;
+					country >> msg_inactive_country;
+					MessageAllClients(msg_inactive_country);
+				}
+			}
+		}};
 }
 
 Game_Server::~Game_Server()
 {
-	std::cerr << "game server destr=======" << std::endl;
+	_server_gui = nullptr;
 }
 
-void Game_Server::run(std::stop_token quit_token)
+const std::pair<std::string, int> Game_Server::address()
 {
-	// connectBots();
-	Start();
-	std::jthread thread_updating{[this](std::stop_token stop_token)
-								 {
-									 while (!stop_token.stop_requested())
-									 {
-										 Update(-1, true);
-									 }
-								 }};
 
-	// while (m_deqConnections.size() < _players.size())
-	// {
-	// 	std::this_thread::sleep_for(std::chrono::seconds(3));
-	// }
-	//! decide to simply wait nearly 10 seconds
-	std::this_thread::sleep_for(std::chrono::seconds(2));
+	return {
+		m_asioAcceptor.local_endpoint().address().to_string(),
+		m_asioAcceptor.local_endpoint().port()};
+}
 
-	for (int curr_round{0}; curr_round < _rounds; ++curr_round)
+const std::pair<int, int> Game_Server::playNum()
+{
+	int count{0};
+	for (auto &[ID, country] : _players)
 	{
-		for (auto &[ID, country] : _players) //! this is very silly way to iterate over the players, because then we extract the node with country on disconnection of the client and after connect again and set the node  new (bigger) index we violate the order of players in queue
-		{
-			country.activityPoints().currentPoints(country.activityPoints().maxPoints());
-			country.update();
-			olc::net::message<MSG_FROM> msg_active_country{};
-			msg_active_country.header.id = MSG_FROM::SERVER_DATA_COUNTRY;
-			country >> msg_active_country;
-			MessageAllClients(msg_active_country);
-			if (quit_token.stop_requested())
-				return;
-			std::cerr << "updating loop " << curr_round << std::endl;
-			std::this_thread::sleep_for(std::chrono::seconds(_thinking_time));
-
-			country.activityPoints().currentPoints(-country.activityPoints().maxPoints());
-			olc::net::message<MSG_FROM> msg_inactive_country{};
-			msg_inactive_country.header.id = MSG_FROM::SERVER_DATA_COUNTRY;
-			country >> msg_inactive_country;
-			MessageAllClients(msg_inactive_country);
-		}
+		if (country.busy())
+			++count;
 	}
+	count -= _bot_num;
+	return {(count > 0) ? count : 0, _play_num};
+}
+
+const std::pair<int, int> Game_Server::botNum()
+{
+	return {_bot_num, _bot_num};
+}
+
+const std::pair<int, int> Game_Server::roundsNum()
+{
+	return {_curr_round, _rounds_num};
+}
+
+const int Game_Server::thinkingTime()
+{
+	return _thinking_t_num;
 }
 
 bool Game_Server::OnClientConnect(std::shared_ptr<olc::net::connection<MSG_FROM>> client)
 {
-	// OnClientValidated;
 	return true;
 }
 
@@ -107,16 +143,19 @@ void Game_Server::OnClientValidated(std::shared_ptr<olc::net::connection<MSG_FRO
 						country >> msg;
 						MessageClient(client, msg);
 					}
-					return;
+					break;
 				}
 			}
 		}
 	}
-	m_deqConnections.erase(
-		std::remove(m_deqConnections.begin(),
-					m_deqConnections.end(),
-					client),
-		m_deqConnections.end());
+	else
+	{
+		m_deqConnections.erase(
+			std::remove(m_deqConnections.begin(),
+						m_deqConnections.end(),
+						client),
+			m_deqConnections.end());
+	}
 }
 void Game_Server::OnClientDisconnect(std::shared_ptr<olc::net::connection<MSG_FROM>> client)
 {

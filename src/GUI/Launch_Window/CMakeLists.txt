@@ -9,7 +9,7 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 
 add_subdirectory(Server_Launch)
-# add_subdirectory(Client_Launch)
+add_subdirectory(Client_Launch)
 
 add_library(${PROJECT_NAME} "")
 
@@ -30,6 +30,6 @@ target_link_libraries(${PROJECT_NAME}
 PUBLIC
     Qt6::Widgets
     Server_Launch
-    # Client_Launch
+    Client_Launch
 )
 

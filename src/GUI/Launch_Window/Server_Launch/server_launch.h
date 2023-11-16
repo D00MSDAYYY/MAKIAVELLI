@@ -2,9 +2,14 @@
 #define SERVER_LAUNCH_H
 
 #include <QWidget>
+#include <thread>
+#include <vector>
 
-namespace Ui {
-class Server_Launch;
+#include "server_gui.h"
+
+namespace Ui
+{
+    class Server_Launch;
 }
 
 class Server_Launch : public QWidget
@@ -18,8 +23,9 @@ public:
 private:
     int server_creating_index;
     int server_gui_index;
-    QWidget *object_is_deleted{nullptr};
     Ui::Server_Launch *ui;
+
+    std::jthread thread_server_deleting;
 };
 
 #endif // SERVER_LAUNCH_H

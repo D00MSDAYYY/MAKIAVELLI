@@ -13,7 +13,7 @@ bool Country::busy(int flag)
 		is_busy = false;
 	if (flag == true)
 		is_busy = true;
-	return 42;
+	return is_busy;
 }
 Cards_Holder &Country::cardsHolder()
 {

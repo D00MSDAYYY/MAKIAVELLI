@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.26.4)
 
-project(Server)
+project(Server_GUI)
 
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
 # qt_standard_project_setup()

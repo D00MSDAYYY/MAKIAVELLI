@@ -1,6 +1,8 @@
 #include "server_creating.h"
 #include "ui_server_creating.h"
 
+#include <utility>
+
 Server_Creating::Server_Creating(QWidget *parent) : QWidget(parent),
                                                     ui(new Ui::Server_Creating)
 {
@@ -33,19 +35,16 @@ void Server_Creating::on_rounds_slider_valueChanged(int value)
 
 void Server_Creating::on_thinking_t_slider_valueChanged(int value)
 {
+
     ui->thinking_t_num_label->setText(QString::number(value) + "s");
 }
 
-Server_GUI *Server_Creating::createServer(QWidget *parent)
+std::shared_ptr<Game_Server> Server_Creating::createServer(Server_GUI* server_gui)
 {
-    return new Server_GUI{parent,
-                      ui->players_slider->value(),
-                      ui->bots_slider->value(),
-                      ui->rounds_slider->value(),
-                      ui->thinking_t_slider->value()};
-    // return new Server{parent,
-    //                   1,
-    //                   1,
-    //                   1,
-    //                   1};
+    return std::shared_ptr<Game_Server>{new Game_Server{
+        ui->players_slider->value(),
+        ui->bots_slider->value(),
+        ui->rounds_slider->value(),
+        ui->thinking_t_slider->value(),
+        server_gui}};
 }

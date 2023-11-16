@@ -9,7 +9,7 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 
 add_subdirectory(Server_Creating)
-add_subdirectory(Server)
+add_subdirectory(Server_GUI)
 
 add_library(${PROJECT_NAME} "")
 
@@ -30,7 +30,7 @@ target_link_libraries(${PROJECT_NAME}
 PUBLIC
     Qt6::Widgets
     Server_Creating
-    Server
+    Server_GUI
     Networking
 )
 
