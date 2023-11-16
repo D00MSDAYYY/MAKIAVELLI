@@ -46,7 +46,8 @@ public:
 			CARD::Cards_Holder cards_holder,
 			AC_POI::Activity_Points activity_p);
 	bool busy(int flag = -1);
-	const int index() const { return _index; }
+	const int index() const 
+	{ return _index; }
 
 	RES::Resources &resources();
 	POI::Points &points();

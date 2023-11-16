@@ -10,25 +10,31 @@ Server_Launch::Server_Launch(QWidget *parent) : QWidget(parent),
 {
     ui->setupUi(this);
 
+    auto server_gui{new Server_GUI{this}};
     auto server_creating{new Server_Creating{this}};
+
     server_creating_index = ui->stackedWidget->addWidget(server_creating);
+    server_gui_index = ui->stackedWidget->addWidget(server_gui);
 
     connect(ui->create_shutdown_button, &QPushButton::clicked,
-            [this, server_creating]()
+            [this, server_creating, server_gui]()
             {
                 if (ui->stackedWidget->currentIndex() == server_creating_index)
                 {
-                    std::cerr << "-count of widgets " << ui->stackedWidget->count() << std::endl;
                     ui->create_shutdown_button->setText("Shutdown");
-                    server_gui_index = ui->stackedWidget->addWidget(server_creating->createServer(this));
+                    server_gui->gameServer(server_creating->createServer());
                     ui->stackedWidget->setCurrentIndex(server_gui_index);
                 }
                 else if (ui->stackedWidget->currentIndex() == server_gui_index)
                 {
                     ui->create_shutdown_button->setText("Create");
-                    ui->stackedWidget->widget(server_gui_index)->setAttribute(Qt::WA_DeleteOnClose);
-                    // ui->stackedWidget->setCurrentIndex(server_creating_index);
-                    // ui->stackedWidget->widget(server_gui_index)->deleteLater();
+                    ui->stackedWidget->setCurrentIndex(server_creating_index);
+                    thread_server_deleting = std::jthread{
+                        [this,server_gui]()
+                        {
+                            std::shared_ptr<Game_Server> deleted_server{
+                                std::move(server_gui->gameServer())};
+                        }};
                 }
             });
 }

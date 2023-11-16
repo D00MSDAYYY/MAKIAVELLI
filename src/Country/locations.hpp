@@ -11,7 +11,6 @@ namespace LOC
 	class Locations
 	{
 	private:
-		
 		Country* _country{nullptr};
 		std::shared_ptr<Map> _map;
 

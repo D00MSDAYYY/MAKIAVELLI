@@ -23,7 +23,48 @@ Game_Server::Game_Server(int play_num, int bot_num,
 	for (auto &[id, country] : _players)
 		country.CHECK();
 
-	thread_server_running = std::jthread(&Game_Server::run, this);
+	thread_server_running = std::jthread{
+		[this](std::stop_token quit_token)
+		{
+			Start();
+			std::jthread thread_updating{[this](std::stop_token stop_token)
+										 {
+											 while (!stop_token.stop_requested())
+											 {
+												 Update(-1, true);
+											 }
+										 }};
+
+			// while (m_deqConnections.size() < _players.size())
+			// {
+			// 	std::this_thread::sleep_for(std::chrono::seconds(3));
+			// }
+			//! decide to simply wait nearly 10 seconds
+			std::this_thread::sleep_for(std::chrono::seconds(2));
+
+			for (int curr_round{0}; curr_round < _rounds; ++curr_round)
+			{
+				for (auto &[ID, country] : _players) //! this is very silly way to iterate over the players, because then we extract the node with country on disconnection of the client and after connect again and set the node  new (bigger) index we violate the order of players in queue
+				{
+					country.activityPoints().currentPoints(country.activityPoints().maxPoints());
+					country.update();
+					olc::net::message<MSG_FROM> msg_active_country{};
+					msg_active_country.header.id = MSG_FROM::SERVER_DATA_COUNTRY;
+					country >> msg_active_country;
+					MessageAllClients(msg_active_country);
+					if (quit_token.stop_requested())
+						return;
+					std::cerr << "updating loop " << curr_round << std::endl;
+					std::this_thread::sleep_for(std::chrono::seconds(_thinking_time));
+
+					country.activityPoints().currentPoints(-country.activityPoints().maxPoints());
+					olc::net::message<MSG_FROM> msg_inactive_country{};
+					msg_inactive_country.header.id = MSG_FROM::SERVER_DATA_COUNTRY;
+					country >> msg_inactive_country;
+					MessageAllClients(msg_inactive_country);
+				}
+			}
+		}};
 }
 
 Game_Server::~Game_Server()
@@ -31,52 +72,9 @@ Game_Server::~Game_Server()
 	std::cerr << "game server destr=======" << std::endl;
 }
 
-void Game_Server::run(std::stop_token quit_token)
-{
-	// connectBots();
-	Start();
-	std::jthread thread_updating{[this](std::stop_token stop_token)
-								 {
-									 while (!stop_token.stop_requested())
-									 {
-										 Update(-1, true);
-									 }
-								 }};
-
-	// while (m_deqConnections.size() < _players.size())
-	// {
-	// 	std::this_thread::sleep_for(std::chrono::seconds(3));
-	// }
-	//! decide to simply wait nearly 10 seconds
-	std::this_thread::sleep_for(std::chrono::seconds(2));
-
-	for (int curr_round{0}; curr_round < _rounds; ++curr_round)
-	{
-		for (auto &[ID, country] : _players) //! this is very silly way to iterate over the players, because then we extract the node with country on disconnection of the client and after connect again and set the node  new (bigger) index we violate the order of players in queue
-		{
-			country.activityPoints().currentPoints(country.activityPoints().maxPoints());
-			country.update();
-			olc::net::message<MSG_FROM> msg_active_country{};
-			msg_active_country.header.id = MSG_FROM::SERVER_DATA_COUNTRY;
-			country >> msg_active_country;
-			MessageAllClients(msg_active_country);
-			if (quit_token.stop_requested())
-				return;
-			std::cerr << "updating loop " << curr_round << std::endl;
-			std::this_thread::sleep_for(std::chrono::seconds(_thinking_time));
-
-			country.activityPoints().currentPoints(-country.activityPoints().maxPoints());
-			olc::net::message<MSG_FROM> msg_inactive_country{};
-			msg_inactive_country.header.id = MSG_FROM::SERVER_DATA_COUNTRY;
-			country >> msg_inactive_country;
-			MessageAllClients(msg_inactive_country);
-		}
-	}
-}
 
 bool Game_Server::OnClientConnect(std::shared_ptr<olc::net::connection<MSG_FROM>> client)
 {
-	// OnClientValidated;
 	return true;
 }
 

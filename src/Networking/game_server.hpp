@@ -26,8 +26,6 @@ private:
 				   olc::net::message<MSG_FROM> &msg) override;
 	// void connectBots(); //TODO! create definition
 	std::jthread thread_server_running;
-	
-	void run(std::stop_token quit_token);
 
 public:
 	Game_Server(int play_num, int bot_num,

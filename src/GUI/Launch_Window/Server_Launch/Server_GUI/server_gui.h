@@ -1,8 +1,9 @@
 #ifndef SERVER_H
 #define SERVER_H
 
+#include <optional>
+
 #include <QWidget>
-#include <thread>
 
 #include "game_server.hpp"
 
@@ -16,10 +17,8 @@ class Server_GUI : public QWidget
     Q_OBJECT
 
 public:
-    explicit Server_GUI(QWidget *parent ,
-                    int play_num, int bot_num,
-                    int rounds, int thinking_time,
-                    uint16_t port = 0);
+    explicit Server_GUI(QWidget *parent);
+    std::shared_ptr<Game_Server> &gameServer(std::optional<std::shared_ptr<Game_Server>> game_server = std::nullopt);
     ~Server_GUI();
 
 private:
