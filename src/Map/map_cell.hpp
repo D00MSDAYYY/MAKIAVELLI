@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <optional>
 
 namespace LOC
 {
@@ -29,6 +30,6 @@ private:
 
 public:
 	Map_Cell(){};
-	Locations *mapCellOwner(Locations *const owner = nullptr);
-	Cell_Type mapCellType(Cell_Type type = Cell_Type::OCEAN);
+	Locations *mapCellOwner(std::optional<Locations *> owner = std::nullopt);
+	Cell_Type mapCellType(std::optional<Cell_Type> type = std::nullopt);
 };

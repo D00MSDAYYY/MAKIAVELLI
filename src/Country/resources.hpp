@@ -39,7 +39,8 @@ namespace RES
 			  _farm_resources{farm},
 			  _industry_resources{industry} {}
 		~Resources();
-		void setDependices(Country *country);
+		
+		Resources& setDependices(Country *country);
 
 		int oilNum(int const resources = 0);
 		int mineralNum(int const resources = 0);

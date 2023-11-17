@@ -13,12 +13,13 @@ namespace AC_POI
 
 	public:
 		Activity_Points(const Activity_Points &acpoi);
+		
 		Activity_Points(int max_p = 0)
 			: _current_points{max_p},
 			  _max_points{max_p} {}
-		~Activity_Points();
-		int currentPoints(int points = 0);
-		int maxPoints(int points = 0);
+		~Activity_Points(){};
+		int currentPoints(std::optional<int> points = std::nullopt);
+		int maxPoints(std::optional<int> points = std::nullopt);
 
 		void operator<<(olc::net::message<MSG_FROM> msg);
 		void operator>>(olc::net::message<MSG_FROM> msg);

@@ -1,23 +1,15 @@
 #include "map_cell.hpp"
 
-Locations *Map_Cell::mapCellOwner(Locations * const owner)
+Locations *Map_Cell::mapCellOwner(std::optional<Locations *> owner)
 {
-	if (owner == nullptr)
-		return _cell_owner;
-	else
-	{
-		_cell_owner = owner;
-		return _cell_owner;
-	}
+	if(owner)
+		_cell_owner = *owner;
+	return _cell_owner;
 }
 
-Cell_Type Map_Cell::mapCellType(Cell_Type type)
+Cell_Type Map_Cell::mapCellType(std::optional<Cell_Type> type)
 {
-	if (type == Cell_Type::OCEAN)
-		return _cell_type;
-	else
-	{
-		_cell_type = type;
-		return Cell_Type::OCEAN;
-	}
+	if(type)
+		_cell_type = *type;
+	return _cell_type;
 }

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.26)
 
-project(Client_Launch)
+project(Client_GUI)
 
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
 #qt_standard_project_setup()
@@ -8,16 +8,14 @@ find_package(Qt6 REQUIRED COMPONENTS Widgets)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 
-add_subdirectory(Client_GUI)
-
 add_library(${PROJECT_NAME} "")
 
 target_sources(${PROJECT_NAME}
 PRIVATE
-  client_launch.cpp
+  client_gui.cpp
 PUBLIC
-  ${CMAKE_CURRENT_SOURCE_DIR}/client_launch.h
-  ${CMAKE_CURRENT_SOURCE_DIR}/client_launch.ui
+  ${CMAKE_CURRENT_SOURCE_DIR}/client_gui.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/client_gui.ui
 )
 
 target_include_directories(${PROJECT_NAME}
@@ -28,6 +26,6 @@ PUBLIC
 target_link_libraries(${PROJECT_NAME}
 PUBLIC
     Qt6::Widgets
-    Client_GUI
+    Networking
 )
 

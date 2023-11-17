@@ -5,15 +5,11 @@ using CARD::Cards_Holder;
 using POI::Points;
 using RES::Resources;
 
-bool Country::busy(int flag)
+bool Country::busy(std::optional<bool> flag)
 {
-	if (flag == -1)
-		return is_busy;
-	if (flag == false)
-		is_busy = false;
-	if (flag == true)
-		is_busy = true;
-	return is_busy;
+	if(flag)
+		_is_busy = *flag;
+	return _is_busy;
 }
 Cards_Holder &Country::cardsHolder()
 {
@@ -28,20 +24,20 @@ Activity_Points &Country::activityPoints()
 
 Points &Country::points()
 {
-	_points.setDependices(this);
-	return _points;
+
+	return _points.setCountry(this);
 }
 
 Resources &Country::resources()
 {
-	_resources.setDependices(this);
-	return _resources;
+
+	return _resources.setDependices(this);
 }
 
 Locations &Country::locations()
 {
-	_locations.setDependices(this);
-	return _locations;
+
+	return _locations.setCountry(this);
 }
 
 void Country::operator<<(olc::net::message<MSG_FROM> msg)

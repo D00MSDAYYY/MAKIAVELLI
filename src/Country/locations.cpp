@@ -3,19 +3,15 @@
 
 using LOC::Locations;
 
-void Locations::setDependices(Country *country)
+Locations &Locations::setCountry(Country *country)
 {
 	_country = country;
+	return *this;
 }
 
 LOC::Locations::~Locations()
 {
 }
-void Locations::setDependices(std::shared_ptr<Map> map)
-{
-	_map = map;
-}
-
 const Locations Locations::operator+(const std::vector<std::pair<int, int>> country_map) const
 {
 	Locations result(*this);
@@ -24,10 +20,10 @@ const Locations Locations::operator+(const std::vector<std::pair<int, int>> coun
 
 const Locations &Locations::operator+=(const std::vector<std::pair<int, int>> country_map)
 {
-	for (auto &country_coord : _country_map)
+	for (auto &country_coord : _country_cells_coords)
 	{
-		if (std::find(_country_map.begin(), _country_map.end(), country_coord) == _country_map.end())
-			_country_map.push_back(country_coord);
+		if (std::find(_country_cells_coords.begin(), _country_cells_coords.end(), country_coord) == _country_cells_coords.end())
+			_country_cells_coords.push_back(country_coord);
 	}
 	return *this;
 }
@@ -40,42 +36,34 @@ const Locations Locations::operator-(const std::vector<std::pair<int, int>> coun
 
 const Locations &Locations::operator-=(const std::vector<std::pair<int, int>> country_map)
 {
-	for (auto &country_coord : _country_map)
+	for (auto &country_coord : _country_cells_coords)
 	{
-		_country_map.erase(std::remove(_country_map.begin(),
-									   _country_map.end(),
-									   country_coord),
-						   _country_map.end());
+		_country_cells_coords.erase(std::remove(_country_cells_coords.begin(),
+												_country_cells_coords.end(),
+												country_coord),
+									_country_cells_coords.end());
 	}
 	return *this;
 }
 
-std::shared_ptr<Map> Locations::map()
+std::shared_ptr<Map> LOC::Locations::map(std::optional<std::shared_ptr<Map>> map)
 {
+	if (map)
+		_map = *map;
 	return _map;
 }
 
-std::vector<std::pair<int, int>> Locations::country_map()
+std::vector<std::pair<int, int>> LOC::Locations::coords()
 {
 	return std::vector<std::pair<int, int>>();
 }
 
-int Locations::oilNum(std::vector<std::pair<int, int>> coords)
+int Locations::oilNum(std::optional<std::vector<std::pair<int, int>>> cells)
 {
-	if (coords.size() == 0)
+	if (cells)
 	{
-		int count{};
-		for (auto &country_coord : _country_map)
-		{
-			if (_map->find(Cell_Type::OIL, country_coord))
-				++count;
-		}
-		return count;
-	}
-	else
-	{
-		bool isChanged{false};
-		for (auto &coord : coords)
+		bool is_changed{false};
+		for (auto &coord : *cells)
 		{
 			if (_oil_loc_cost * _oil_coef_cost <= _country->resources())
 			{
@@ -85,34 +73,32 @@ int Locations::oilNum(std::vector<std::pair<int, int>> coords)
 					_country->resources() -= _oil_loc_cost * _oil_coef_cost;
 					_map->cell(coord).mapCellOwner(this);
 					_map->cell(coord).mapCellType(Cell_Type::OIL);
-					isChanged = true;
+					is_changed = true;
 				}
 			}
 			else
-			{
 				break;
-			}
 		}
-		return isChanged;
+		return is_changed;
 	}
-}
-
-int Locations::mineralNum(std::vector<std::pair<int, int>> coords)
-{
-	if (coords.size() == 0)
+	else
 	{
-		int count{};
-		for (auto &country_coord : _country_map)
+		int count{0};
+		for (auto &country_coord : _country_cells_coords)
 		{
-			if (_map->find(Cell_Type::MINERAL, country_coord))
+			if (_map->find(Cell_Type::OIL, country_coord))
 				++count;
 		}
 		return count;
 	}
-	else
+}
+
+int Locations::mineralNum(std::optional<std::vector<std::pair<int, int>>> cells)
+{
+	if (cells)
 	{
-		bool isChanged{false};
-		for (auto &coord : coords)
+		bool is_changed{false};
+		for (auto &coord : *cells)
 		{
 			if (_mineral_loc_cost * _mineral_coef_cost <= _country->resources())
 			{
@@ -122,34 +108,32 @@ int Locations::mineralNum(std::vector<std::pair<int, int>> coords)
 					_country->resources() -= _mineral_loc_cost * _mineral_coef_cost;
 					_map->cell(coord).mapCellOwner(this);
 					_map->cell(coord).mapCellType(Cell_Type::MINERAL);
-					isChanged = true;
+					is_changed = true;
 				}
 			}
 			else
-			{
 				break;
-			}
 		}
-		return isChanged;
+		return is_changed;
 	}
-}
-
-int Locations::farmNum(std::vector<std::pair<int, int>> coords)
-{
-	if (coords.size() == 0)
+	else
 	{
-		int count{};
-		for (auto &country_coord : _country_map)
+		int count{0};
+		for (auto &country_coord : _country_cells_coords)
 		{
-			if (_map->find(Cell_Type::FARM, country_coord))
+			if (_map->find(Cell_Type::MINERAL, country_coord))
 				++count;
 		}
 		return count;
 	}
-	else
+}
+
+int Locations::farmNum(std::optional<std::vector<std::pair<int, int>>> cells)
+{
+	if (cells)
 	{
-		bool isChanged{false};
-		for (auto &coord : coords)
+		bool is_changed{false};
+		for (auto &coord : *cells)
 		{
 			if (_farm_loc_cost * _farm_coef_cost <= _country->resources())
 			{
@@ -159,35 +143,33 @@ int Locations::farmNum(std::vector<std::pair<int, int>> coords)
 					_country->resources() -= _farm_loc_cost * _farm_coef_cost;
 					_map->cell(coord).mapCellOwner(this);
 					_map->cell(coord).mapCellType(Cell_Type::FARM);
-					isChanged = true;
+					is_changed = true;
 				}
 			}
 			else
-			{
 				break;
-			}
 		}
-		return isChanged;
+		return is_changed;
 	}
-}
-
-int Locations::industryNum(std::vector<std::pair<int, int>> coords)
-{
-
-	if (coords.size() == 0)
+	else
 	{
-		int count{};
-		for (auto &country_coord : _country_map)
+		int count{0};
+		for (auto &country_coord : _country_cells_coords)
 		{
-			if (_map->find(Cell_Type::INDUSTRY, country_coord))
+			if (_map->find(Cell_Type::FARM, country_coord))
 				++count;
 		}
 		return count;
 	}
-	else
+}
+
+int Locations::industryNum(std::optional<std::vector<std::pair<int, int>>> cells)
+{
+
+	if (cells)
 	{
-		bool isChanged{false};
-		for (auto &coord : coords)
+		bool is_changed{false};
+		for (auto &coord : *cells)
 		{
 			if (_industry_loc_cost * _industry_coef_cost <= _country->resources())
 			{
@@ -197,7 +179,7 @@ int Locations::industryNum(std::vector<std::pair<int, int>> coords)
 					_country->resources() -= _industry_loc_cost * _industry_coef_cost;
 					_map->cell(coord).mapCellOwner(this);
 					_map->cell(coord).mapCellType(Cell_Type::INDUSTRY);
-					isChanged = true;
+					is_changed = true;
 				}
 			}
 			else
@@ -205,60 +187,46 @@ int Locations::industryNum(std::vector<std::pair<int, int>> coords)
 				break;
 			}
 		}
-		return isChanged;
-	}
-}
-
-float Locations::oilCoef(float const coef)
-{
-	if (coef == 0)
-	{
-		return _oil_coef_cost;
+		return is_changed;
 	}
 	else
 	{
-		_oil_coef_cost *= coef;
-		return 1.0;
+		int count{0};
+		for (auto &country_coord : _country_cells_coords)
+		{
+			if (_map->find(Cell_Type::INDUSTRY, country_coord))
+				++count;
+		}
+		return count;
 	}
 }
 
-float Locations::mineralCoef(float const coef)
+float Locations::oilCoef(std::optional<float> coef)
 {
-	if (coef == 0)
-	{
-		return _mineral_coef_cost;
-	}
-	else
-	{
-		_mineral_coef_cost *= coef;
-		return 1.0;
-	}
+	if (coef)
+		_oil_coef_cost *= *coef;
+	return _oil_coef_cost;
 }
 
-float Locations::farmCoef(float const coef)
+float Locations::mineralCoef(std::optional<float> coef)
 {
-	if (coef == 0)
-	{
-		return _farm_coef_cost;
-	}
-	else
-	{
-		_farm_coef_cost *= coef;
-		return 1.0;
-	}
+	if (coef)
+		_mineral_coef_cost *= *coef;
+	return _mineral_coef_cost;
 }
 
-float Locations::industryCoef(float const coef)
+float Locations::farmCoef(std::optional<float> coef)
 {
-	if (coef == 0)
-	{
-		return _industry_coef_cost;
-	}
-	else
-	{
-		_industry_coef_cost *= coef;
-		return 1.0;
-	}
+	if (coef)
+		_farm_coef_cost *= *coef;
+	return _farm_coef_cost;
+}
+
+float Locations::industryCoef(std::optional<float> coef)
+{
+	if (coef)
+		_industry_coef_cost *= *coef;
+	return _industry_coef_cost;
 }
 
 float Locations::allCoef(float const coef)
@@ -273,8 +241,8 @@ float Locations::allCoef(float const coef)
 
 Locations LOC::tag_invoke(boost::json::value_to_tag<Locations>, boost::json::value const &jv)
 {
-	boost::json::object const &obj = jv.as_object();
 
+	boost::json::object const &obj = jv.as_object();
 	std::vector<std::pair<int, int>> country_map;
 	country_map.resize(boost::json::value_to<int>(obj.at("country map")));
 	return Locations{country_map};
@@ -282,6 +250,9 @@ Locations LOC::tag_invoke(boost::json::value_to_tag<Locations>, boost::json::val
 void LOC::tag_invoke(boost::json::value_from_tag, boost::json::value &jv, Locations const &p)
 {
 	Locations temp = p; //! dont change this coz loc must be const
+
+	temp.oilNum();
+
 	jv = {{"oil", temp.oilNum()},
 		  {"mineral", temp.mineralNum()},
 		  {"farm", temp.farmNum()},

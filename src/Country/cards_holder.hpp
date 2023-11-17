@@ -21,11 +21,11 @@ namespace CARD
 	public:
 		Cards_Holder() {}
 		~Cards_Holder();
+
 		void setDependices(std::shared_ptr<Card_Bank> card_bank);
 		void setDependices(Country* country);
 
 		void addCard();
-
 		void update();
 
 		void operator<<(olc::net::message<MSG_FROM> msg){};
