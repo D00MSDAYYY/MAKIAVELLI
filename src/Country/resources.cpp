@@ -3,9 +3,10 @@
 
 using RES::Resources;
 
-void Resources::setDependices(Country* country)
+Resources& Resources::setDependices(Country* country)
 {
 	_country = country;
+	return *this;
 }
 RES::Resources::~Resources() 
 {

@@ -42,13 +42,16 @@
 // 	}
 // }
 
-
+Player_Client::Player_Client(const std::string &host, const uint16_t port)
+{
+	Connect(host, port);
+}
 
 void Player_Client::buyPoints(SCOPE scope, const int points)
 {
 }
 
-void Player_Client::buyLocations(SCOPE scope, std::vector<std::pair<int, int>> coords)
+void Player_Client::buyLocations(SCOPE scope, std::vector<std::pair<int, int>> cells)
 {
 }
 

@@ -20,12 +20,12 @@ namespace POI
 
 		Country *_country;
 
-		int _army_points{};
-		int _science_points{};
-		int _oil_points{};
-		int _mineral_points{};
-		int _farm_points{};
-		int _industry_points{};
+		int _army_points{0};
+		int _science_points{0};
+		int _oil_points{0};
+		int _mineral_points{0};
+		int _farm_points{0};
+		int _industry_points{0};
 
 		float _army_coef_cost{1.0};
 		float _science_coef_cost{1.0};
@@ -67,14 +67,14 @@ namespace POI
 			setAllCost();
 		}
 		~Points();
-		void setDependices(Country *country);
+		Points& setCountry(Country *country);
 
-		int armyNum(int const points = 0);
-		int scienceNum(int const points = 0);
-		int oilNum(int const points = 0);
-		int mineralNum(int const points = 0);
-		int farmNum(int const points = 0);
-		int industryNum(int const points = 0);
+		int armyNum(std::optional<int>  points = std::nullopt);
+		int scienceNum(std::optional<int> points = std::nullopt);
+		int oilNum(std::optional<int> points = std::nullopt);
+		int mineralNum(std::optional<int> points = std::nullopt);
+		int farmNum(std::optional<int> points = std::nullopt);
+		int industryNum(std::optional<int> points = std::nullopt);
 
 		float armyCoefCost(float const coef = 0);
 		float scienceCoefCost(float const coef = 0);

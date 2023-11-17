@@ -19,5 +19,5 @@ public:
 	void exchangeRes(SCOPE give_scope, const int give_res,
 					 SCOPE receive_scope, const int receive_res);
 	void buyPoints(SCOPE scope, const int points);
-	void buyLocations(SCOPE scope, std::vector<std::pair<int, int>> coords);
+	void buyLocations(SCOPE scope, std::vector<std::pair<int, int>> cells);
 };

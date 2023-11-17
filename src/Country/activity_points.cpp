@@ -3,33 +3,32 @@
 using AC_POI::Activity_Points;
 
 AC_POI::Activity_Points::Activity_Points(const Activity_Points &acpoi)
-: _max_points{acpoi._max_points}
+	: _max_points{acpoi._max_points}
 {
 	_current_points.store(acpoi._current_points);
 }
 
-AC_POI::Activity_Points::~Activity_Points()
+
+int Activity_Points::currentPoints(std::optional<int> points)
 {
+	if (points)
+	{
+		_current_points += *points;
+		if (_current_points < 0)
+			_current_points = 0;
+	}
+	return _current_points;
 }
 
-int Activity_Points::currentPoints(int points)
+int Activity_Points::maxPoints(std::optional<int> points)
 {
-	if (points == 0)
-		return _current_points;
-	_current_points += points;
-	if (_current_points.load() < 0)
-		_current_points = 0;
-	return 1;
-}
-
-int Activity_Points::maxPoints(int points)
-{
-	if (points == 0)
-		return _max_points;
-	_max_points += points;
-	if (_max_points < 0)
-		_max_points = 0;
-	return 1;
+	if (points)
+	{
+		_max_points += *points;
+		if (_max_points < 0)
+			_max_points = 0;
+	}
+	return _max_points;
 }
 
 void AC_POI::Activity_Points::operator<<(olc::net::message<MSG_FROM> msg)

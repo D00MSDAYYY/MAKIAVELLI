@@ -25,7 +25,7 @@ enum class COUNTRY_COLOR : uint32_t
 class Country
 {
 private:
-	bool is_busy{false};
+	bool _is_busy{false};
 
 	int _index{0}; // TODO! maybe in future delete this and only COUNTRY_COLOR and use it like index
 
@@ -45,9 +45,9 @@ public:
 			LOC::Locations l,
 			CARD::Cards_Holder cards_holder,
 			AC_POI::Activity_Points activity_p);
-	bool busy(int flag = -1);
-	const int index() const 
-	{ return _index; }
+	~Country(){}
+	bool busy(std::optional<bool> flag = std::nullopt);
+	const int index() { return _index; }
 
 	RES::Resources &resources();
 	POI::Points &points();

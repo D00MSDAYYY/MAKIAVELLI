@@ -185,7 +185,7 @@ void Game_Factory::createMap(std::unordered_map<uint32_t, Country> &p)
 			country.locations() += {new_border_cell_coord};
 			border_line.push_back(new_border_cell_coord);
 		}
-		country.locations().setDependices(_map);
+		country.locations().map(_map);
 	}
 }
 

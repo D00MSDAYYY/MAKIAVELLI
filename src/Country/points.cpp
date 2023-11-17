@@ -194,167 +194,210 @@ void Points::setAllCost()
 	setIndustryCost();
 }
 
-void POI::Points::setDependices(Country* country)
+Points &Points::setCountry(Country *country)
 {
 	_country = country;
+	return *this;
 }
-POI::Points::~Points()
+Points::~Points()
 {
 }
-int Points::armyNum(int const points)
+int Points::armyNum(std::optional<int> points)
 {
-	if (points == 0)
+	if (points)
+	{
+		if (*points < 0)
+		{
+			_army_points += *points;
+			if (_army_points < 0)
+				_army_points = 0;
+			setArmyCost();
+			return true;
+		}
+		else //! this statement holds point >= 0   and return false if points == 0
+		{
+			bool is_changed{false};
+			for (int i{0};
+				 i < points &&
+				 _army_points < MAX_ARMY_POINTS &&
+				 _army_points_cost * _army_coef_cost <= _country->resources();
+				 ++i)
+			{
+				_country->resources() -= _army_points_cost * _army_coef_cost;
+				++_army_points;
+				is_changed = true;
+				setArmyCost();
+			}
+			return is_changed;
+		}
+	}
+	else
 		return _army_points;
-	if (points < 0)
-	{
-		_army_points += points;
-		if (_army_points < 0)
-			_army_points = 0;
-		setArmyCost();
-		return 0;
-	}
-	bool isChanged = false;
-	while (_army_points < MAX_ARMY_POINTS &&
-		   _army_points_cost * _army_coef_cost <= _country->resources())
-	{
-		_country->resources() -= _army_points_cost * _army_coef_cost;
-		++_army_points;
-		isChanged = true;
-		setArmyCost();
-	}
-	if (isChanged)
-		return 1;
-	return 0;
 }
 
-int Points::scienceNum(int const points)
+int Points::scienceNum(std::optional<int> points)
 {
-	if (points == 0)
+	if (points)
+	{
+		if (*points < 0)
+		{
+			_science_points += *points;
+			if (_science_points < 0)
+				_science_points = 0;
+			setArmyCost();
+			return true;
+		}
+		else 
+		{
+			bool is_changed{false};
+			for (int i{0};
+				 i < points &&
+				 _science_points < MAX_SCIENCE_POINTS &&
+				 _science_points_cost * _science_coef_cost <= _country->resources();
+				 ++i)
+			{
+				_country->resources() -= _science_points_cost * _science_coef_cost;
+				++_science_points;
+				is_changed = true;
+				setArmyCost();
+			}
+			return is_changed;
+		}
+	}
+	else
 		return _science_points;
-	if (points < 0)
-	{
-		_science_points += points;
-		if (_science_points < 0)
-			_science_points = 0;
-		setScienceCost();
-		return 0;
-	}
-	bool isChanged = false;
-	while (_science_points < MAX_SCIENCE_POINTS &&
-		   _science_points_cost * _science_coef_cost <= _country->resources())
-	{
-		_country->resources() -= _science_points_cost * _science_coef_cost;
-		++_science_points;
-		isChanged = true;
-		setScienceCost();
-	}
-	if (isChanged)
-		return 1;
-	return 0;
 }
 
-int Points::oilNum(int const points)
+int Points::oilNum(std::optional<int> points)
 {
-	if (points == 0)
+	if (points)
+	{
+		if (*points < 0)
+		{
+			_oil_points += *points;
+			if (_oil_points < 0)
+				_oil_points = 0;
+			setArmyCost();
+			return true;
+		}
+		else 
+		{
+			bool is_changed{false};
+			for (int i{0};
+				 i < points &&
+				 _oil_points < MAX_OIL_POINTS &&
+				 _oil_points_cost * _oil_coef_cost <= _country->resources();
+				 ++i)
+			{
+				_country->resources() -= _oil_points_cost * _oil_coef_cost;
+				++_oil_points;
+				is_changed = true;
+				setArmyCost();
+			}
+			return is_changed;
+		}
+	}
+	else
 		return _oil_points;
-	if (points < 0)
-	{
-		_oil_points += points;
-		if (_oil_points < 0)
-			_oil_points = 0;
-		setOilCost();
-		return 0;
-	}
-	bool isChanged = false;
-	while (_oil_points < MAX_OIL_POINTS &&
-		   _oil_points_cost * _oil_coef_cost <= _country->resources())
-	{
-		_country->resources() -= _oil_points_cost * _oil_coef_cost;
-		++_oil_points;
-		isChanged = true;
-		setOilCost();
-	}
-	if (isChanged)
-		return 1;
-	return 0;
 }
 
-int Points::mineralNum(int const points)
+int Points::mineralNum(std::optional<int> points)
 {
-	if (points == 0)
+	if (points)
+	{
+		if (*points < 0)
+		{
+			_mineral_points += *points;
+			if (_mineral_points < 0)
+				_mineral_points = 0;
+			setArmyCost();
+			return true;
+		}
+		else
+		{
+			bool is_changed{false};
+			for (int i{0};
+				 i < points &&
+				 _mineral_points < MAX_MINERAL_POINTS &&
+				 _mineral_points_cost * _mineral_coef_cost <= _country->resources();
+				 ++i)
+			{
+				_country->resources() -= _mineral_points_cost * _mineral_coef_cost;
+				++_mineral_points;
+				is_changed = true;
+				setArmyCost();
+			}
+			return is_changed;
+		}
+	}
+	else
 		return _mineral_points;
-	if (points < 0)
-	{
-		_mineral_points += points;
-		if (_mineral_points < 0)
-			_mineral_points = 0;
-		setMineralCost();
-		return 0;
-	}
-	bool isChanged = false;
-	while (_mineral_points < MAX_MINERAL_POINTS &&
-		   _mineral_points_cost * _mineral_coef_cost <= _country->resources())
-	{
-		_country->resources() -= _mineral_points_cost * _mineral_coef_cost;
-		++_mineral_points;
-		isChanged = true;
-		setMineralCost();
-	}
-	if (isChanged)
-		return 1;
-	return 0;
 }
 
-int Points::farmNum(int const points)
+int Points::farmNum(std::optional<int> points)
 {
-	if (points == 0)
+	if (points)
+	{
+		if (*points < 0)
+		{
+			_farm_points += *points;
+			if (_farm_points < 0)
+				_farm_points = 0;
+			setArmyCost();
+			return true;
+		}
+		else
+		{
+			bool is_changed{false};
+			for (int i{0};
+				 i < points &&
+				 _farm_points < MAX_FARM_POINTS &&
+				 _farm_points_cost * _farm_coef_cost <= _country->resources();
+				 ++i)
+			{
+				_country->resources() -= _farm_points_cost * _farm_coef_cost;
+				++_farm_points;
+				is_changed = true;
+				setArmyCost();
+			}
+			return is_changed;
+		}
+	}
+	else
 		return _farm_points;
-	if (points < 0)
-	{
-		_farm_points += points;
-		if (_farm_points < 0)
-			_farm_points = 0;
-		setFarmCost();
-		return 0;
-	}
-	bool isChanged = false;
-	while (_farm_points < MAX_FARM_POINTS &&
-		   _farm_points_cost * _farm_coef_cost <= _country->resources())
-	{
-		_country->resources() -= _farm_points_cost * _farm_coef_cost;
-		++_farm_points;
-		isChanged = true;
-		setFarmCost();
-	}
-	if (isChanged)
-		return 1;
-	return 0;
 }
 
-int Points::industryNum(int const points)
+int Points::industryNum(std::optional<int> points)
 {
-	if (points == 0)
+	if (points)
+	{
+		if (*points < 0)
+		{
+			_industry_points += *points;
+			if (_industry_points < 0)
+				_industry_points = 0;
+			setArmyCost();
+			return true;
+		}
+		else
+		{
+			bool is_changed{false};
+			for (int i{0};
+				 i < points &&
+				 _industry_points < MAX_INDUSTRY_POINTS &&
+				 _industry_points_cost * _industry_coef_cost <= _country->resources();
+				 ++i)
+			{
+				_country->resources() -= _industry_points_cost * _industry_coef_cost;
+				++_industry_points;
+				is_changed = true;
+				setArmyCost();
+			}
+			return is_changed;
+		}
+	}
+	else
 		return _industry_points;
-	if (points < 0)
-	{
-		_industry_points += points;
-		if (_industry_points < 0)
-			_industry_points = 0;
-		setIndustryCost();
-		return 0;
-	}
-	bool isChanged = false;
-	while (_industry_points < MAX_INDUSTRY_POINTS &&
-		   _industry_points_cost * _industry_coef_cost <= _country->resources())
-	{
-		_country->resources() -= _industry_points_cost * _industry_coef_cost;
-		++_industry_points;
-		isChanged = true;
-		setIndustryCost();
-	}
-	if (isChanged)
-		return 1;
-	return 0;
 }
 
 float Points::armyCoefCost(float const coef)
@@ -602,15 +645,15 @@ void Locations::operator<<(olc::net::message<MSG_FROM> msg)
 	for (int i{0}; i < size; ++i)
 	{
 		msg >> x >> y;
-		_country_map.push_back({x, y});
+		_country_cells_coords.push_back({x, y});
 	}
 }
 
 void Locations::operator>>(olc::net::message<MSG_FROM> msg)
 {
-	for (auto &[x, y] : _country_map)
+	for (auto &[x, y] : _country_cells_coords)
 	{
 		msg << uint32_t(y) << uint32_t(x);
 	}
-	msg << uint32_t(_country_map.size());
+	msg << uint32_t(_country_cells_coords.size());
 }
