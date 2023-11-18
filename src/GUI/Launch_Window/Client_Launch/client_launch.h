@@ -3,6 +3,8 @@
 
 #include <QWidget>
 
+#include "client_gui.h"
+
 namespace Ui {
 class Client_Launch;
 }

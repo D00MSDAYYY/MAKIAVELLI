@@ -23,10 +23,6 @@ Game_Server::Game_Server(int play_num, int bot_num,
 	Game_Factory factory{_play_num + _bot_num};
 	_players = factory.createPlayers();
 
-	std::cerr << "in game server constr : " << std::endl;
-	for (auto &[id, country] : _players)
-		country.CHECK();
-
 	thread_server_running = std::jthread{
 		[this](std::stop_token quit_token)
 		{
@@ -54,10 +50,12 @@ Game_Server::Game_Server(int play_num, int bot_num,
 						_server_gui->drawInfo();
 					country.activityPoints().currentPoints(country.activityPoints().maxPoints());
 					country.update();
+
 					olc::net::message<MSG_FROM> msg_active_country{};
 					msg_active_country.header.id = MSG_FROM::SERVER_DATA_COUNTRY;
 					country >> msg_active_country;
 					MessageAllClients(msg_active_country);
+					
 					if (quit_token.stop_requested())
 						return;
 					std::this_thread::sleep_for(std::chrono::seconds(_thinking_t_num));
@@ -113,14 +111,14 @@ const int Game_Server::thinkingTime()
 
 bool Game_Server::OnClientConnect(std::shared_ptr<olc::net::connection<MSG_FROM>> client)
 {
-	return true;
+	return (m_deqConnections.size() <= _play_num ) ?  true : false;
 }
 
 void Game_Server::OnClientValidated(std::shared_ptr<olc::net::connection<MSG_FROM>> client)
 {
 	if (client)
 	{
-		if (m_deqConnections.size() != _play_num)
+		if (m_deqConnections.size() <= _play_num)
 		{
 			for (auto &[ID, country] : _players)
 			{
@@ -143,6 +141,9 @@ void Game_Server::OnClientValidated(std::shared_ptr<olc::net::connection<MSG_FRO
 						country >> msg;
 						MessageClient(client, msg);
 					}
+					std::cerr << "client with id = " << client->GetID()
+							  << " own country with index = " << country.index();
+					_server_gui->drawInfo();
 					break;
 				}
 			}
@@ -159,10 +160,10 @@ void Game_Server::OnClientValidated(std::shared_ptr<olc::net::connection<MSG_FRO
 }
 void Game_Server::OnClientDisconnect(std::shared_ptr<olc::net::connection<MSG_FROM>> client)
 {
+	std::cerr << "client disconnected " << std::endl;
 	if (client)
-	{
 		_players.at(client->GetID()).busy(false);
-	}
+	
 }
 
 void Game_Server::OnMessage(std::shared_ptr<olc::net::connection<MSG_FROM>> client, olc::net::message<MSG_FROM> &msg)

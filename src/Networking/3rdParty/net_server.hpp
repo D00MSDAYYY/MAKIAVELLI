@@ -190,7 +190,6 @@ namespace olc
 					// well remove the client - let the server know, it may
 					// be tracking it somehow
 					OnClientDisconnect(client);
-
 					// Off you go now, bye bye!
 					client.reset();
 
@@ -203,6 +202,9 @@ namespace olc
 			// Send message to all clients
 			void MessageAllClients(const message<T> &msg, std::shared_ptr<connection<T>> pIgnoreClient = nullptr)
 			{
+				for(auto & elem : m_deqConnections)
+					std::cerr << "client with ID = " << elem->m_socket.remote_endpoint()
+							  << " have connection : " << elem->IsConnected() << std::endl;
 				bool bInvalidClientExists = false;
 
 				// Iterate through all clients in container

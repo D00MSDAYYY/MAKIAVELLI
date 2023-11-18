@@ -60,5 +60,5 @@ public:
 
 	void update();
 
-	void CHECK();
+	// void CHECK();
 };

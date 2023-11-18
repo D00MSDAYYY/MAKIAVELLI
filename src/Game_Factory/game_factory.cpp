@@ -229,9 +229,5 @@ std::unordered_map<uint32_t, Country> Game_Factory::createPlayers()
 	}
 	createMap(players);
 	createCardBank(players); // TODO! change this logic and use this methods inside createLocations() and createCards()
-
-	std::cerr << "in createPlayers() : " << std::endl;
-	for(auto& [id,country] : players)
-		country.CHECK();
 	return std::move(players);
 }

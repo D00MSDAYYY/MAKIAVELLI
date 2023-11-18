@@ -15,7 +15,7 @@ private:
 public:
 	Map() {}
 	Map(const int numplayers);
-	~Map();
+	~Map(){};
 
 	bool find(Cell_Type celltype, std::pair<int, int> coord1, std::pair<int, int> coord2);
 	bool find(Cell_Type celltype, std::pair<int, int> coord);

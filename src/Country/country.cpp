@@ -64,23 +64,21 @@ void Country::operator>>(olc::net::message<MSG_FROM> msg)
 
 void Country::update()
 {
-	std::cerr << "in country update " << std::endl;
-	CHECK();
 	_resources.setDependices(this);
 	_resources.update();
 }
 
-void Country::CHECK()
-{
-	std::cerr << "-------------------" << std::endl;
-	std::cerr << "CHECK" << std::endl;
-	std::cerr << "country " << _index<< " address " << this << std::endl;
-	std::cerr << "locations address " << &_locations << std::endl;
-	std::cerr << "resources address " << &_resources << std::endl;
-	std::cerr << "points address " << &_points << std::endl;
-	std::cerr << "cards holder address " << &_cards_holder << std::endl;
-	std::cerr << "-------------------" << std::endl;
-}
+// void Country::CHECK()
+// {
+// 	std::cerr << "-------------------" << std::endl;
+// 	std::cerr << "CHECK" << std::endl;
+// 	std::cerr << "country " << _index<< " address " << this << std::endl;
+// 	std::cerr << "locations address " << &_locations << std::endl;
+// 	std::cerr << "resources address " << &_resources << std::endl;
+// 	std::cerr << "points address " << &_points << std::endl;
+// 	std::cerr << "cards holder address " << &_cards_holder << std::endl;
+// 	std::cerr << "-------------------" << std::endl;
+// }
 
 Country::Country(int index,
 				 Resources r,
@@ -96,5 +94,5 @@ Country::Country(int index,
 	  _activity_points{std::move(activity_p)}
 {
 	std::cerr << "in county constr" << std::endl;
-	CHECK();
+	// CHECK();
 }

@@ -226,8 +226,7 @@ void Resources::operator>>(olc::net::message<MSG_FROM> msg)
 
 void Resources::update()
 {
-	std::cerr << "in res update " << std::endl;
-	_country->CHECK();
+	// _country->CHECK();
 	// _oil_resources += OIL_BASE * _oil_coef * _country->locations()->oilNum();
 	// _mineral_resources += MINERAL_BASE * _mineral_coef * _country->locations()->mineralNum();
 	// _farm_resources += FARM_BASE * _farm_coef * _country->locations()->farmNum();
