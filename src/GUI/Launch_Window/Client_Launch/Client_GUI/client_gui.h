@@ -19,7 +19,7 @@ public:
     explicit Client_GUI(QWidget *parent = nullptr);
     ~Client_GUI();
 
-    std::shared_ptr<Player_Client> playerClient(std::optional<std::shared_ptr<Player_Client>> player_client = std::nullopt);
+    std::shared_ptr<Player_Client>& playerClient(std::optional<std::shared_ptr<Player_Client>> player_client = std::nullopt);
 
 private:
     std::shared_ptr<Player_Client> _player_client{nullptr};
