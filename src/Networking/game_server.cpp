@@ -3,6 +3,7 @@
 #include <thread>
 #include <stop_token>
 #include <chrono>
+#include <bitset>
 
 #include "game_server.hpp"
 #include "text_message.hpp"
@@ -39,7 +40,6 @@ Game_Server::Game_Server(int play_num, int bot_num,
 			// {
 			// 	std::this_thread::sleep_for(std::chrono::seconds(3));
 			// }
-			//! decide to simply wait nearly 5 seconds
 			std::this_thread::sleep_for(std::chrono::seconds(2));
 
 			for (_curr_round = 0; _curr_round < _rounds_num; ++_curr_round)
@@ -48,6 +48,7 @@ Game_Server::Game_Server(int play_num, int bot_num,
 				{
 					if (_server_gui)
 						_server_gui->drawInfo();
+
 					country.activityPoints().currentPoints(country.activityPoints().maxPoints());
 					country.update();
 
@@ -55,10 +56,10 @@ Game_Server::Game_Server(int play_num, int bot_num,
 					msg_active_country.header.id = MSG_FROM::SERVER_DATA_COUNTRY;
 					country >> msg_active_country;
 					MessageAllClients(msg_active_country);
-					
+
 					if (quit_token.stop_requested())
 						return;
-					std::this_thread::sleep_for(std::chrono::seconds(_thinking_t_num));
+					std::this_thread::sleep_for(std::chrono::seconds(7));
 					country.activityPoints().currentPoints(-country.activityPoints().maxPoints());
 					olc::net::message<MSG_FROM> msg_inactive_country{};
 					msg_inactive_country.header.id = MSG_FROM::SERVER_DATA_COUNTRY;
@@ -111,7 +112,7 @@ const int Game_Server::thinkingTime()
 
 bool Game_Server::OnClientConnect(std::shared_ptr<olc::net::connection<MSG_FROM>> client)
 {
-	return (m_deqConnections.size() <= _play_num ) ?  true : false;
+	return (m_deqConnections.size() <= _play_num) ? true : false;
 }
 
 void Game_Server::OnClientValidated(std::shared_ptr<olc::net::connection<MSG_FROM>> client)
@@ -132,6 +133,13 @@ void Game_Server::OnClientValidated(std::shared_ptr<olc::net::connection<MSG_FRO
 					olc::net::message<MSG_FROM> msg;
 					msg.header.id = MSG_FROM::SERVER_HANDSHAKE;
 					country >> msg;
+					std::cerr << "in server country " << std::endl;
+					for (auto &elem : msg.body)
+						std::cerr << int(elem);
+					std::cerr << "\ncountry army " << country.points().armyNum() << std::endl;
+					std::cerr << "\ncountry science " << country.points().scienceNum() << std::endl;
+					std::cerr << "\ncountry oil " << country.points().oilNum() << std::endl;
+					std::cerr << "\ncountry industry " << country.points().industryNum() << std::endl;
 					MessageClient(client, msg);
 
 					for (auto &[ID, country] : _players)
@@ -141,8 +149,6 @@ void Game_Server::OnClientValidated(std::shared_ptr<olc::net::connection<MSG_FRO
 						country >> msg;
 						MessageClient(client, msg);
 					}
-					std::cerr << "client with id = " << client->GetID()
-							  << " own country with index = " << country.index();
 					_server_gui->drawInfo();
 					break;
 				}
@@ -163,7 +169,6 @@ void Game_Server::OnClientDisconnect(std::shared_ptr<olc::net::connection<MSG_FR
 	std::cerr << "client disconnected " << std::endl;
 	if (client)
 		_players.at(client->GetID()).busy(false);
-	
 }
 
 void Game_Server::OnMessage(std::shared_ptr<olc::net::connection<MSG_FROM>> client, olc::net::message<MSG_FROM> &msg)

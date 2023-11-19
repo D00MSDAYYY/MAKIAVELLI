@@ -202,9 +202,6 @@ namespace olc
 			// Send message to all clients
 			void MessageAllClients(const message<T> &msg, std::shared_ptr<connection<T>> pIgnoreClient = nullptr)
 			{
-				for(auto & elem : m_deqConnections)
-					std::cerr << "client with ID = " << elem->m_socket.remote_endpoint()
-							  << " have connection : " << elem->IsConnected() << std::endl;
 				bool bInvalidClientExists = false;
 
 				// Iterate through all clients in container

@@ -40,7 +40,7 @@ namespace RES
 			  _industry_resources{industry} {}
 		~Resources();
 		
-		Resources& setDependices(Country *country);
+		Resources& setCountry(Country *country);
 
 		int oilNum(int const resources = 0);
 		int mineralNum(int const resources = 0);
@@ -69,8 +69,8 @@ namespace RES
 		const Resources operator/(const float &coef) const;
 		const Resources &operator/=(const float &coef);
 
-		void operator<<(olc::net::message<MSG_FROM> msg);
-		void operator>>(olc::net::message<MSG_FROM> msg);
+		void operator<<(olc::net::message<MSG_FROM>& msg);
+		void operator>>(olc::net::message<MSG_FROM>& msg);
 	};
 	Resources tag_invoke(boost::json::value_to_tag<Resources>, boost::json::value const &jv);
 	void tag_invoke(boost::json::value_from_tag, boost::json::value &jv, Resources const &res);

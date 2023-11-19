@@ -128,7 +128,6 @@ void Game_Factory::createMap(std::unordered_map<uint32_t, Country> &p)
 			 ++in_x_row_count)
 		{
 			++x;
-			std::cerr << in_x_row_count << " " << _map->xSize() << " " << y << std::endl;
 			if (in_x_row_count == _map->xSize())
 			{
 				++y;

@@ -1,6 +1,6 @@
 #include "text_message.hpp"
 
-void Text_Message::operator<<(olc::net::message<MSG_FROM> msg)
+void Text_Message::operator<<(olc::net::message<MSG_FROM>& msg)
 {
 	uint32_t size{};
 	msg >> size;
@@ -13,7 +13,7 @@ void Text_Message::operator<<(olc::net::message<MSG_FROM> msg)
 	msg >> _index;
 }
 
-void Text_Message::operator>>(olc::net::message<MSG_FROM> msg)
+void Text_Message::operator>>(olc::net::message<MSG_FROM>& msg)
 {
 	msg << uint32_t(_index);
 	for (auto &ch : _data)

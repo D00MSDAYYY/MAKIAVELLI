@@ -3,12 +3,12 @@
 
 using RES::Resources;
 
-Resources& Resources::setDependices(Country* country)
+Resources &Resources::setCountry(Country *country)
 {
 	_country = country;
 	return *this;
 }
-RES::Resources::~Resources() 
+RES::Resources::~Resources()
 {
 }
 int Resources::oilNum(int const resources)
@@ -203,25 +203,28 @@ const Resources &Resources::operator/=(const float &coef)
 	return *this;
 }
 
-void Resources::operator<<(olc::net::message<MSG_FROM> msg)
+void Resources::operator<<(olc::net::message<MSG_FROM>& msg)
 {
 	uint32_t ores{};
 	uint32_t mres{};
 	uint32_t fres{};
 	uint32_t ires{};
-	msg >> ires >> fres >> mres >> ores;
+	msg >> ires;
+	msg >> fres;
+	msg >> mres;
+	msg >> ores;
 	_oil_resources = ores;
 	_mineral_resources = mres;
 	_farm_resources = fres;
 	_industry_resources = ires;
 }
 
-void Resources::operator>>(olc::net::message<MSG_FROM> msg)
+void Resources::operator>>(olc::net::message<MSG_FROM>& msg)
 {
-	msg << uint32_t(_oil_resources)
-		<< uint32_t(_mineral_resources)
-		<< uint32_t(_farm_resources)
-		<< uint32_t(_industry_resources);
+	msg << uint32_t(_oil_resources);
+	msg << uint32_t(_mineral_resources);
+	msg << uint32_t(_farm_resources);
+	msg << uint32_t(_industry_resources);
 }
 
 void Resources::update()

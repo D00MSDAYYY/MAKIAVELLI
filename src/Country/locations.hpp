@@ -55,8 +55,8 @@ namespace LOC
 		float industryCoef(std::optional<float> coef = std::nullopt);
 		float allCoef(float const coef);
 
-		void operator<<(olc::net::message<MSG_FROM> msg);
-		void operator>>(olc::net::message<MSG_FROM> msg);
+		void operator<<(olc::net::message<MSG_FROM>& msg);
+		void operator>>(olc::net::message<MSG_FROM>& msg);
 	};
 	Locations tag_invoke(boost::json::value_to_tag<Locations>, boost::json::value const &jv);
 	void tag_invoke(boost::json::value_from_tag, boost::json::value &jv, Locations const &p);

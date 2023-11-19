@@ -587,15 +587,20 @@ const Points &Points::operator*=(const float &coef)
 	return *this;
 }
 
-void Points::operator<<(olc::net::message<MSG_FROM> msg)
+void Points::operator<<(olc::net::message<MSG_FROM>& msg)
 {
-	uint32_t ipoi{};
-	uint32_t fpoi{};
-	uint32_t mpoi{};
-	uint32_t opoi{};
-	uint32_t spoi{};
-	uint32_t apoi{};
-	msg >> ipoi >> fpoi >> mpoi >> opoi >> spoi >> apoi;
+	uint32_t ipoi{0};
+	uint32_t fpoi{0};
+	uint32_t mpoi{0};
+	uint32_t opoi{0};
+	uint32_t spoi{0};
+	uint32_t apoi{0};
+	msg >> ipoi;
+	msg >> fpoi;
+	msg >> mpoi;
+	msg >> opoi;
+	msg >> spoi;
+	msg >> apoi;
 	_army_points = apoi;
 	_science_points = spoi;
 	_oil_points = opoi;
@@ -604,7 +609,7 @@ void Points::operator<<(olc::net::message<MSG_FROM> msg)
 	_industry_points = ipoi;
 }
 
-void Points::operator>>(olc::net::message<MSG_FROM> msg)
+void Points::operator>>(olc::net::message<MSG_FROM>& msg)
 {
 	msg << uint32_t(_army_points)
 		<< uint32_t(_science_points)
@@ -627,7 +632,6 @@ Points POI::tag_invoke(boost::json::value_to_tag<Points>, boost::json::value con
 void POI::tag_invoke(boost::json::value_from_tag, boost::json::value &jv, Points const &p)
 {
 	Points temp = p; //! dont change this coz res must be const
-	std::cerr << "in poi tag_invoke2" << std::endl;
 	jv = {{"army", temp.armyNum()},
 		  {"science", temp.scienceNum()},
 		  {"oil", temp.oilNum()},
@@ -636,24 +640,26 @@ void POI::tag_invoke(boost::json::value_from_tag, boost::json::value &jv, Points
 		  {"industry", temp.industryNum()}};
 }
 
-void Locations::operator<<(olc::net::message<MSG_FROM> msg)
+void Locations::operator<<(olc::net::message<MSG_FROM>& msg)
 {
-	uint32_t size{};
+	uint32_t size{0};
 	msg >> size;
-	uint32_t x;
-	uint32_t y;
+	uint32_t x{0};
+	uint32_t y{0};
 	for (int i{0}; i < size; ++i)
 	{
-		msg >> x >> y;
+		msg >> x;
+		msg >> y;
 		_country_cells_coords.push_back({x, y});
 	}
 }
 
-void Locations::operator>>(olc::net::message<MSG_FROM> msg)
+void Locations::operator>>(olc::net::message<MSG_FROM>& msg)
 {
 	for (auto &[x, y] : _country_cells_coords)
 	{
-		msg << uint32_t(y) << uint32_t(x);
+		msg << uint32_t(y);
+		msg << uint32_t(x);
 	}
 	msg << uint32_t(_country_cells_coords.size());
 }
