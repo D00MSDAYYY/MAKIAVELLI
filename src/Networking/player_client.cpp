@@ -1,50 +1,70 @@
+#include <bitset>
+
 #include "player_client.hpp"
 #include "game_server.hpp"
 #include "card.hpp"
 #include "card_bank.hpp"
 
-// void Player_Client::OnMessage(olc::net::message<MSG_FROM> &msg)
-// {
-// 	switch (msg.header.id)
-// 	{
+void Player_Client::OnMessage(olc::net::message<MSG_FROM> &msg)
+{
+	std::cerr << "IN CLIENT MESSAGE RECEIVED" << std::endl;
+	switch (msg.header.id)
+	{
+	case MSG_FROM::SERVER_DATA_COUNTRY:
+	{
+		std::cerr << "//1" << std::endl;
+		Country country;
+		country << msg;
+		_countries[country.index()] = std::move(country);
+		break;
+	}
 
-// 	case MSG_FROM::SERVER_DATA_COUNTRY:
-// 	{
-// 		Country country;
-// 		country << msg;
-// 		_countries[country.index()] = std::move(country);
-// 		break;
-// 	}
+	case MSG_FROM::SERVER_REQUEST_EXCHANGE_RES:
+	{
+		std::cerr << "//2" << std::endl;
+		Country data_sender_request_exchange;
+		Country data_receiver_request_exchange;
+		auto msg_copy = msg;
+		data_sender_request_exchange << msg;
+		data_receiver_request_exchange << msg;
+		// TODO! GUI here displaying the offer to the client and then accept/ignore it
+		if (/*accept = true */ 0)
+		{
+			msg_copy.header.id = MSG_FROM::CLIENT_ACCEPT_EXCHANGE_RES;
+			Send(msg_copy);
+		}
+		break;
+	}
+	case MSG_FROM::SERVER_HANDSHAKE:
+	{
+		std::cerr << "in player country " << std::endl;
+		for (auto &elem : msg.body)
+			std::cerr << int(elem);
+		Country this_country;
+		this_country << msg;
+		std::cerr << "\ncountry army " << this_country.points().armyNum() << std::endl;
+		std::cerr << "\ncountry science " << this_country.points().scienceNum() << std::endl;
+		std::cerr << "\ncountry oil " << this_country.points().oilNum() << std::endl;
+		std::cerr << "\ncountry industry " << this_country.points().industryNum() << std::endl;
 
-// 	case MSG_FROM::SERVER_REQUEST_EXCHANGE_RES:
-// 	{
-// 		Country data_sender_request_exchange;
-// 		Country data_receiver_request_exchange;
-// 		auto msg_copy = msg;
-// 		data_sender_request_exchange << msg;
-// 		data_receiver_request_exchange << msg;
-// 		// TODO! GUI here displaying the offer to the client and then accept/ignore it
-// 		if (/*accept = true */ 0)
-// 		{
-// 			msg_copy.header.id = MSG_FROM::CLIENT_ACCEPT_EXCHANGE_RES;
-// 			Send(msg_copy);
-// 		}
-// 		break;
-// 	}
-// 	case MSG_FROM::SERVER_HANDSHAKE:
-// 	{
-// 		Country this_country;
-// 		this_country << msg;
-// 		_this_country_index = this_country.index();
-// 		_countries[this_country.index()] = std::move(this_country);
-// 		break;
-// 	}
-// 	}
-// }
+		_this_country_index = this_country.index();
+		_countries[this_country.index()] = std::move(this_country);
+		break;
+	}
+	}
+}
 
 Player_Client::Player_Client(const std::string &host, const uint16_t port)
 {
+
 	Connect(host, port);
+	thread_updating = std::jthread{[this](std::stop_token stop_token)
+								   {
+									   while (!stop_token.stop_requested())
+									   {
+										   Update(-1, true);
+									   }
+								   }};
 }
 
 void Player_Client::buyPoints(SCOPE scope, const int points)

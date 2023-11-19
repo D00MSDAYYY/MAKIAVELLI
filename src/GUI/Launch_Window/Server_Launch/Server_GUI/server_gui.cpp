@@ -21,7 +21,6 @@ std::shared_ptr<Game_Server> &Server_GUI::gameServer(std::optional<std::shared_p
 
 void Server_GUI::drawInfo()
 {
-    std::cerr << "=================";
     ui->server_addr_text_label->setText(QString(_game_server->address().first.data()) + "/" + QString::number(_game_server->address().second));
     ui->players_num_label->setText(QString::number(_game_server->playNum().first) + "/" + QString::number(_game_server->playNum().second));
     ui->bots_num_label->setText(QString::number(_game_server->botNum().first) + "/" + QString::number(_game_server->botNum().second));

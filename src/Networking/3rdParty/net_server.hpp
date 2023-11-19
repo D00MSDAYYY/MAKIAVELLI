@@ -190,7 +190,6 @@ namespace olc
 					// well remove the client - let the server know, it may
 					// be tracking it somehow
 					OnClientDisconnect(client);
-
 					// Off you go now, bye bye!
 					client.reset();
 

@@ -97,8 +97,8 @@ namespace POI
 		const Points operator*(const float &coef) const;
 		const Points &operator*=(const float &coef);
 
-		void operator<<(olc::net::message<MSG_FROM> msg);
-		void operator>>(olc::net::message<MSG_FROM> msg);
+		void operator<<(olc::net::message<MSG_FROM>& msg);
+		void operator>>(olc::net::message<MSG_FROM>& msg);
 	};
 	Points tag_invoke(boost::json::value_to_tag<Points>, boost::json::value const &jv);
 	void tag_invoke(boost::json::value_from_tag, boost::json::value &jv, Points const &p);

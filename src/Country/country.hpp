@@ -55,10 +55,10 @@ public:
 	CARD::Cards_Holder &cardsHolder();
 	AC_POI::Activity_Points &activityPoints();
 
-	void operator<<(olc::net::message<MSG_FROM> msg);
-	void operator>>(olc::net::message<MSG_FROM> msg);
+	void operator<<(olc::net::message<MSG_FROM>& msg);
+	void operator>>(olc::net::message<MSG_FROM>& msg);
 
 	void update();
 
-	void CHECK();
+	// void CHECK();
 };

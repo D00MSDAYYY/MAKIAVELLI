@@ -5,7 +5,7 @@ using namespace CARD;
 CARD::Cards_Holder::~Cards_Holder() 
 {
 }
-
+  
 void Cards_Holder::setDependices(std::shared_ptr<Card_Bank> card_bank)
 {
 	_card_bank = card_bank;

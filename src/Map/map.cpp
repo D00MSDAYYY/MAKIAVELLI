@@ -63,11 +63,6 @@ Map::Map(int numplayers)
 	}
 }
 
-Map::~Map()
-{
-	std::cerr << "map destr " << std::endl;
-}
-
 bool Map::find(Cell_Type celltype, std::pair<int, int> coord)
 {
 	return find(celltype, coord, coord);

@@ -11,10 +11,12 @@ private:
 	int _this_country_index{};
 	std::unordered_map<uint32_t, Country> _countries;
 
-	//! void OnMessage(olc::net::message<MSG_FROM> &msg) override;
+	std::jthread thread_updating;
+	void OnMessage(olc::net::message<MSG_FROM> &msg) override;
 
 public:
 	Player_Client(const std::string &host, const uint16_t port);
+	~Player_Client(){};
 
 	void exchangeRes(SCOPE give_scope, const int give_res,
 					 SCOPE receive_scope, const int receive_res);
