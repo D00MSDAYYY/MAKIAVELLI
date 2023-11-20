@@ -3,6 +3,7 @@
 #include "3rdParty/net_common.hpp"
 #include "3rdParty/net_client.hpp"
 #include "3rdParty/net_server.hpp"
+
 enum class MSG_FROM : uint32_t
 {
 	SERVER_HANDSHAKE,

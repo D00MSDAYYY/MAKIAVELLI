@@ -28,4 +28,5 @@ PUBLIC
   Game_Factory
   3rdParty
   Server_Launch
+  Client_Launch
 )

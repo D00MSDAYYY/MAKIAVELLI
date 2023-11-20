@@ -4,8 +4,8 @@ project(Game_Factory)
 
 find_package(Boost REQUIRED COMPONENTS json)
 
-# find_package(Qt6 REQUIRED COMPONENTS Core)
-# set(AUTORCC ON)
+find_package(Qt6 REQUIRED COMPONENTS Core)
+set(AUTORCC ON)
 
 # qt_add_resources(RCC json_files.qrc)
 qt_add_resources(RCC json_files.qrc)

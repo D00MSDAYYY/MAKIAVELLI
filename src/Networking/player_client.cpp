@@ -1,18 +1,16 @@
-#include <bitset>
-
 #include "player_client.hpp"
 #include "game_server.hpp"
 #include "card.hpp"
 #include "card_bank.hpp"
+#include "client_gui.h"
 
 void Player_Client::OnMessage(olc::net::message<MSG_FROM> &msg)
 {
-	std::cerr << "IN CLIENT MESSAGE RECEIVED" << std::endl;
 	switch (msg.header.id)
 	{
 	case MSG_FROM::SERVER_DATA_COUNTRY:
 	{
-		std::cerr << "//1" << std::endl;
+		std::cerr << "//1 " << _this_country_index ;
 		Country country;
 		country << msg;
 		_countries[country.index()] = std::move(country);
@@ -37,24 +35,19 @@ void Player_Client::OnMessage(olc::net::message<MSG_FROM> &msg)
 	}
 	case MSG_FROM::SERVER_HANDSHAKE:
 	{
-		std::cerr << "in player country " << std::endl;
-		for (auto &elem : msg.body)
-			std::cerr << int(elem);
 		Country this_country;
 		this_country << msg;
-		std::cerr << "\ncountry army " << this_country.points().armyNum() << std::endl;
-		std::cerr << "\ncountry science " << this_country.points().scienceNum() << std::endl;
-		std::cerr << "\ncountry oil " << this_country.points().oilNum() << std::endl;
-		std::cerr << "\ncountry industry " << this_country.points().industryNum() << std::endl;
-
 		_this_country_index = this_country.index();
 		_countries[this_country.index()] = std::move(this_country);
 		break;
 	}
 	}
+	if (_client_gui)
+		_client_gui->redraw();
 }
 
-Player_Client::Player_Client(const std::string &host, const uint16_t port)
+Player_Client::Player_Client(const std::string &host, const uint16_t port,
+							 Client_GUI *client_gui) : _client_gui{client_gui}
 {
 
 	Connect(host, port);
@@ -73,6 +66,11 @@ void Player_Client::buyPoints(SCOPE scope, const int points)
 
 void Player_Client::buyLocations(SCOPE scope, std::vector<std::pair<int, int>> cells)
 {
+}
+
+const std::unordered_map<int, Country> &Player_Client::countries()
+{
+	return _countries;
 }
 
 // void Player_Client::run(const std::string &host, const uint16_t port)

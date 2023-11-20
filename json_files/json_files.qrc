@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>cards.json</file>
+        <file>custom_cards.json</file>
+		<file>locations.json</file>
+		<file>points.json</file>
+		<file>resources.json</file>
+    </qresource>
+</RCC>

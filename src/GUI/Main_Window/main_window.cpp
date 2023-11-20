@@ -17,7 +17,7 @@ MainWindow::~MainWindow()
 void MainWindow::on_play_button_clicked()
 {
     Launch_Window *launch_window = new Launch_Window{this};
-    launch_window->setModal(true);
+    // launch_window->setModal(true);
     launch_window->setAttribute(Qt::WA_DeleteOnClose);
     launch_window->show();
 }
