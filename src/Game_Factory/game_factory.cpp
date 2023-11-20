@@ -33,7 +33,7 @@ Resources Game_Factory::createResources(int index)
 {
 	if (res_ar.size() == 0)
 	{
-		QFile res_file(":/resources.json");
+		QFile res_file(":/json_files/resources.json");
 		res_file.open(QIODevice::ReadOnly);
 		//! if using GCC 13.2.0 QString::toStdString() cause compile error, with clang 16.0.6 OK
 		std::string res_str_input{res_file.readAll().data()};
