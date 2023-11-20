@@ -1,0 +1,86 @@
+[
+	{
+		"index": 0,
+		"oil": 5000,
+		"mineral": 6000,
+		"farm": 2000,
+		"industry": 5000
+	},
+	{
+		"index": 1,
+		"oil": 1000,
+		"mineral": 1000,
+		"farm": 9000,
+		"industry": 15000
+	},
+	{
+		"index": 2,
+		"oil": 0,
+		"mineral": 11000,
+		"farm": 1200,
+		"industry": 19000
+	},
+	{
+		"index": 3,
+		"oil": 8000,
+		"mineral": 4000,
+		"farm": 10000,
+		"industry": 10000
+	},
+	{
+		"index": 4,
+		"oil": 3200,
+		"mineral": 8800,
+		"farm": 6700,
+		"industry": 4200
+	},
+	{
+		"index": 5,
+		"oil": 3200,
+		"mineral": 8800,
+		"farm": 6700,
+		"industry": 4200
+	},
+	{
+		"index": 6,
+		"oil": 3200,
+		"mineral": 8800,
+		"farm": 6700,
+		"industry": 4200
+	},
+	{
+		"index": 7,
+		"oil": 3200,
+		"mineral": 8800,
+		"farm": 6700,
+		"industry": 4200
+	},
+	{
+		"index": 8,
+		"oil": 3200,
+		"mineral": 8800,
+		"farm": 6700,
+		"industry": 4200
+	},
+	{
+		"index": 9,
+		"oil": 3200,
+		"mineral": 8800,
+		"farm": 6700,
+		"industry": 4200
+	},
+	{
+		"index": 10,
+		"oil": 3200,
+		"mineral": 8800,
+		"farm": 6700,
+		"industry": 4200
+	},
+	{
+		"index": 11,
+		"oil": 3200,
+		"mineral": 8800,
+		"farm": 6700,
+		"industry": 4200
+	}
+]

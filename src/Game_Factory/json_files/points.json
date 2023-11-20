@@ -1,0 +1,110 @@
+[
+	{
+		"index": 0,
+		"army": 2,
+		"science": 3,
+		"oil": 4,
+		"mineral": 4,
+		"farm": 1,
+		"industry": 1
+	},
+	{
+		"index": 1,
+		"army": 0,
+		"science": 4,
+		"oil": 5,
+		"mineral": 4,
+		"farm": 8,
+		"industry": 1
+	},
+	{
+		"index": 2,
+		"army": 10,
+		"science": 10,
+		"oil": 10,
+		"mineral": 10,
+		"farm": 10,
+		"industry": 10
+	},
+	{
+		"index": 3,
+		"army": 8,
+		"science": 6,
+		"oil": 7,
+		"mineral": 1,
+		"farm": 0,
+		"industry": 4
+	},
+	{
+		"index": 4,
+		"army": 3,
+		"science": 1,
+		"oil": 9,
+		"mineral": 7,
+		"farm": 2,
+		"industry": 2
+	},
+	{
+		"index": 5,
+		"army": 3,
+		"science": 1,
+		"oil": 9,
+		"mineral": 7,
+		"farm": 2,
+		"industry": 2
+	},
+	{
+		"index": 6,
+		"army": 3,
+		"science": 1,
+		"oil": 9,
+		"mineral": 7,
+		"farm": 2,
+		"industry": 2
+	},
+	{
+		"index": 7,
+		"army": 3,
+		"science": 1,
+		"oil": 9,
+		"mineral": 7,
+		"farm": 2,
+		"industry": 2
+	},
+	{
+		"index": 8,
+		"army": 3,
+		"science": 1,
+		"oil": 9,
+		"mineral": 7,
+		"farm": 2,
+		"industry": 2
+	},
+	{
+		"index": 9,
+		"army": 3,
+		"science": 1,
+		"oil": 9,
+		"mineral": 7,
+		"farm": 2,
+		"industry": 2
+	},
+	{
+		"index": 10,
+		"army": 3,
+		"science": 1,
+		"oil": 9,
+		"mineral": 7,
+		"farm": 2,
+		"industry": 2
+	},
+	{
+		"index": 11,
+		"army": 3,
+		"science": 1,
+		"oil": 9,
+		"mineral": 7,
+		"farm": 2,
+		"industry": 2
+	}
+]
