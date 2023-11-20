@@ -33,7 +33,7 @@ private:
 public:
 	Game_Server(int play_num, int bot_num,
 				int rounds, int thinking_time,
-				Server_GUI *server_gui,
+				Server_GUI *server_gui = nullptr,
 				uint16_t port = 0);
 	virtual ~Game_Server();
 

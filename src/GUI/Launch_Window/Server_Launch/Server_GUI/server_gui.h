@@ -2,7 +2,6 @@
 #define SERVER_H
 
 #include <optional>
-
 #include <QWidget>
 
 #include "game_server.hpp"
@@ -23,7 +22,7 @@ public:
     std::shared_ptr<Game_Server> &gameServer(
         std::optional<std::shared_ptr<Game_Server>> game_server = std::nullopt);
 
-    void drawInfo();
+    void redraw();
 
 private:
     std::shared_ptr<Game_Server> _game_server{nullptr};

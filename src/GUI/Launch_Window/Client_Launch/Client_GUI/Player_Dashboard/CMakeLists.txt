@@ -1,24 +1,25 @@
 cmake_minimum_required(VERSION 3.26)
 
-project(Server_Launch)
+project(Player_Dashboard)
 
-find_package(Qt6 REQUIRED COMPONENTS Widgets)
+find_package(Qt6 REQUIRED COMPONENTS SvgWidgets)
 #qt_standard_project_setup()
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOMOC ON)
 
-add_subdirectory(Server_Creating)
-add_subdirectory(Server_GUI)
+qt_add_resources(RCC pd_images.qrc)
 
 add_library(${PROJECT_NAME} "")
 
 target_sources(${PROJECT_NAME}
 PRIVATE
-  server_launch.cpp
+  player_dashboard.cpp
+    ${RCC}
 PUBLIC
-  ${CMAKE_CURRENT_SOURCE_DIR}/server_launch.h
-  ${CMAKE_CURRENT_SOURCE_DIR}/server_launch.ui
+  ${CMAKE_CURRENT_SOURCE_DIR}/player_dashboard.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/player_dashboard.ui
 )
 
 target_include_directories(${PROJECT_NAME}
@@ -28,8 +29,6 @@ PUBLIC
 
 target_link_libraries(${PROJECT_NAME}
 PUBLIC
-    Qt6::Widgets
-    Server_Creating
-    Networking
+    Qt6::SvgWidgets
 )
 
