@@ -24,12 +24,11 @@ Client_GUI::Client_GUI(QWidget *parent) : QWidget(parent),
     init();
     ui->setupUi(this);
     ui->graphicsView->setScene(new QGraphicsScene{this});
-    QPixmap image{":/images/background.svg"};
-    image.scaled(2000, 2000);
-    QBrush brush{image};
-    ui->graphicsView->scene()->setBackgroundBrush(image);
+    QPixmap pixmap{":/images/background.svg"};
+    pixmap.scaled(100, 100, Qt::KeepAspectRatio);
+    ui->graphicsView->scene()->setBackgroundBrush(pixmap);
 
-    // auto tmp = ui->graphicsView->scene()->addWidget(new Player_Dashboard{"", this});
+    auto tmp = ui->graphicsView->scene()->addWidget(new Player_Dashboard{""});
 }
 
 Client_GUI::~Client_GUI()
