@@ -11,7 +11,7 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOMOC ON)
 
-qt_add_resources(RCC images.qrc)
+qt_add_resources(RCC cg_images.qrc)
 
 add_library(${PROJECT_NAME} "")
 

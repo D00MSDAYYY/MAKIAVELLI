@@ -10,12 +10,12 @@
 
 inline void init()
 {
-    Q_INIT_RESOURCE(images);
+    Q_INIT_RESOURCE(cg_images);
 }
 
 inline void cleanUp()
 {
-    Q_CLEANUP_RESOURCE(images);
+    Q_CLEANUP_RESOURCE(cg_images);
 }
 
 Client_GUI::Client_GUI(QWidget *parent) : QWidget(parent),
@@ -24,8 +24,8 @@ Client_GUI::Client_GUI(QWidget *parent) : QWidget(parent),
     init();
     ui->setupUi(this);
     ui->graphicsView->setScene(new QGraphicsScene{this});
-    QPixmap pixmap{":/images/background.svg"};
-    pixmap.scaled(100, 100, Qt::KeepAspectRatio);
+    QPixmap pixmap{":/cg_images/background.svg"};
+    pixmap.scaled(2, 2, Qt::KeepAspectRatio);
     ui->graphicsView->scene()->setBackgroundBrush(pixmap);
 
     auto tmp = ui->graphicsView->scene()->addWidget(new Player_Dashboard{""});
