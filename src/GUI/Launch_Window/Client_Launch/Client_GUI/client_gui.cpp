@@ -27,7 +27,6 @@ Client_GUI::Client_GUI(QWidget *parent) : QWidget(parent),
     QPixmap pixmap{":/cg_images/background.svg"};
     pixmap.scaled(2, 2, Qt::KeepAspectRatio);
     ui->graphicsView->scene()->setBackgroundBrush(pixmap);
-
     auto tmp = ui->graphicsView->scene()->addWidget(new Player_Dashboard{""});
 }
 
