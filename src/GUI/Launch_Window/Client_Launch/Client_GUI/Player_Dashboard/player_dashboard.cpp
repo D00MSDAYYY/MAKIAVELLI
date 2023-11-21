@@ -18,16 +18,10 @@ Player_Dashboard::Player_Dashboard(const QString &file,
 {
     init();
     ui->setupUi(this);
-    setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
 }
 
 Player_Dashboard::~Player_Dashboard()
 {
     delete ui;
-}
-
-void Player_Dashboard::on_pushButton_3_clicked()
-{
-    resize(size().width() + 20, size().height() + 30);
 }
 

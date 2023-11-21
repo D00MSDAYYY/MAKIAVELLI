@@ -17,9 +17,6 @@ public:
                               QWidget *parent = nullptr);
     ~Player_Dashboard();
 
-private slots:
-    void on_pushButton_3_clicked();
-
 private:
     Ui::Player_Dashboard *ui;
 };

@@ -33,7 +33,7 @@ Resources Game_Factory::createResources(int index)
 {
 	if (res_ar.size() == 0)
 	{
-		QFile res_file(":/resources.json");
+		QFile res_file(":/json_files/resources.json");
 		res_file.open(QIODevice::ReadOnly);
 		//! if using GCC 13.2.0 QString::toStdString() cause compile error, with clang 16.0.6 OK
 		std::string res_str_input{res_file.readAll().data()};
@@ -47,7 +47,7 @@ Points Game_Factory::createPoints(int index)
 {
 	if (points_ar.size() == 0)
 	{
-		QFile points_file(":/points.json");
+		QFile points_file(":/json_files/points.json");
 		points_file.open(QIODevice::ReadOnly);
 		std::string points_str_input{points_file.readAll().data()};
 		points_ar = boost::json::parse(points_str_input).as_array();
@@ -60,7 +60,7 @@ Locations Game_Factory::createLocations(int index)
 {
 	if (loc_ar.size() == 0)
 	{
-		QFile loc_file(":/locations.json");
+		QFile loc_file(":/json_files/locations.json");
 		loc_file.open(QIODevice::ReadOnly);
 		std::string loc_str_input{loc_file.readAll().data()};
 		loc_ar = boost::json::parse(loc_str_input).as_array();
@@ -83,7 +83,7 @@ void Game_Factory::createCardBank(std::unordered_map<uint32_t, Country> &pl)
 {
 	if (cards_ar.size() == 0)
 	{
-		QFile cards_file(":/cards.json");
+		QFile cards_file(":/json_files/cards.json");
 		cards_file.open(QIODevice::ReadOnly);
 		std::string cards_str_input{cards_file.readAll().data()};
 		cards_ar = boost::json::parse(cards_str_input).as_array();
