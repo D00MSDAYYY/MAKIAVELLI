@@ -23,11 +23,17 @@ Client_GUI::Client_GUI(QWidget *parent) : QWidget(parent),
 {
     init();
     ui->setupUi(this);
-    ui->graphicsView->setScene(new QGraphicsScene{this});
+    ui->graphicsView->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+
+    auto scene = new QGraphicsScene{this};
+    scene->setSceneRect(0, 0, 1920, 1080);
     QPixmap pixmap{":/cg_images/background.svg"};
-    pixmap.scaled(2, 2, Qt::KeepAspectRatio);
-    ui->graphicsView->scene()->setBackgroundBrush(pixmap);
-    auto tmp = ui->graphicsView->scene()->addWidget(new Player_Dashboard{""});
+    scene->setBackgroundBrush(pixmap);
+    ui->graphicsView->setScene(scene);
+
+    ui->graphicsView->fitInView(scene->sceneRect(), Qt::KeepAspectRatio);
+
+    scene->addRect(0, 0, 1920, 1080);
 }
 
 Client_GUI::~Client_GUI()
@@ -37,17 +43,61 @@ Client_GUI::~Client_GUI()
 
 std::shared_ptr<Player_Client> &Client_GUI::playerClient(std::optional<std::shared_ptr<Player_Client>> player_client)
 {
-    if (!player_client)
-        return _player_client;
-    else
-    {
+    if (player_client)
         _player_client = *player_client;
-        return _player_client;
-    }
+    return _player_client;
 }
 
 void Client_GUI::redraw()
 {
-    std::cerr << " size " << _player_client->countries().size() << std::endl;
+    if (_player_client && (_players_dashboards.size() != _player_client->countries().size()))
+    {
+        for (auto &[index, country] : _player_client->countries())
+        {
+            if (!_players_dashboards.contains(index))
+            {
+                auto tmp = new Player_Dashboard{};
+                tmp->index(index);
+                _players_dashboards[index] =
+                    ui->graphicsView->scene()->addWidget(tmp);
+            }
+        }
+    }
+    {
+        // switch ()
+        // {
+        // case 1:
+        // {
+        //     // auto tmp = ui->graphicsView->scene()->addWidget(new Player_Dashboard{""});
 
+        //     break;
+        // }
+        // case 2:
+        // {
+        //     for (auto &[ID, country] : _player_client->countries())
+        //         ;
+        //     break;
+        // }
+        // case 3:
+        // {
+        //     break;
+        // }
+        // case 4:
+        // {
+        //     break;
+        // }
+        // case 5:
+        // {
+        //     break;
+        // }
+        // default:
+        // {
+        // }
+        // }
+    }
+}
+
+void Client_GUI::resizeEvent(QResizeEvent *event)
+{
+    ui->graphicsView->fitInView(ui->graphicsView->scene()->sceneRect(), Qt::KeepAspectRatio);
 }

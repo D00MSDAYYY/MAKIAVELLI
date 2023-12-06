@@ -27,8 +27,13 @@ public:
     void redraw();
 
 private:
+    void resizeEvent(QResizeEvent *event);
+
+private:
     std::shared_ptr<Player_Client> _player_client{nullptr};
 
+    std::unordered_map<int, QGraphicsProxyWidget *> _players_dashboards{};
+    
     Ui::Client_GUI *ui;
 };
 
