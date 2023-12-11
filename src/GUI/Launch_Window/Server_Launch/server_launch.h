@@ -5,8 +5,6 @@
 #include <thread>
 #include <vector>
 
-#include "server_gui.h"
-
 namespace Ui
 {
     class Server_Launch;

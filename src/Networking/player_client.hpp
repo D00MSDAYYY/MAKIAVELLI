@@ -1,11 +1,11 @@
 #pragma once
-#include <memory>
+
 #include <unordered_map>
 
 #include "game_network.hpp"
-#include "country.hpp"
 
 class Client_GUI;
+#include "country.hpp"
 
 class Player_Client : public olc::net::client_interface<MSG_FROM>
 {

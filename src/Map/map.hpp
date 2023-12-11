@@ -4,7 +4,6 @@
 
 #include "map_cell.hpp"
 
-
 class Map
 {
 private:

@@ -4,11 +4,10 @@
 
 #include <QResource>
 #include <QFile>
-#include <QDebug>
-#include <QString>
 #include <QByteArray>
 
 #include "game_factory.hpp"
+#include "card_bank.hpp"
 #include "map.hpp"
 
 using AC_POI::Activity_Points;

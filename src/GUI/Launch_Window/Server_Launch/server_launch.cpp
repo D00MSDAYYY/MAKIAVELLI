@@ -2,8 +2,7 @@
 #include "ui_server_launch.h"
 
 #include "server_creating.h"
-
-#include <iostream>
+#include "server_gui.h"
 
 Server_Launch::Server_Launch(QWidget *parent) : QWidget(parent),
                                                 ui(new Ui::Server_Launch)

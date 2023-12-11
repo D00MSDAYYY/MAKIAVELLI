@@ -1,11 +1,9 @@
 #ifndef CLIENT_GUI_H
 #define CLIENT_GUI_H
 
-#include <memory>
-#include <optional>
+// #include <memory>
+// #include <optional>
 #include <QWidget>
-
-#include <QGraphicsItemGroup>
 
 #include "player_client.hpp"
 
