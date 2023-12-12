@@ -5,7 +5,7 @@
 // #include <optional>
 #include <QWidget>
 
-#include "player_client.hpp"
+#include "game_client.hpp"
 
 namespace Ui
 {
@@ -20,7 +20,7 @@ public:
     explicit Client_GUI(QWidget *parent = nullptr);
     ~Client_GUI();
 
-    std::shared_ptr<Player_Client> &playerClient(std::optional<std::shared_ptr<Player_Client>> player_client = std::nullopt);
+    std::shared_ptr<Player_Client> &playerClient(std::optional<std::shared_ptr<Player_Client>> game_client = std::nullopt);
 
     void redraw();
 
@@ -28,7 +28,7 @@ private:
     void resizeEvent(QResizeEvent *event);
 
 private:
-    std::shared_ptr<Player_Client> _player_client{nullptr};
+    std::shared_ptr<Player_Client> _game_client{nullptr};
 
     std::unordered_map<int, QGraphicsProxyWidget *> _players_dashboards{};
     

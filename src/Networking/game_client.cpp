@@ -1,7 +1,7 @@
 
 #include <memory>
 
-#include "player_client.hpp"
+#include "game_client.hpp"
 #include "client_gui.h"
 
 void Player_Client::OnMessage(olc::net::message<MSG_FROM> &msg)

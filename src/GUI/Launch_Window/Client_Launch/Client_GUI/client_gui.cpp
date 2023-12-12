@@ -41,18 +41,18 @@ Client_GUI::~Client_GUI()
     delete ui;
 }
 
-std::shared_ptr<Player_Client> &Client_GUI::playerClient(std::optional<std::shared_ptr<Player_Client>> player_client)
+std::shared_ptr<Player_Client> &Client_GUI::playerClient(std::optional<std::shared_ptr<Player_Client>> game_client)
 {
-    if (player_client)
-        _player_client = *player_client;
-    return _player_client;
+    if (game_client)
+        _game_client = *game_client;
+    return _game_client;
 }
 
 void Client_GUI::redraw()
 {
-    if (_player_client && (_players_dashboards.size() != _player_client->countries().size()))
+    if (_game_client && (_players_dashboards.size() != _game_client->countries().size()))
     {
-        for (auto &[index, country] : _player_client->countries())
+        for (auto &[index, country] : _game_client->countries())
         {
             if (!_players_dashboards.contains(index))
             {
@@ -74,7 +74,7 @@ void Client_GUI::redraw()
         // }
         // case 2:
         // {
-        //     for (auto &[ID, country] : _player_client->countries())
+        //     for (auto &[ID, country] : _game_client->countries())
         //         ;
         //     break;
         // }
