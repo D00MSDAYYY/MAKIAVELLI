@@ -1,5 +1,6 @@
 # cmake
 ################
+/build/
 CMakeLists.txt.user
 CMakeCache.txt
 CMakeFiles
@@ -44,5 +45,4 @@ _deps
 ehthumbs.db
 Thumbs.db
 
-/build/
 /.vscode/

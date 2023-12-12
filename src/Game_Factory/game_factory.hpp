@@ -3,8 +3,6 @@
 #include <memory>
 
 #include "country.hpp"
-#include "game_server.hpp"
-#include "card_bank.hpp"
 
 static const int DEFAULT_ID{0};
 class Game_Factory

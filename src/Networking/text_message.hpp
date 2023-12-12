@@ -1,4 +1,7 @@
+#pragma once
+
 #include <string>
+
 #include "game_network.hpp"
 
 class Text_Message

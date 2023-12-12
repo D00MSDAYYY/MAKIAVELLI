@@ -1,11 +1,9 @@
 #ifndef CLIENT_GUI_H
 #define CLIENT_GUI_H
 
-#include <memory>
-#include <optional>
+// #include <memory>
+// #include <optional>
 #include <QWidget>
-
-#include <QGraphicsItemGroup>
 
 #include "player_client.hpp"
 
@@ -27,8 +25,13 @@ public:
     void redraw();
 
 private:
+    void resizeEvent(QResizeEvent *event);
+
+private:
     std::shared_ptr<Player_Client> _player_client{nullptr};
 
+    std::unordered_map<int, QGraphicsProxyWidget *> _players_dashboards{};
+    
     Ui::Client_GUI *ui;
 };
 

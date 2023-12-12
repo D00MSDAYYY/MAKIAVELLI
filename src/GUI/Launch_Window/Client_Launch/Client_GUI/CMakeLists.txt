@@ -4,35 +4,30 @@ project(Client_GUI)
 
 add_subdirectory(Player_Dashboard)
 
-find_package(Qt6 REQUIRED COMPONENTS Widgets)
-#qt_standard_project_setup()
+add_library(${PROJECT_NAME})
 
-set(CMAKE_AUTOUIC ON)
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTOMOC ON)
-
-qt_add_resources(RCC cg_images.qrc)
-
-add_library(${PROJECT_NAME} "")
+qt_add_resources(RCC 
+	cg_images.qrc
+)
 
 target_sources(${PROJECT_NAME}
 PRIVATE
-  client_gui.cpp
-   ${RCC}
+	client_gui.cpp
+	${RCC}
 PUBLIC
-  ${CMAKE_CURRENT_SOURCE_DIR}/client_gui.h
-  ${CMAKE_CURRENT_SOURCE_DIR}/client_gui.ui
+	${CMAKE_CURRENT_SOURCE_DIR}/client_gui.h
+	${CMAKE_CURRENT_SOURCE_DIR}/client_gui.ui
 )
 
 target_include_directories(${PROJECT_NAME}
 PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}
+	${CMAKE_CURRENT_SOURCE_DIR}
 )
 
 target_link_libraries(${PROJECT_NAME}
 PUBLIC
-    Qt6::Widgets
-    Networking
-    Player_Dashboard
+	Qt6::Widgets
+	Networking
+	Player_Dashboard
 )
 

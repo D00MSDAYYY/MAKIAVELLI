@@ -1,7 +1,7 @@
+
+#include <memory>
+
 #include "player_client.hpp"
-#include "game_server.hpp"
-#include "card.hpp"
-#include "card_bank.hpp"
 #include "client_gui.h"
 
 void Player_Client::OnMessage(olc::net::message<MSG_FROM> &msg)
@@ -60,13 +60,13 @@ Player_Client::Player_Client(const std::string &host, const uint16_t port,
 								   }};
 }
 
-void Player_Client::buyPoints(SCOPE scope, const int points)
-{
-}
+// void Player_Client::buyPoints(SCOPE scope, const int points)
+// {
+// }
 
-void Player_Client::buyLocations(SCOPE scope, std::vector<std::pair<int, int>> cells)
-{
-}
+// void Player_Client::buyLocations(SCOPE scope, std::vector<std::pair<int, int>> cells)
+// {
+// }
 
 const std::unordered_map<int, Country> &Player_Client::countries()
 {

@@ -1,5 +1,5 @@
-#include <algorithm>
-#include <utility>
+// #include <algorithm>
+// #include <utility>
 #include <thread>
 #include <stop_token>
 #include <chrono>
@@ -7,7 +7,7 @@
 #include "game_server.hpp"
 #include "text_message.hpp"
 #include "game_factory.hpp"
-#include "Server_GUI/server_gui.h"
+#include "server_gui.h"
 
 Game_Server::Game_Server(int play_num, int bot_num,
 						 int rounds, int thinking_time,

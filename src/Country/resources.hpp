@@ -2,8 +2,6 @@
 #include <boost/json.hpp>
 #include <memory>
 
-#include "game_network.hpp"
-
 class Country;
 
 namespace RES

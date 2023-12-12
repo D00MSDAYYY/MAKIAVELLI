@@ -4,11 +4,10 @@
 
 #include <QResource>
 #include <QFile>
-#include <QDebug>
-#include <QString>
 #include <QByteArray>
 
 #include "game_factory.hpp"
+#include "card_bank.hpp"
 #include "map.hpp"
 
 using AC_POI::Activity_Points;
@@ -31,7 +30,7 @@ inline void cleanUp()
 
 Resources Game_Factory::createResources(int index)
 {
-	if (res_ar.size() == 0)
+	if (res_ar.empty())
 	{
 		QFile res_file(":/json_files/resources.json");
 		res_file.open(QIODevice::ReadOnly);
@@ -45,7 +44,7 @@ Resources Game_Factory::createResources(int index)
 
 Points Game_Factory::createPoints(int index)
 {
-	if (points_ar.size() == 0)
+	if (points_ar.empty())
 	{
 		QFile points_file(":/json_files/points.json");
 		points_file.open(QIODevice::ReadOnly);
@@ -58,7 +57,7 @@ Points Game_Factory::createPoints(int index)
 
 Locations Game_Factory::createLocations(int index)
 {
-	if (loc_ar.size() == 0)
+	if (loc_ar.empty())
 	{
 		QFile loc_file(":/json_files/locations.json");
 		loc_file.open(QIODevice::ReadOnly);
@@ -190,12 +189,12 @@ void Game_Factory::createMap(std::unordered_map<uint32_t, Country> &p)
 
 Game_Factory::Game_Factory(int numplay) : _num_of_players{numplay}
 {
-	// init();
+	init();
 }
 
 Game_Factory::~Game_Factory()
 {
-	// cleanUp();
+	cleanUp();
 }
 
 std::unordered_map<uint32_t, Country> Game_Factory::createPlayers()
