@@ -5,82 +5,88 @@ using CARD::Cards_Holder;
 using POI::Points;
 using RES::Resources;
 
-Country::Country(int index,
-				 Resources r,
-				 Points p,
-				 Locations l,
-				 Cards_Holder cards_holder,
-				 Activity_Points activity_p)
-	: _index{index},
-	  _resources{std::move(r)},
-	  _points{std::move(p)},
-	  _locations{std::move(l)},
-	  _cards_holder{std::move(cards_holder)},
-	  _activity_points{std::move(activity_p)}
+Country::Country(int             index,
+                 Resources       r,
+                 Points          p,
+                 Locations       l,
+                 Cards_Holder    cards_holder,
+                 Activity_Points activity_p)
+    : _index{index},
+      _resources{std::move(r)},
+      _points{std::move(p)},
+      _locations{std::move(l)},
+      _cards_holder{std::move(cards_holder)},
+      _activity_points{std::move(activity_p)}
 {
-	// CHECK();
+    // CHECK();
 }
 
-bool Country::busy(std::optional<bool> flag)
+bool
+Country::busy(std::optional<bool> flag)
 {
-	if (flag)
-		_is_busy = *flag;
-	return _is_busy;
-}
-Cards_Holder &Country::cardsHolder()
-{
-	_cards_holder.setDependices(this);
-	return _cards_holder;
+    if(flag) _is_busy = *flag;
+    return _is_busy;
 }
 
-Activity_Points &Country::activityPoints()
+Cards_Holder&
+Country::cardsHolder()
 {
-	return _activity_points;
+    _cards_holder.setDependices(this);
+    return _cards_holder;
 }
 
-Points &Country::points()
+Activity_Points&
+Country::activityPoints()
 {
-
-	return _points.setCountry(this);
+    return _activity_points;
 }
 
-Resources &Country::resources()
+Points&
+Country::points()
 {
-	return _resources.setCountry(this);
+    return _points.setCountry(this);
 }
 
-Locations &Country::locations()
+Resources&
+Country::resources()
 {
-
-	return _locations.setCountry(this);
+    return _resources.setCountry(this);
 }
 
-void Country::operator<<(olc::net::message<MSG_FROM>& msg)
+Locations&
+Country::locations()
 {
-	_resources << msg;
-	_points << msg;
-	_locations << msg;
-	_cards_holder << msg;
-	_activity_points << msg;
-	msg >> _color; // TODO! check the order of insertion/extraction
-	msg >> _index;	
+    return _locations.setCountry(this);
 }
 
-void Country::operator>>(olc::net::message<MSG_FROM>& msg)
+void
+Country::operator<<(olc::net::message<MSG_FROM>& msg)
 {
-	msg << uint32_t(_index);
-	msg << uint32_t(_color);
-	_activity_points >> msg;
-	_cards_holder >> msg;
-	_locations >> msg;
-	_points >> msg;
-	_resources >> msg;
+    _resources << msg;
+    _points << msg;
+    _locations << msg;
+    _cards_holder << msg;
+    _activity_points << msg;
+    msg >> _color;  // TODO! check the order of insertion/extraction
+    msg >> _index;
 }
 
-void Country::update()
+void
+Country::operator>>(olc::net::message<MSG_FROM>& msg)
 {
-	if (_activity_points.currentPoints() > 0)
-		_resources.setCountry(this).update();
+    msg << uint32_t(_index);
+    msg << uint32_t(_color);
+    _activity_points >> msg;
+    _cards_holder >> msg;
+    _locations >> msg;
+    _points >> msg;
+    _resources >> msg;
+}
+
+void
+Country::update()
+{
+    if(_activity_points.currentPoints() > 0) _resources.setCountry(this).update();
 }
 
 // void Country::CHECK()
@@ -94,5 +100,3 @@ void Country::update()
 // 	std::cerr << "cards holder address " << &_cards_holder << std::endl;
 // 	std::cerr << "-------------------" << std::endl;
 // }
-
-

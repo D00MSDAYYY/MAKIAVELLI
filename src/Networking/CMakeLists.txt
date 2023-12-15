@@ -25,6 +25,7 @@ PUBLIC
 
 target_link_libraries(${PROJECT_NAME} 
 PUBLIC 
+	Country
 	Game_Factory
 	3rdParty
 	Server_Launch

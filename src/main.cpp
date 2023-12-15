@@ -1,6 +1,7 @@
 #include "GUI.hpp"
 
-int main(int argc, char **argv)
+int
+main(int argc, char** argv)
 {
-	runGUI(argc, argv);
+    runGUI(argc, argv);
 }
