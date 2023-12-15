@@ -1,2 +1,3 @@
 
-int runGUI(int argc, char **argv);
+int
+runGUI(int argc, char** argv);
