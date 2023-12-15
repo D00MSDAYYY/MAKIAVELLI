@@ -3,7 +3,8 @@
 
 #include <QDialog>
 
-namespace Ui {
+namespace Ui
+{
 class Launch_Window;
 }
 
@@ -12,11 +13,11 @@ class Launch_Window : public QDialog
     Q_OBJECT
 
 public:
-    explicit Launch_Window(QWidget *parent = nullptr);
+    explicit Launch_Window(QWidget* parent = nullptr);
     ~Launch_Window();
 
 private:
-    Ui::Launch_Window *ui;
+    Ui::Launch_Window* ui;
 };
 
-#endif // LAUNCH_WINDOW_H
+#endif  // LAUNCH_WINDOW_H
