@@ -16,7 +16,6 @@ class Cards_Holder
 {
 private:
     std::deque<std::list<Card>> _cards{MAX_YEARS_DEPTH, {{}}};
-
     Country*                    _country;
     std::shared_ptr<Card_Bank>  _card_bank;
 

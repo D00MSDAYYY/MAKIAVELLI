@@ -25,8 +25,7 @@ Locations::operator+=(const std::vector<std::pair<int, int>> country_map)
 {
     for(auto& country_coord: _country_cells_coords)
     {
-        if(std::find(
-               _country_cells_coords.begin(), _country_cells_coords.end(), country_coord)
+        if(std::find(_country_cells_coords.begin(), _country_cells_coords.end(), country_coord)
            == _country_cells_coords.end())
             _country_cells_coords.push_back(country_coord);
     }

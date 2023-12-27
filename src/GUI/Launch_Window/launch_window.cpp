@@ -4,7 +4,7 @@
 #include "server_launch.h"
 #include "ui_launch_window.h"
 
-Launch_Window::Launch_Window(QWidget* parent)
+Launch_Window::Launch_Window(QWidget *parent)
     : QDialog(parent),
       ui(new Ui::Launch_Window)
 {

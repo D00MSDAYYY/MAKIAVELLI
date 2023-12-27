@@ -27,7 +27,8 @@ Player_Client::OnMessage(olc::net::message<MSG_FROM>& msg)
                 auto    msg_copy = msg;
                 data_sender_request_exchange << msg;
                 data_receiver_request_exchange << msg;
-                // TODO! GUI here displaying the offer to the client and then accept/ignore it
+                // TODO! GUI here displaying the offer to the client and then
+                // accept/ignore it
                 if(/*accept = true */ 0)
                 {
                     msg_copy.header.id = MSG_FROM::CLIENT_ACCEPT_EXCHANGE_RES;
@@ -47,14 +48,17 @@ Player_Client::OnMessage(olc::net::message<MSG_FROM>& msg)
     if(_client_gui) _client_gui->redraw();
 }
 
-Player_Client::Player_Client(const std::string& host, const uint16_t port, Client_GUI* client_gui)
-    : _client_gui{ client_gui }
+Player_Client::Player_Client(const std::string& host,
+                             const uint16_t     port,
+                             Client_GUI*        client_gui)
+    : _client_gui{client_gui}
 {
     Connect(host, port);
-    thread_updating = std::jthread{ [this](std::stop_token stop_token)
-                                    {
-                                        while(!stop_token.stop_requested()) { Update(-1, true); }
-                                    } };
+    thread_updating = std::jthread{[this](std::stop_token stop_token)
+                                   {
+                                       while(!stop_token.stop_requested())
+                                           Update(-1, true);
+                                   }};
 }
 
 // void Player_Client::buyPoints(SCOPE scope, const int points)
@@ -78,19 +82,21 @@ Player_Client::countries()
 // 	std::mutex mtx_Redraw_Update;
 // 	std::condition_variable cv_Redraw_Update;
 
-// 	auto lambda_updating{[this, &cv_Redraw_Update, &mtx_Redraw_Update](std::stop_token stop_token)
+// 	auto lambda_updating{[this, &cv_Redraw_Update, &mtx_Redraw_Update](std::stop_token
+// stop_token)
 // 						 {
 // 							 while (!stop_token.stop_requested())
 // 							 {
-// 								 Update(-1, true); //! with true it can lead to deadlock coz wait shall never wake up
-// 								 std::scoped_lock<std::mutex> sl(mtx_Redraw_Update);
+// 								 Update(-1, true); //! with true it can lead to deadlock
+// coz wait shall never wake up std::scoped_lock<std::mutex> sl(mtx_Redraw_Update);
 // 								 cv_Redraw_Update.notify_one();
 // 							 }
 // 						 }};
 // TODO ! move lambda directly in jthread initialization
 // 	std::jthread thread_updating{lambda_updating};
 
-// 	auto lambda_redrawing{[this, &cv_Redraw_Update, &mtx_Redraw_Update](std::stop_token stop_token)
+// 	auto lambda_redrawing{[this, &cv_Redraw_Update, &mtx_Redraw_Update](std::stop_token
+// stop_token)
 // 						  {
 // 							  while (!stop_token.stop_requested())
 // 							  {
