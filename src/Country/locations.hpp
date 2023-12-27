@@ -22,7 +22,6 @@ private:
     float                            _farm_coef_cost{1.0};
     float                            _industry_coef_cost{1.0};
 
-
     RES::Resources                   _oil_loc_cost{0, 0, 0, 0};
     // TODO!  change to optional for avoiding object constructor
     RES::Resources                   _mineral_loc_cost{0, 0, 0, 0};
