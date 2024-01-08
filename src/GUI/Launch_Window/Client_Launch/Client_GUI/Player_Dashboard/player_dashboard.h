@@ -1,7 +1,6 @@
 #ifndef PLAYER_DASHBOARD_H
 #define PLAYER_DASHBOARD_H
 
-
 #include <QSvgWidget>
 
 namespace Ui

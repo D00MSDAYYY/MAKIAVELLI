@@ -25,6 +25,6 @@ target_link_libraries(${PROJECT_NAME}
 PUBLIC
 	Boost::json
 	Qt::Core
-	Card_Bank
+	Country
 )
 

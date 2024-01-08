@@ -5,6 +5,8 @@ project(MAKIAVELLI)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(CMAKE_GENERATOR "Unix Makefiles")
+
 find_package(Qt6 REQUIRED COMPONENTS Core Widgets)
 find_package(Boost REQUIRED COMPONENTS json)
 
@@ -32,11 +34,11 @@ add_executable(${PROJECT_NAME}
 
 target_link_libraries(${PROJECT_NAME}
 PRIVATE
-	Map
-	Game_Factory
-	Card_Bank
-	Country
-	Networking
+	# Map
+	# Game_Factory
+	# Card_Bank
+	# Country
+	# Networking
 	GUI
 )
 set_target_properties(${PROJECT_NAME} PROPERTIES

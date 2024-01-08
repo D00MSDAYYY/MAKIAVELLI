@@ -26,7 +26,8 @@ PUBLIC
 target_link_libraries(${PROJECT_NAME} 
 PUBLIC 
 	Game_Factory
+	Server_GUI
+	Client_GUI
+PRIVATE 
 	3rdParty
-	Server_Launch
-	Client_Launch
 )
