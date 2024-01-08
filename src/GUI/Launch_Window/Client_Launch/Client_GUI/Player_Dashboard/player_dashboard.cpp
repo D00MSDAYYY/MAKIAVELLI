@@ -24,9 +24,3 @@ Player_Dashboard::~Player_Dashboard()
     delete ui;
 }
 
-int Player_Dashboard::index(std::optional<int> index)
-{
-	if(index)
-        _index = *index;
-    return _index;
-}

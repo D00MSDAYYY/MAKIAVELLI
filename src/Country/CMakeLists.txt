@@ -31,6 +31,7 @@ target_link_libraries(${PROJECT_NAME}
 PUBLIC 
 	Boost::json
 	Map
-	Networking
 	Card_Bank
+	Networking
+	
 )

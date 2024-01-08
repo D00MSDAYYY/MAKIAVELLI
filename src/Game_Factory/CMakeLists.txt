@@ -26,6 +26,5 @@ PUBLIC
 	Boost::json
 	Qt::Core
 	Card_Bank
-	Networking
 )
 
